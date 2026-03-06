@@ -6,6 +6,8 @@
 <title>FlowMind AI — Your Personal Intelligence OS</title>
 <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!-- Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <!-- Firebase SDK v8 - most compatible -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -1108,24 +1110,40 @@ body::before {
     position: absolute; top: 0; left: 0; height: 100%;
     transform: translateX(-100%);
     box-shadow: var(--shadow);
+    z-index: 100; width: 240px;
   }
   .sidebar.open { transform: translateX(0); }
   .hamburger { display: flex; }
   .greeting { display: none; }
   .status-pill span { display: none; }
   .chat-header { padding: 12px 16px; }
-  .messages { padding: 16px; }
-  .chips-row { padding: 0 16px 12px; }
-  .chat-input-bar { padding: 12px 14px; }
-  .panel-topbar { padding: 16px; }
-  .tasks-body { padding: 14px 16px; }
-  .wealth-overview { padding: 16px; }
-  .wealth-grid { padding: 14px 16px; grid-template-columns: 1fr; }
-  .goals-grid { padding: 14px 16px; grid-template-columns: 1fr; }
-  .report-body { padding: 16px; }
-  .add-form { padding: 12px 16px; }
-  .modal { padding: 24px; }
-  .logo-text { font-size: 14px; }
+  .messages { padding: 12px; }
+  .chips-row { padding: 0 12px 10px; }
+  .chat-input-bar { padding: 10px 12px; }
+  .panel-topbar { padding: 14px 16px; flex-wrap: wrap; gap: 8px; }
+  .tasks-body { padding: 12px 14px; }
+  .wealth-overview { padding: 14px; }
+  .wealth-grid { padding: 12px 14px; grid-template-columns: 1fr; }
+  .goals-grid { padding: 12px 14px; grid-template-columns: 1fr; }
+  .report-body { padding: 14px; }
+  .add-form { padding: 10px 14px; }
+  .modal { padding: 20px 16px; margin: 16px; width: calc(100% - 32px); }
+  .logo-text { font-size: 13px; }
+  .topbar { padding: 0 12px; gap: 6px; }
+  .topbar-right { gap: 6px; }
+  .api-btn { padding: 6px 10px; font-size: 11px; }
+  #themeToggleBtn { padding: 6px 8px; }
+  .msg .bubble { max-width: 92%; font-size: 13px; }
+  .chat-input-wrap textarea { font-size: 14px; }
+  .panel-heading { font-size: 16px; }
+  .add-btn { padding: 7px 12px; font-size: 12px; }
+  .game-grid { grid-template-columns: 1fr; }
+  .report-charts-grid { grid-template-columns: 1fr !important; }
+  .pricing-modal { padding: 24px 16px; }
+  .plans-grid { grid-template-columns: 1fr; }
+  .live-stage { padding: 20px 12px; }
+  #liveClock { display: none; }
+  .plan-badge, .free-badge, .pro-badge { font-size: 9px; padding: 2px 6px; }
 }
 
 /* ── VOICE & TTS ── */
@@ -1591,19 +1609,153 @@ body::before {
 }
 .live-hint { font-size:12px; color:rgba(255,255,255,0.22); text-align:center; font-family:'Cabinet Grotesk',sans-serif; }
 
+/* ── PRICING MODAL ── */
+.pricing-modal-overlay {
+  position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+.pricing-modal-overlay.show { display:flex; }
+.pricing-modal {
+  background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r3);
+  padding:32px 28px;max-width:520px;width:100%;animation:fadeUp 0.3s ease;
+  max-height:90vh;overflow-y:auto;
+}
+.pricing-modal h2 {
+  font-family:'Instrument Serif',serif;font-size:28px;text-align:center;
+  margin-bottom:6px;background:linear-gradient(135deg,var(--text),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.pricing-modal-sub { text-align:center;color:var(--silver);font-size:14px;margin-bottom:24px; }
+.plans-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px; }
+@media(max-width:480px){.plans-grid{grid-template-columns:1fr;}}
+.plan-card {
+  background:var(--ink3);border:2px solid var(--line2);border-radius:var(--r2);
+  padding:20px 16px;text-align:center;transition:all 0.2s;position:relative;
+}
+.plan-card.pro { border-color:var(--gold);background:rgba(245,200,66,0.05); }
+.plan-card-badge {
+  position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;
+  padding:3px 10px;border-radius:20px;white-space:nowrap;letter-spacing:1px;
+}
+.plan-name { font-size:16px;font-weight:800;margin-bottom:8px; }
+.plan-price { font-size:28px;font-weight:900;color:var(--gold);margin-bottom:4px; }
+.plan-price span { font-size:13px;color:var(--silver);font-weight:400; }
+.plan-features { list-style:none;margin:12px 0;text-align:left; }
+.plan-features li { font-size:12px;color:var(--text2);padding:4px 0;display:flex;gap:6px;align-items:flex-start; }
+.plan-features li .fi { flex-shrink:0; }
+.plan-btn {
+  width:100%;padding:12px;border:none;border-radius:var(--r2);
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:14px;
+  cursor:pointer;transition:all 0.2s;margin-top:8px;
+}
+.plan-btn-free { background:var(--ink2);color:var(--silver);border:1px solid var(--line2); }
+.plan-btn-pro { background:var(--gold);color:var(--ink); }
+.plan-btn-pro:hover { background:var(--gold2);transform:translateY(-2px); }
+.plan-close-btn {
+  display:block;width:100%;padding:10px;background:transparent;
+  border:none;color:var(--silver);font-size:13px;cursor:pointer;margin-top:8px;
+}
+/* Plan indicator in topbar */
+.pro-badge {
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:var(--ink);font-size:10px;font-weight:800;padding:3px 8px;
+  border-radius:20px;letter-spacing:1px;
+}
+.free-badge {
+  background:var(--ink3);color:var(--silver);font-size:10px;font-weight:700;
+  padding:3px 8px;border-radius:20px;border:1px solid var(--line2);cursor:pointer;
+}
+.free-badge:hover { border-color:var(--gold);color:var(--gold); }
+/* Lock overlay for wealth */
+.locked-overlay {
+  position:absolute;inset:0;background:rgba(13,13,18,0.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-radius:var(--r2);z-index:10;gap:12px;
+}
+.locked-overlay h3 { font-size:20px;font-weight:800;color:var(--gold); }
+.locked-overlay p { font-size:13px;color:var(--silver);text-align:center;max-width:260px; }
+.unlock-btn {
+  background:var(--gold);color:var(--ink);border:none;padding:12px 24px;
+  border-radius:var(--r2);font-family:'Cabinet Grotesk',sans-serif;
+  font-weight:800;font-size:14px;cursor:pointer;transition:all 0.2s;
+}
+.unlock-btn:hover { background:var(--gold2);transform:translateY(-2px); }
+
+/* ── LIGHT MODE ── */
+body.light-mode {
+  --ink:   #f5f5f7;
+  --ink2:  #ffffff;
+  --ink3:  #ebebf0;
+  --text:  #1a1a2e;
+  --text2: #4a4a6a;
+  --silver:#6b6b8a;
+  --line:  rgba(0,0,0,0.08);
+  --line2: rgba(0,0,0,0.15);
+  --shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+body.light-mode .sidebar { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+body.light-mode .topbar { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.08); }
+body.light-mode .panel { background: #f5f5f7; }
+body.light-mode .msg.ai .bubble { background: #ffffff; border-color: rgba(0,0,0,0.1); }
+body.light-mode .msg.user .bubble { background: var(--gold); }
+body.light-mode .chat-input-wrap { background: #ffffff; border-color: rgba(0,0,0,0.1); }
+body.light-mode #chatInput { background: transparent; color: var(--text); }
+body.light-mode .card { background: #ffffff; border-color: rgba(0,0,0,0.08); }
+body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient-3 { opacity: 0.03; }
 </style>
 </head>
 <body>
 
 <!-- File input lives at body root — completely isolated from any UI context.
      This prevents file:// protocol browsers from treating onchange as a page navigation. -->
-<input type="file" id="fileInput" accept="image/*" style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;" onchange="handleFileUpload(event)">
+<input type="file" id="fileInput" accept="image/*,.pdf,.txt,.csv,.md,.js,.py,.html,.json" style="position:fixed;top:-9999px;left:-9999px;opacity:0;pointer-events:none;" onchange="handleFileUpload(event)">
 
 <div class="ambient ambient-1"></div>
 <div class="ambient ambient-2"></div>
 <div class="ambient ambient-3"></div>
 
 <div class="toast" id="toast"></div>
+
+<!-- PRICING MODAL -->
+<div class="pricing-modal-overlay" id="pricingModal">
+  <div class="pricing-modal">
+    <h2>Upgrade FlowMind AI</h2>
+    <p class="pricing-modal-sub">Unlock your full productivity potential</p>
+    <div class="plans-grid">
+      <!-- FREE PLAN -->
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">₹0 <span>/month</span></div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> 5 Tasks max</li>
+          <li><span class="fi">✓</span> 5 Goals max</li>
+          <li><span class="fi">✓</span> 10 AI chats/day</li>
+          <li><span class="fi">✓</span> 10 Quiz/day</li>
+          <li><span class="fi">✗</span> No Wealth section</li>
+          <li><span class="fi">✗</span> No Cloud Sync</li>
+        </ul>
+        <button class="plan-btn plan-btn-free" onclick="closePricing()">Current Plan</button>
+      </div>
+      <!-- PRO PLAN -->
+      <div class="plan-card pro">
+        <div class="plan-card-badge">⚡ POPULAR</div>
+        <div class="plan-name" style="color:var(--gold)">Pro</div>
+        <div class="plan-price">₹299 <span>/month</span></div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Unlimited Tasks</li>
+          <li><span class="fi">✓</span> Unlimited Goals</li>
+          <li><span class="fi">✓</span> Unlimited AI chats</li>
+          <li><span class="fi">✓</span> Unlimited Quiz</li>
+          <li><span class="fi">✓</span> Wealth section</li>
+          <li><span class="fi">✓</span> Cloud Sync</li>
+        </ul>
+        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Upgrade Now →</button>
+      </div>
+    </div>
+    <button class="plan-close-btn" onclick="closePricing()">✕ Maybe later</button>
+  </div>
+</div>
 
 <div id="landing">
   <!-- Auth Screen -->
@@ -1685,6 +1837,8 @@ body::before {
         <span id="statusText">No Key</span>
       </div>
       <button class="api-btn" onclick="openModal('apiModal')">⚙ API Key</button>
+      <span id="planBadge" class="free-badge" onclick="openPricing()" title="Upgrade to Pro">FREE</span>
+      <button class="api-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Light/Dark Mode">🌙</button>
       <button class="api-btn" onclick="firebaseLogout()" style="background:var(--ink3);color:var(--silver);border:1px solid var(--line2);" title="Sign Out">Sign Out</button>
     </div>
   </div>
@@ -1864,7 +2018,14 @@ body::before {
         </div>
       </div>
 
-      <div class="panel" id="panel-wealth">
+      <div class="panel" id="panel-wealth" style="position:relative;">
+        <!-- PRO LOCK OVERLAY -->
+        <div class="locked-overlay" id="wealthLock">
+          <div style="font-size:40px;">🔒</div>
+          <h3>Pro Feature</h3>
+          <p>Wealth Tracker is available on the Pro plan. Upgrade for ₹299/month!</p>
+          <button class="unlock-btn" onclick="openPricing()">Upgrade to Pro →</button>
+        </div>
         <div class="panel-topbar">
           <div class="panel-heading">💰 Wealth Tracker</div>
           <button class="add-btn" onclick="toggleForm('wealthForm')">+ Add Asset</button>
@@ -2132,6 +2293,7 @@ function genId() { return ++_idCounter; }
 // Image Upload State
 let currentAttachmentBase64 = null;
 let currentAttachmentMime = null;
+let currentAttachmentIsText = false;
 
 // ─── HELPERS ─────────────────────────────────────────────────
 function esc(str) {
@@ -2369,6 +2531,7 @@ function startApp() {
   if (apiKey) document.getElementById('apiKeyInput').value = apiKey;
 
   updateStatus(!!apiKey);
+  updatePlanUI();
   renderTasks();
   renderWealth();
   renderGoals();
@@ -2493,6 +2656,7 @@ function handleFileUpload(e) {
   reader.onload = (event) => {
     currentAttachmentBase64 = event.target.result;
     currentAttachmentMime = file.type;
+    currentAttachmentIsText = isTextFile;
 
     const preview   = document.getElementById('attachmentPreview');
     const imgEl     = document.getElementById('attachImg');
@@ -2529,13 +2693,20 @@ function handleFileUpload(e) {
     e.target.value = '';
   };
 
+  const isTextFile = ['text/plain','text/csv','text/markdown','application/json',
+    'text/javascript','text/html','text/x-python'].includes(file.type) || 
+    /\.(txt|csv|md|js|py|html|json)$/i.test(file.name);
+
   if (type === 'image') reader.readAsDataURL(file);
-  else reader.readAsText(file);
+  else if (type === 'pdf') reader.readAsDataURL(file);
+  else if (isTextFile) reader.readAsText(file);
+  else reader.readAsDataURL(file);
 }
 
 function clearAttachment() {
   currentAttachmentBase64 = null;
   currentAttachmentMime = null;
+  currentAttachmentIsText = false;
   const preview = document.getElementById('attachmentPreview');
   preview.classList.remove('visible');
   const imgEl = document.getElementById('attachImg');
@@ -2644,6 +2815,7 @@ async function sendMessage() {
   
   if (!msg && !currentAttachmentBase64) return;
   if (!apiKey) { openModal('apiModal'); return; }
+  if (!checkChatLimit()) return;
 
   input.value = '';
   input.style.height = '48px';
@@ -2698,16 +2870,42 @@ Example 2: "Added to your list! [ADD_TASK: Read 10 pages | personal]"`;
   let modelToUse = 'llama-3.3-70b-versatile';
   let apiMessages = [{ role: 'system', content: systemPrompt }, ...chatHistory];
   
-  // If an image is attached, switch to Groq's Vision model and format the LAST message accordingly
-  if (currentAttachmentBase64) {
-      modelToUse = 'llama-3.2-90b-vision-preview';
+  if (currentAttachmentBase64 && currentAttachmentMime) {
+    const mime = currentAttachmentMime;
+
+    if (mime.startsWith('image/')) {
+      // ── IMAGE: use vision model ──
+      modelToUse = 'meta-llama/llama-4-scout-17b-16e-instruct';
       apiMessages[apiMessages.length - 1] = {
-          role: 'user',
-          content: [
-              { type: "text", text: msg || "What is in this image?" },
-              { type: "image_url", image_url: { url: currentAttachmentBase64 } }
-          ]
+        role: 'user',
+        content: [
+          { type: 'text', text: msg || 'What is in this image?' },
+          { type: 'image_url', image_url: { url: currentAttachmentBase64 } }
+        ]
       };
+    } else if (mime === 'application/pdf') {
+      // ── PDF: extract as base64 document ──
+      modelToUse = 'meta-llama/llama-4-scout-17b-16e-instruct';
+      const base64Data = currentAttachmentBase64.split(',')[1];
+      apiMessages[apiMessages.length - 1] = {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: (msg || 'Please read and summarize this PDF document.') +
+              '\n\n[PDF attached — base64 encoded below]\ndata:application/pdf;base64,' + base64Data
+          }
+        ]
+      };
+    } else if (currentAttachmentIsText) {
+      // ── TEXT FILE: inject content directly into prompt ──
+      const textContent = currentAttachmentBase64;
+      apiMessages[apiMessages.length - 1] = {
+        role: 'user',
+        content: (msg || 'Please read this file and help me with it.') +
+          '\n\n--- FILE CONTENT START ---\n' + textContent + '\n--- FILE CONTENT END ---'
+      };
+    }
   }
   
   // Clear attachment right after sending payload
@@ -2826,6 +3024,7 @@ function filterTasks(f, btn) {
 }
 
 function addTask() {
+  if (!checkTaskLimit()) return;
   const title = document.getElementById('taskTitleInput').value.trim();
   const cat   = document.getElementById('taskCatInput').value;
   if (!title) { toast('⚠️ Please enter a task title'); return; }
@@ -2946,6 +3145,7 @@ function filterGoals(f, btn) {
 }
 
 function addGoal() {
+  if (!checkGoalLimit()) return;
   const title    = document.getElementById('goalTitleInput').value.trim();
   const desc     = document.getElementById('goalDescInput').value.trim();
   const progress = parseInt(document.getElementById('goalPctInput').value);
@@ -4174,7 +4374,7 @@ function toggleHabit(i) {
 // ─── DAILY QUIZ SYSTEM ───────────────────────────────────────
 
 const ALL_QUIZ_QUESTIONS = [
-  // Finance
+  // ── FINANCE (20) ──
   { q: "What does 'ROI' stand for?", opts: ["Return On Investment","Rate Of Inflation","Revenue Over Income","Risk Of Investment"], ans: 0, cat: "💰 Finance" },
   { q: "What is a mutual fund?", opts: ["A government bond","A pooled investment vehicle","A type of bank account","A stock exchange"], ans: 1, cat: "💰 Finance" },
   { q: "What does 'bull market' mean?", opts: ["Market is falling","Market is rising","Market is stable","Market is closed"], ans: 1, cat: "💰 Finance" },
@@ -4184,31 +4384,101 @@ const ALL_QUIZ_QUESTIONS = [
   { q: "What does ETF stand for?", opts: ["Equity Trade Fund","Exchange Traded Fund","Electronic Transfer Fund","Earnings Trade Formula"], ans: 1, cat: "💰 Finance" },
   { q: "Which asset is most liquid?", opts: ["Real Estate","Gold","Cash","Art"], ans: 2, cat: "💰 Finance" },
   { q: "What is inflation?", opts: ["Rise in purchasing power","Decrease in money supply","Rise in general price level","Increase in production"], ans: 2, cat: "💰 Finance" },
-  { q: "What is a dividend?", opts: ["A company debt","A share of company profits paid to shareholders","A stock buyback","A type of bond"], ans: 1, cat: "💰 Finance" },
-  // Productivity
+  { q: "What is a dividend?", opts: ["A company debt","A share of profits paid to shareholders","A stock buyback","A type of bond"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a bear market?", opts: ["Market rising 20%+","Market falling 20%+","Market sideways","Market opening"], ans: 1, cat: "💰 Finance" },
+  { q: "What does SIP stand for in investing?", opts: ["Systematic Investment Plan","Stock Investment Plan","Secure Index Portfolio","Standard Interest Payment"], ans: 0, cat: "💰 Finance" },
+  { q: "What is a hedge fund?", opts: ["A government savings scheme","An alternative investment fund for high net worth individuals","A type of insurance","A mutual fund"], ans: 1, cat: "💰 Finance" },
+  { q: "What is CAGR?", opts: ["Compound Annual Growth Rate","Current Asset Growth Ratio","Capital Adjusted Gross Return","Cost Analysis Growth Rate"], ans: 0, cat: "💰 Finance" },
+  { q: "What does liquidity mean in finance?", opts: ["Amount of cash in a country","How easily assets can be converted to cash","Total market value","Level of debt"], ans: 1, cat: "💰 Finance" },
+  { q: "What is dollar-cost averaging?", opts: ["Buying only when prices drop","Investing a fixed amount regularly regardless of price","Converting to USD","Averaging daily expenses"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a bond?", opts: ["Company stock","Loan made to a government or company","Real estate asset","Currency exchange"], ans: 1, cat: "💰 Finance" },
+  { q: "What is net worth?", opts: ["Monthly income","Total assets minus total liabilities","Annual salary","Credit score"], ans: 1, cat: "💰 Finance" },
+  { q: "What is an IPO?", opts: ["International Payment Order","Initial Public Offering","Index Portfolio Option","Investor Profit Outcome"], ans: 1, cat: "💰 Finance" },
+  { q: "What is portfolio rebalancing?", opts: ["Selling all investments","Adjusting asset allocation back to target","Adding new assets only","Switching brokers"], ans: 1, cat: "💰 Finance" },
+  // ── PRODUCTIVITY (20) ──
   { q: "What is the Pomodoro Technique?", opts: ["25-min work, 5-min break cycles","Working 8 hours straight","Meditating before work","Doing hardest task first"], ans: 0, cat: "🧠 Productivity" },
   { q: "What does 'GTD' stand for?", opts: ["Get Things Done","Go To Dashboard","Goal Tracking Daily","Group Task Delegation"], ans: 0, cat: "🧠 Productivity" },
-  { q: "What is 'deep work'?", opts: ["Working overnight","Focused, distraction-free work on complex tasks","Working underwater","Delegating tasks"], ans: 1, cat: "🧠 Productivity" },
-  { q: "What is the 80/20 rule (Pareto Principle)?", opts: ["Work 80% relax 20%","80% of results come from 20% of efforts","Save 80% spend 20%","20 tasks done in 80 minutes"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'deep work'?", opts: ["Working overnight","Focused distraction-free work on complex tasks","Working underwater","Delegating tasks"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is the 80/20 rule?", opts: ["Work 80% relax 20%","80% of results from 20% of efforts","Save 80% spend 20%","20 tasks in 80 minutes"], ans: 1, cat: "🧠 Productivity" },
   { q: "What does 'time blocking' mean?", opts: ["Blocking social media","Scheduling specific tasks in fixed time slots","Working only at night","Ignoring emails"], ans: 1, cat: "🧠 Productivity" },
-  // Tech
+  { q: "What is the Eisenhower Matrix used for?", opts: ["Calculating ROI","Prioritizing tasks by urgency and importance","Tracking time","Managing teams"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'eating the frog'?", opts: ["A diet plan","Doing the hardest task first","Skipping breakfast","Working late"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does SMART goal stand for?", opts: ["Simple Measurable Achievable Realistic Timely","Specific Measurable Achievable Relevant Time-bound","Strategic Motivated Active Realistic Trackable","Simple Modern Accurate Reliable Tested"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'flow state' in productivity?", opts: ["Working near water","State of complete immersed focus in a task","Morning routine","Team collaboration"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is batch processing in productivity?", opts: ["Computer processing","Grouping similar tasks together to do at once","Working in batches of people","Processing paperwork"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is the two-minute rule?", opts: ["Take a break every 2 mins","If a task takes less than 2 mins do it immediately","Work in 2-minute sprints","Plan 2 minutes before starting"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is a 'morning routine' benefit?", opts: ["Saves money","Sets productive tone for the whole day","Reduces sleep","Increases hunger"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is multitasking's effect on productivity?", opts: ["Always increases it","Generally decreases quality and efficiency","Has no effect","Only works for creative tasks"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'inbox zero'?", opts: ["Having no email account","Keeping email inbox empty by processing all emails","Deleting all emails","Using only one email"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'weekly review' in GTD involve?", opts: ["Reviewing stocks weekly","Processing all tasks and planning for the week ahead","Meeting with your team","Reviewing expenses"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'energy management' in productivity?", opts: ["Managing electricity bills","Scheduling tasks based on your energy levels","Exercising daily","Eating for energy"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'context switching' cost?", opts: ["Cost of new software","Mental overhead when switching between different tasks","Switching offices","Changing jobs"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is a 'done list'?", opts: ["A to-do list","Record of completed tasks to boost motivation","List of failed tasks","Shopping list"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'single-tasking'?", opts: ["Working alone","Focusing on one task at a time for better results","Using one app","Having one goal"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'productive procrastination'?", opts: ["Never procrastinating","Doing useful tasks to avoid the most important one","Procrastinating productively","Planning while procrastinating"], ans: 1, cat: "🧠 Productivity" },
+  // ── TECH (20) ──
   { q: "What does API stand for?", opts: ["Application Programming Interface","Advanced Protocol Integration","Automated Process Input","Applied Program Index"], ans: 0, cat: "💻 Tech" },
   { q: "What is 'the cloud' in tech?", opts: ["Weather forecasting system","Remote servers accessed via internet","A type of RAM","Local storage"], ans: 1, cat: "💻 Tech" },
   { q: "What does SaaS stand for?", opts: ["Software as a Service","System and Application Setup","Secure Access and Storage","Server and App Software"], ans: 0, cat: "💻 Tech" },
   { q: "What is machine learning?", opts: ["Teaching machines to walk","AI that learns from data without explicit programming","Programming robots","Computer hardware assembly"], ans: 1, cat: "💻 Tech" },
   { q: "What is open source software?", opts: ["Software you pay for","Software with publicly available source code","Closed beta software","Government software"], ans: 1, cat: "💻 Tech" },
-  // Business
+  { q: "What is blockchain?", opts: ["A type of server","A distributed ledger technology","A programming language","A cloud service"], ans: 1, cat: "💻 Tech" },
+  { q: "What does UI stand for?", opts: ["Universal Integration","User Interface","Unlimited Input","Unified Index"], ans: 1, cat: "💻 Tech" },
+  { q: "What does UX stand for?", opts: ["User Experience","Unlimited Exchange","Universal Extension","Unique Expression"], ans: 0, cat: "💻 Tech" },
+  { q: "What is a cookie in web browsing?", opts: ["A type of malware","Small data stored by websites on your browser","A web page element","A server file"], ans: 1, cat: "💻 Tech" },
+  { q: "What is encryption?", opts: ["Compressing files","Converting data into unreadable format to protect it","Backing up data","Deleting files"], ans: 1, cat: "💻 Tech" },
+  { q: "What is VPN?", opts: ["Video Processing Network","Virtual Private Network","Verified Public Node","Visual Programming Network"], ans: 1, cat: "💻 Tech" },
+  { q: "What is the Internet of Things (IoT)?", opts: ["A social network","Physical devices connected to the internet","A programming language","A type of wifi"], ans: 1, cat: "💻 Tech" },
+  { q: "What is RAM in a computer?", opts: ["Read Access Memory","Random Access Memory","Remote Application Module","Rapid Application Management"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a firewall?", opts: ["A hardware upgrade","Security system that monitors network traffic","A type of virus","A backup system"], ans: 1, cat: "💻 Tech" },
+  { q: "What does HTML stand for?", opts: ["Hyper Text Markup Language","High Tech Machine Learning","Hyper Transfer Markup Link","High Text Managing Language"], ans: 0, cat: "💻 Tech" },
+  { q: "What is a bug in software?", opts: ["A feature request","An error or flaw in a program","A type of virus","A performance upgrade"], ans: 1, cat: "💻 Tech" },
+  { q: "What is agile methodology?", opts: ["Fast internet connection","Iterative approach to software development","A type of database","Hardware specification"], ans: 1, cat: "💻 Tech" },
+  { q: "What does CPU stand for?", opts: ["Central Processing Unit","Computer Power Utility","Core Program Unit","Current Processing Update"], ans: 0, cat: "💻 Tech" },
+  { q: "What is version control?", opts: ["Software pricing","System to track changes in code over time","Hardware versioning","App store management"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a startup unicorn?", opts: ["A mythical company","A private startup valued at $1 billion+","A profitable small business","A tech company with AI"], ans: 1, cat: "💻 Tech" },
+  // ── BUSINESS (20) ──
   { q: "What is a startup's MVP?", opts: ["Most Valuable Player","Minimum Viable Product","Maximum Value Proposition","Market Verification Plan"], ans: 1, cat: "🏢 Business" },
   { q: "What does B2B mean?", opts: ["Business to Business","Bank to Bank","Buyer to Buyer","Brand to Brand"], ans: 0, cat: "🏢 Business" },
   { q: "What is 'burn rate'?", opts: ["Rate of product sales","Speed at which a company spends cash","Employee turnover rate","Marketing spend rate"], ans: 1, cat: "🏢 Business" },
   { q: "What is venture capital?", opts: ["Bank loans for businesses","Investment in startups in exchange for equity","Government grants","Small business loans"], ans: 1, cat: "🏢 Business" },
   { q: "What is a USP?", opts: ["Universal Sales Protocol","Unique Selling Proposition","User Support Plan","Unit Sales Performance"], ans: 1, cat: "🏢 Business" },
-  // Health & Mindset
-  { q: "What is 'growth mindset'?", opts: ["Belief that abilities are fixed","Belief that abilities can be developed","Focus on making money","Avoiding failure at all costs"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is a SWOT analysis?", opts: ["Sales analysis","Strengths Weaknesses Opportunities Threats analysis","Software testing method","Staff work output tracking"], ans: 1, cat: "🏢 Business" },
+  { q: "What does B2C mean?", opts: ["Business to Consumer","Bank to Customer","Business to Company","Brand to Consumer"], ans: 0, cat: "🏢 Business" },
+  { q: "What is product-market fit?", opts: ["Physical store location","When product satisfies strong market demand","Product pricing strategy","Marketing channel fit"], ans: 1, cat: "🏢 Business" },
+  { q: "What is bootstrapping a startup?", opts: ["Starting with investors","Building a company using personal funds without investors","Using government funding","Copying a competitor"], ans: 1, cat: "🏢 Business" },
+  { q: "What is CAC in marketing?", opts: ["Content Acquisition Cost","Customer Acquisition Cost","Company Annual Cost","Campaign Average Cost"], ans: 1, cat: "🏢 Business" },
+  { q: "What is LTV in business?", opts: ["Long Term Value","Lifetime Value of a customer","Latest Technology Version","Low Transaction Volume"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a pivot in startup terms?", opts: ["A presentation technique","Shifting business strategy based on learnings","Hiring new staff","Changing office location"], ans: 1, cat: "🏢 Business" },
+  { q: "What is the difference between revenue and profit?", opts: ["They are the same","Revenue is total income; profit is after expenses","Profit is total income; revenue is after expenses","Revenue is only from products"], ans: 1, cat: "🏢 Business" },
+  { q: "What is an NDA?", opts: ["National Development Authority","Non-Disclosure Agreement","New Deal Announcement","Network Distribution Access"], ans: 1, cat: "🏢 Business" },
+  { q: "What is KPI?", opts: ["Key Performance Indicator","Known Process Integration","Key Product Index","Knowledge Platform Interface"], ans: 0, cat: "🏢 Business" },
+  { q: "What is a freemium model?", opts: ["Completely free product","Free basic service with paid premium features","Free trial for one month","Free product with ads only"], ans: 1, cat: "🏢 Business" },
+  { q: "What is churn rate?", opts: ["Rate of new customers","Rate at which customers stop using a service","Production rate","Profit growth rate"], ans: 1, cat: "🏢 Business" },
+  { q: "What is angel investing?", opts: ["Charity donations","Early-stage investment by wealthy individuals in startups","Government investment","Bank loans"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a go-to-market strategy?", opts: ["GPS for salespeople","Plan to launch a product to market","Company travel policy","Marketing budget plan"], ans: 1, cat: "🏢 Business" },
+  { q: "What is scalability in business?", opts: ["Company size","Ability to grow revenue without proportional cost increase","Scaling down operations","Employee training"], ans: 1, cat: "🏢 Business" },
+  // ── MINDSET & HEALTH (20) ──
+  { q: "What is 'growth mindset'?", opts: ["Belief that abilities are fixed","Belief that abilities can be developed","Focus on making money","Avoiding failure"], ans: 1, cat: "🔥 Mindset" },
   { q: "What hormone is known as the 'stress hormone'?", opts: ["Dopamine","Serotonin","Cortisol","Oxytocin"], ans: 2, cat: "💪 Health" },
   { q: "How many hours of sleep do most adults need?", opts: ["4-5 hours","6-7 hours","7-9 hours","10-12 hours"], ans: 2, cat: "💪 Health" },
   { q: "What is 'neuroplasticity'?", opts: ["Brain damage","Brain's ability to reorganize and form new connections","Memory loss","Speed of thinking"], ans: 1, cat: "🔥 Mindset" },
-  { q: "What is the benefit of cold exposure/cold showers?", opts: ["Nothing proven","Increases alertness and reduces inflammation","Makes you sick","Slows metabolism"], ans: 1, cat: "💪 Health" },
+  { q: "What is the benefit of cold showers?", opts: ["Nothing proven","Increases alertness and reduces inflammation","Makes you sick","Slows metabolism"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'stoicism'?", opts: ["Being emotionless","Philosophy of enduring pain/pleasure without complaint and focusing on control","A type of meditation","Ancient Greek sport"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'delayed gratification' mean?", opts: ["Paying late","Resisting short-term rewards for long-term benefits","Skipping dessert","Getting paid later"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'self-awareness'?", opts: ["Being selfish","Conscious knowledge of one's own character and feelings","Awareness of others","Physical awareness"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is the benefit of daily exercise on the brain?", opts: ["No effect","Increases BDNF improving memory and focus","Decreases brain activity","Only helps muscles"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'imposter syndrome'?", opts: ["A real medical condition","Feeling of being a fraud despite accomplishments","Copying others","Identity theft"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'discipline' mean in personal development?", opts: ["Punishment","Consistent action toward goals regardless of motivation","Strict rules","Following orders"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'confirmation bias'?", opts: ["Confirming passwords","Tendency to favor information confirming existing beliefs","Bias against confirmation","Logical thinking"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is mindfulness?", opts: ["A type of exercise","Being present and fully aware of the current moment","Planning ahead","Memory improvement"], ans: 1, cat: "💪 Health" },
+  { q: "What does 'locus of control' mean?", opts: ["Physical location","Belief about how much control you have over your life outcomes","Controlling others","Remote work"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is the recommended daily water intake?", opts: ["1 litre","2 litres","3-4 litres (varies by person and activity)","5+ litres"], ans: 2, cat: "💪 Health" },
+  { q: "What is 'visualization' in peak performance?", opts: ["Watching videos","Mentally rehearsing success to improve real performance","Drawing goals","Using vision boards only"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What are endorphins?", opts: ["Stress hormones","Feel-good chemicals released during exercise","Brain cells","Digestive enzymes"], ans: 1, cat: "💪 Health" },
+  { q: "What is the '1% better every day' concept?", opts: ["Earning 1% more","Small daily improvements compound into massive results","Reducing work by 1%","A financial rule"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is cognitive load?", opts: ["Computer processing power","Mental effort being used in working memory","Weight of a laptop","Learning speed"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'social proof' in psychology?", opts: ["Legal proof","Tendency to follow others' actions in uncertain situations","Social media followers","Academic proof"], ans: 1, cat: "🔥 Mindset" },
 ];
 
 let quizState = {
@@ -4225,19 +4495,42 @@ function getTodayDateStr() {
 }
 
 function getDailyQuestions() {
-  // Seed based on date so everyone gets same questions that day
   const today = getTodayDateStr();
+  const totalQ = ALL_QUIZ_QUESTIONS.length; // 100 questions
+  const perDay = 10;
+  const totalDays = Math.floor(totalQ / perDay); // 10 days before cycle repeats
+
+  // Get used question indices from past days
+  const usedKey = 'fm_quiz_used_indices';
+  let usedData = JSON.parse(localStorage.getItem(usedKey) || '{"indices":[],"lastReset":""}');
+
+  // Reset after full cycle (all questions used)
+  if (usedData.indices.length >= totalQ - perDay) {
+    usedData = { indices: [], lastReset: today };
+    localStorage.setItem(usedKey, JSON.stringify(usedData));
+  }
+
+  // Available pool — exclude already used questions
+  const available = [...Array(totalQ).keys()].filter(i => !usedData.indices.includes(i));
+
+  // Seed with today's date for consistency within the day
   const seed = today.replace(/-/g,'');
-  let indices = [];
-  let pool = [...Array(ALL_QUIZ_QUESTIONS.length).keys()];
   let s = parseInt(seed) % 99999;
-  while (indices.length < 10 && pool.length > 0) {
+  const selected = [];
+  const pool = [...available];
+
+  while (selected.length < perDay && pool.length > 0) {
     s = (s * 1664525 + 1013904223) % (2**32);
     const idx = s % pool.length;
-    indices.push(pool[idx]);
+    selected.push(pool[idx]);
     pool.splice(idx, 1);
   }
-  return indices.map(i => ALL_QUIZ_QUESTIONS[i]);
+
+  // Save used indices so tomorrow we skip them
+  const updatedUsed = [...usedData.indices, ...selected];
+  localStorage.setItem(usedKey, JSON.stringify({ indices: updatedUsed, lastReset: usedData.lastReset }));
+
+  return selected.map(i => ALL_QUIZ_QUESTIONS[i]);
 }
 
 function initQuiz() {
@@ -4442,6 +4735,184 @@ function answerMM(i) {
   mmRound++;
   setTimeout(renderMM, 1200);
 }
+</script>
+<script>
+// ─── PLAN SYSTEM ─────────────────────────────────────────────
+// FREE limits: 5 tasks, 5 goals, 10 AI chats/day, 10 quiz/day, no wealth
+// PRO: unlimited everything + wealth section
+// Razorpay Key — replace with real key when selling
+const RAZORPAY_KEY = 'rzp_test_YourKeyHere';
+const PRO_AMOUNT = 29900; // ₹299 in paise
+
+function getUserPlan() {
+  return localStorage.getItem('fm_plan') || 'free';
+}
+
+function isPro() {
+  return getUserPlan() === 'pro';
+}
+
+function getDailyCount(key) {
+  const today = new Date().toDateString();
+  const stored = JSON.parse(localStorage.getItem(key) || '{"date":"","count":0}');
+  if (stored.date !== today) return 0;
+  return stored.count;
+}
+
+function incrementDailyCount(key) {
+  const today = new Date().toDateString();
+  const stored = JSON.parse(localStorage.getItem(key) || '{"date":"","count":0}');
+  const count = stored.date === today ? stored.count + 1 : 1;
+  localStorage.setItem(key, JSON.stringify({ date: today, count }));
+  return count;
+}
+
+function updatePlanUI() {
+  const badge = document.getElementById('planBadge');
+  const wealthLock = document.getElementById('wealthLock');
+  if (!badge) return;
+
+  if (isPro()) {
+    badge.textContent = '⚡ PRO';
+    badge.className = 'pro-badge';
+    badge.onclick = null;
+    badge.title = 'You are on Pro plan!';
+    if (wealthLock) wealthLock.style.display = 'none';
+  } else {
+    badge.textContent = 'FREE';
+    badge.className = 'free-badge';
+    badge.onclick = openPricing;
+    badge.title = 'Upgrade to Pro';
+    if (wealthLock) wealthLock.style.display = 'flex';
+  }
+}
+
+function openPricing() {
+  const modal = document.getElementById('pricingModal');
+  if (modal) modal.classList.add('show');
+}
+
+function closePricing() {
+  const modal = document.getElementById('pricingModal');
+  if (modal) modal.classList.remove('show');
+}
+
+function startPayment() {
+  if (typeof Razorpay === 'undefined') {
+    // Razorpay not loaded — show demo mode
+    showToast('🎉 Demo Mode: Upgrading to Pro! (Add real Razorpay key to enable payments)');
+    activatePro('demo_' + Date.now());
+    closePricing();
+    return;
+  }
+
+  const options = {
+    key: RAZORPAY_KEY,
+    amount: PRO_AMOUNT,
+    currency: 'INR',
+    name: 'FlowMind AI',
+    description: 'Pro Plan - Monthly Subscription',
+    image: 'https://flowmind-ai-five.vercel.app/favicon.ico',
+    handler: function(response) {
+      activatePro(response.razorpay_payment_id);
+      showToast('🎉 Payment successful! Welcome to Pro!');
+      closePricing();
+    },
+    prefill: {
+      name: userName || '',
+      email: window._fbCurrentUser ? window._fbCurrentUser.email : ''
+    },
+    theme: { color: '#f5c842' },
+    modal: {
+      ondismiss: function() {
+        showToast('Payment cancelled.');
+      }
+    }
+  };
+
+  try {
+    const rzp = new Razorpay(options);
+    rzp.open();
+  } catch(e) {
+    showToast('Payment system error. Contact support.');
+  }
+}
+
+function activatePro(paymentId) {
+  localStorage.setItem('fm_plan', 'pro');
+  localStorage.setItem('fm_payment_id', paymentId);
+  localStorage.setItem('fm_pro_since', new Date().toISOString());
+  updatePlanUI();
+  // Save to Firestore if logged in
+  if (window._fbDb && window._fbCurrentUser) {
+    window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
+      plan: 'pro', paymentId, proSince: new Date().toISOString()
+    }).catch(() => {});
+  }
+}
+
+// ─── FREE PLAN LIMIT CHECKS ──────────────────────────────────
+const FREE_TASK_LIMIT = 5;
+const FREE_GOAL_LIMIT = 5;
+const FREE_CHAT_LIMIT = 10;
+
+function checkTaskLimit() {
+  if (isPro()) return true;
+  if (tasks.length >= FREE_TASK_LIMIT) {
+    showToast(`⚠️ Free plan limit: ${FREE_TASK_LIMIT} tasks max. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1000);
+    return false;
+  }
+  return true;
+}
+
+function checkGoalLimit() {
+  if (isPro()) return true;
+  if (goals.length >= FREE_GOAL_LIMIT) {
+    showToast(`⚠️ Free plan limit: ${FREE_GOAL_LIMIT} goals max. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1000);
+    return false;
+  }
+  return true;
+}
+
+function checkChatLimit() {
+  if (isPro()) return true;
+  const count = getDailyCount('fm_chat_count');
+  if (count >= FREE_CHAT_LIMIT) {
+    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day used. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1200);
+    return false;
+  }
+  incrementDailyCount('fm_chat_count');
+  return true;
+}
+
+// ─── THEME TOGGLE ─────────────────────────────────────────────
+function toggleTheme() {
+  const body = document.body;
+  const btn = document.getElementById('themeToggleBtn');
+  const isLight = body.classList.toggle('light-mode');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('fm_theme', isLight ? 'light' : 'dark');
+}
+
+function initTheme() {
+  const saved = localStorage.getItem('fm_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light-mode');
+    const btn = document.getElementById('themeToggleBtn');
+    if (btn) btn.textContent = '☀️';
+  }
+}
+
+// Close modal on outside click
+document.getElementById('pricingModal').addEventListener('click', function(e) {
+  if (e.target === this) closePricing();
+});
+
+// Init theme on load
+window.addEventListener('load', initTheme);
 </script>
 </body>
 </html>
