@@ -1116,34 +1116,60 @@ body::before {
   .hamburger { display: flex; }
   .greeting { display: none; }
   .status-pill span { display: none; }
-  .chat-header { padding: 12px 16px; }
-  .messages { padding: 12px; }
-  .chips-row { padding: 0 12px 10px; }
-  .chat-input-bar { padding: 10px 12px; }
-  .panel-topbar { padding: 14px 16px; flex-wrap: wrap; gap: 8px; }
-  .tasks-body { padding: 12px 14px; }
-  .wealth-overview { padding: 14px; }
-  .wealth-grid { padding: 12px 14px; grid-template-columns: 1fr; }
-  .goals-grid { padding: 12px 14px; grid-template-columns: 1fr; }
-  .report-body { padding: 14px; }
-  .add-form { padding: 10px 14px; }
-  .modal { padding: 20px 16px; margin: 16px; width: calc(100% - 32px); }
-  .logo-text { font-size: 13px; }
-  .topbar { padding: 0 12px; gap: 6px; }
-  .topbar-right { gap: 6px; }
-  .api-btn { padding: 6px 10px; font-size: 11px; }
-  #themeToggleBtn { padding: 6px 8px; }
-  .msg .bubble { max-width: 92%; font-size: 13px; }
-  .chat-input-wrap textarea { font-size: 14px; }
-  .panel-heading { font-size: 16px; }
+  .status-pill { padding: 4px 8px; }
+  .chat-header { padding: 10px 14px; gap: 6px; flex-wrap: wrap; }
+  .chat-model-badge { font-size: 10px; padding: 3px 8px; }
+  .messages { padding: 12px; gap: 14px; }
+  .msg { max-width: 95%; }
+  .msg .msg-bubble { font-size: 13px; padding: 10px 13px; }
+  .chips-row { padding: 0 10px 10px; gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
+  .chip { white-space: nowrap; font-size: 11px; padding: 6px 12px; flex-shrink: 0; }
+  .chat-input-bar { padding: 8px 10px; gap: 6px; }
+  .chat-input-wrap { padding: 6px 10px; }
+  #chatInput { font-size: 14px; }
+  .send-btn { width: 40px; height: 40px; font-size: 16px; }
+  .mic-btn { width: 40px; height: 40px; font-size: 16px; }
+  .attach-btn-wrap { flex-shrink: 0; }
+  .panel-topbar { padding: 12px 14px; flex-wrap: wrap; gap: 8px; }
+  .panel-heading { font-size: 15px; }
   .add-btn { padding: 7px 12px; font-size: 12px; }
-  .game-grid { grid-template-columns: 1fr; }
-  .report-charts-grid { grid-template-columns: 1fr !important; }
-  .pricing-modal { padding: 24px 16px; }
-  .plans-grid { grid-template-columns: 1fr; }
-  .live-stage { padding: 20px 12px; }
+  .tasks-body { padding: 10px 12px; }
+  .task-card { padding: 12px; }
+  .task-title { font-size: 13px; }
+  .wealth-overview { padding: 12px 14px; }
+  .wealth-total-val { font-size: 26px; }
+  .wealth-grid { padding: 10px 12px; grid-template-columns: 1fr; gap: 10px; }
+  .wealth-card { padding: 14px; }
+  .goals-grid { padding: 10px 12px; grid-template-columns: 1fr; gap: 10px; }
+  .goal-card { padding: 14px; }
+  .goal-title { font-size: 13px; }
+  .report-body { padding: 12px; }
+  .report-charts-grid { grid-template-columns: 1fr !important; gap: 12px; }
+  .report-chart-card { padding: 14px; }
+  .add-form { padding: 10px 12px; gap: 8px; }
+  .add-form input, .add-form select, .add-form textarea { font-size: 14px; padding: 10px 12px; }
+  .modal { padding: 20px 16px; margin: 12px; width: calc(100% - 24px); max-height: 85vh; overflow-y: auto; }
+  .logo-text { font-size: 13px; }
+  .topbar { padding: 0 10px; gap: 5px; height: 52px; }
+  .topbar-right { gap: 5px; }
+  .api-btn { padding: 5px 8px; font-size: 11px; }
+  #themeToggleBtn { padding: 5px 7px; font-size: 14px; }
   #liveClock { display: none; }
-  .plan-badge, .free-badge, .pro-badge { font-size: 9px; padding: 2px 6px; }
+  .free-badge, .pro-badge { font-size: 9px; padding: 3px 7px; }
+  .game-grid { grid-template-columns: 1fr; gap: 12px; }
+  .game-card { padding: 16px; }
+  .pricing-modal { padding: 22px 14px; }
+  .plans-grid { grid-template-columns: 1fr; gap: 12px; }
+  .plan-card { padding: 18px 14px; }
+  .live-stage { padding: 16px 10px; }
+  .sidebar-stat-row { padding: 6px 14px; }
+  .sidebar-section { padding: 12px 14px 6px; }
+  .nav-item { padding: 9px 12px; font-size: 13px; }
+  .locked-overlay h3 { font-size: 17px; }
+  .locked-overlay p { font-size: 12px; }
+  .unlock-btn { padding: 10px 18px; font-size: 13px; }
+  .quiz-card { padding: 16px 14px; }
+  .quiz-opt { padding: 10px 12px; font-size: 13px; }
 }
 
 /* ── VOICE & TTS ── */
@@ -2414,8 +2440,11 @@ async function firebaseSignup() {
 }
 
 async function firebaseGoogleLogin() {
-  if (!window._fbAuth) { showToast('Firebase loading... try again in a second!'); return; }
+  if (!window._fbAuth) { showToast('Firebase loading... try again!'); return; }
+  const errEl = document.getElementById('loginError');
+
   try {
+    // Try popup first
     window._fbAuth.useDeviceLanguage();
     const result = await window._fbAuth.signInWithPopup(window._fbGoogleProvider);
     const user = result.user;
@@ -2423,27 +2452,46 @@ async function firebaseGoogleLogin() {
       const ref = window._fbDb.collection('users').doc(user.uid);
       const snap = await ref.get();
       if (!snap.exists) {
-        await ref.set({
-          name: user.displayName,
-          email: user.email,
-          createdAt: new Date().toISOString()
-        });
+        await ref.set({ name: user.displayName, email: user.email, createdAt: new Date().toISOString() });
       }
     } catch(fe) { console.log('Firestore skipped', fe); }
   } catch(e) {
-    const msg = e.message || '';
-    if (msg.includes('popup-blocked')) {
-      showToast('⚠️ Popup blocked! Please allow popups for this site in your browser settings.');
-    } else if (msg.includes('popup-closed')) {
+    const code = e.code || '';
+    if (code === 'auth/popup-blocked' || code === 'auth/cancelled-popup-request') {
+      // Popup blocked — try redirect
+      showToast('⏳ Redirecting to Google...');
+      try {
+        await window._fbAuth.signInWithRedirect(window._fbGoogleProvider);
+      } catch(re) {
+        if (errEl) { errEl.textContent = 'Google sign-in failed. Please use Email login instead.'; errEl.style.display = 'block'; errEl.style.color = 'var(--red)'; }
+      }
+    } else if (code === 'auth/popup-closed-by-user') {
       showToast('Google sign-in cancelled.');
+    } else if (code === 'auth/network-request-failed') {
+      if (errEl) { errEl.textContent = '🌐 Network error. Check your connection.'; errEl.style.display = 'block'; errEl.style.color = 'var(--red)'; }
     } else {
-      showToast('Google sign-in failed: ' + msg.replace('Firebase: ','').replace(/\(.*\)/,''));
+      if (errEl) { errEl.textContent = e.message.replace('Firebase: ','').replace(/\(.*\)/,''); errEl.style.display = 'block'; errEl.style.color = 'var(--red)'; }
     }
   }
 }
 
 async function handleRedirectResult() {
-  // No longer using redirect - kept for compatibility
+  if (!window._fbAuth) return;
+  try {
+    const result = await window._fbAuth.getRedirectResult();
+    if (result && result.user) {
+      const user = result.user;
+      try {
+        const ref = window._fbDb.collection('users').doc(user.uid);
+        const snap = await ref.get();
+        if (!snap.exists) {
+          await ref.set({ name: user.displayName, email: user.email, createdAt: new Date().toISOString() });
+        }
+      } catch(fe) { console.log('Firestore skipped', fe); }
+    }
+  } catch(e) {
+    console.log('Redirect result:', e.message);
+  }
 }
 
 async function firebaseLogout() {
@@ -2760,44 +2808,47 @@ function clearChat() {
 function processAiCommands(replyText) {
   let processedText = replyText;
 
-  // 1. ADD Tasks
+  // 1. ADD Tasks — ask user confirmation first
   const taskRegex = /\[ADD_TASK:\s*(.*?)\s*\|\s*(.*?)\]/g;
   let matchTask;
+  const pendingTasks = [];
   while ((matchTask = taskRegex.exec(processedText)) !== null) {
     const tTitle = matchTask[1].trim();
     let tCat = matchTask[2].trim().toLowerCase();
     if (!['wealth','strategy','personal','health','general'].includes(tCat)) tCat = 'general';
-    tasks.push({ id: genId(), title: tTitle, cat: tCat, done: false, created: new Date().toISOString() });
-    save(); renderTasks(); updateSidebar();
-    toast('✅ AI added a new task!');
+    pendingTasks.push({ title: tTitle, cat: tCat });
   }
-  
-  // 2. DELETE Tasks
-  const delTaskRegex = /\[DELETE_TASK:\s*(\d+)\]/g;
-  let matchDelTask;
-  while ((matchDelTask = delTaskRegex.exec(processedText)) !== null) {
-      deleteTask(parseInt(matchDelTask[1]), true); // silent toast internally
-      toast('🗑 AI deleted a task!');
+  if (pendingTasks.length > 0) {
+    setTimeout(() => {
+      pendingTasks.forEach(t => {
+        if (confirm(`AI wants to add task: "${t.title}"\nAdd it to your tasks?`)) {
+          if (!checkTaskLimit()) return;
+          tasks.push({ id: genId(), title: t.title, cat: t.cat, done: false, created: new Date().toISOString() });
+          save(); renderTasks(); updateSidebar();
+          toast('✅ Task added!');
+        }
+      });
+    }, 500);
   }
 
-  // 3. ADD Goals
+  // 2. ADD Goals — ask user confirmation first
   const goalRegex = /\[ADD_GOAL:\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(\d+)\]/g;
   let matchGoal;
+  const pendingGoals = [];
   while ((matchGoal = goalRegex.exec(processedText)) !== null) {
-    const gTitle = matchGoal[1].trim();
-    const gDesc = matchGoal[2].trim();
-    const gProg = parseInt(matchGoal[3]) || 0;
-    goals.push({ id: genId(), title: gTitle, desc: gDesc, progress: gProg, done: (gProg>=100), completedOn: (gProg>=100?new Date().toLocaleDateString():null), created: new Date().toISOString() });
-    save(); renderGoals(); updateSidebar();
-    toast('🎯 AI set a new goal!');
+    pendingGoals.push({ title: matchGoal[1].trim(), desc: matchGoal[2].trim(), progress: parseInt(matchGoal[3])||0 });
   }
-  
-  // 4. DELETE Goals
-  const delGoalRegex = /\[DELETE_GOAL:\s*(\d+)\]/g;
-  let matchDelGoal;
-  while ((matchDelGoal = delGoalRegex.exec(processedText)) !== null) {
-      deleteGoal(parseInt(matchDelGoal[1]), true); 
-      toast('🗑 AI deleted a goal!');
+  if (pendingGoals.length > 0) {
+    setTimeout(() => {
+      pendingGoals.forEach(g => {
+        if (confirm(`AI wants to add goal: "${g.title}"\nAdd it to your goals?`)) {
+          if (!checkGoalLimit()) return;
+          goals.push({ id: genId(), title: g.title, desc: g.desc, progress: g.progress, done: (g.progress>=100), completedOn: (g.progress>=100?new Date().toLocaleDateString():null), created: new Date().toISOString() });
+          save(); renderGoals(); updateSidebar();
+          toast('🎯 Goal added!');
+        }
+      });
+    }, 500);
   }
 
   // Hide the brackets from the final user UI
@@ -2848,23 +2899,25 @@ async function sendMessage() {
 You know their data:
 - Net Worth: $${totalWealth.toLocaleString()}
 - Tasks:
-${tasks.map(t => `  [ID: ${t.id}] ${t.title} (${t.done?'done':'active'})`).join('\n')}
+${tasks.map(t => `  [ID: ${t.id}] ${t.title} (${t.done?'done':'active'})`).join('\n') || '  No tasks yet'}
 - Goals:
-${goals.map(g => `  [ID: ${g.id}] ${g.title} (${g.progress}%)`).join('\n')}
+${goals.map(g => `  [ID: ${g.id}] ${g.title} (${g.progress}%)`).join('\n') || '  No goals yet'}
 
-*** SPECIAL ADMIN POWERS ***
-You have the ability to directly add or delete tasks and goals to the user's OS!
-If the user asks you to add or delete, you MUST include these EXACT formats anywhere in your reply:
+*** IMPORTANT RULES ***
+1. NEVER add tasks or goals automatically unless the user EXPLICITLY says "add this task" or "add this goal" or "create a task/goal"
+2. NEVER suggest adding tasks unless asked
+3. Only use the special commands below when user specifically requests it
 
+*** SPECIAL COMMANDS (only when user explicitly asks) ***
 To ADD a task: [ADD_TASK: Task Title | category]
 (categories: wealth, strategy, personal, health, general)
-To DELETE a task: [DELETE_TASK: <ID>] (Replace <ID> with the exact number)
+To DELETE a task: [DELETE_TASK: <ID>]
 
 To ADD a goal: [ADD_GOAL: Goal Title | Description | Progress Number]
 To DELETE a goal: [DELETE_GOAL: <ID>]
 
-Example 1: "Done! I've removed that task. [DELETE_TASK: 12345]"
-Example 2: "Added to your list! [ADD_TASK: Read 10 pages | personal]"`;
+Example: User says "add a task to read 10 pages" → "Done! [ADD_TASK: Read 10 pages | personal]"
+Example: User says "help me plan my day" → Just give advice, NO task commands!`;
 
   // Base API configuration
   let modelToUse = 'llama-3.3-70b-versatile';
