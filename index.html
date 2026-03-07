@@ -40,7 +40,10 @@ function initFirebase() {
     window._fbGoogleProvider = new firebase.auth.GoogleAuthProvider();
     window._fbGoogleProvider.addScope('email');
     window._fbGoogleProvider.addScope('profile');
-    window._fbGoogleProvider.setCustomParameters({ prompt: 'select_account' });
+    window._fbGoogleProvider.setCustomParameters({ 
+      prompt: 'select_account',
+      display: 'popup'
+    });
 
     window._fbAuth.onAuthStateChanged(function(user) {
       if (user) {
@@ -2507,7 +2510,6 @@ async function firebaseGoogleLogin() {
   try {
     if (btn) { btn.innerHTML = '⏳ Connecting to Google...'; btn.disabled = true; }
     window._fbAuth.useDeviceLanguage();
-    window._fbGoogleProvider.setCustomParameters({ prompt: 'select_account' });
     const result = await window._fbAuth.signInWithPopup(window._fbGoogleProvider);
     if (result.user) {
       // Save user to Firestore
