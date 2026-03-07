@@ -26,7 +26,7 @@ function initFirebase() {
     }
     var firebaseConfig = {
       apiKey: "AIzaSyBKy0lHoCpZhwiJF2u319o-TyFUIhvzwzc",
-      authDomain: "flowmind-ai-five.vercel.app",
+      authDomain: "flowmind-ai-b9a35.firebaseapp.com",
       projectId: "flowmind-ai-b9a35",
       storageBucket: "flowmind-ai-b9a35.firebasestorage.app",
       messagingSenderId: "430878228394",
@@ -52,14 +52,6 @@ function initFirebase() {
       }
     });
     console.log('Firebase ready!');
-    // Handle Google redirect result on page load
-    window._fbAuth.getRedirectResult().then(function(result) {
-      if (result && result.user) {
-        console.log('Redirect login success:', result.user.email);
-      }
-    }).catch(function(e) {
-      console.log('Redirect result error:', e.code, e.message);
-    });
   } catch(e) {
     console.log('Firebase init error - local mode active:', e.message);
   }
@@ -2449,36 +2441,44 @@ async function firebaseSignup() {
 }
 
 async function firebaseGoogleLogin() {
-  if (!window._fbAuth) {
-    showToast('⏳ Firebase loading... try again!');
-    return;
-  }
+  if (!window._fbAuth) { showToast('⏳ Firebase loading... try again!'); return; }
   const errEl = document.getElementById('loginError');
   const btn = document.querySelector('[onclick="firebaseGoogleLogin()"]');
+  if (errEl) errEl.style.display = 'none';
 
   try {
-    // Show loading state on button
-    if (btn) { btn.innerHTML = '⏳ Redirecting to Google...'; btn.disabled = true; }
-    if (errEl) errEl.style.display = 'none';
-
-    // Pure redirect — works on ALL browsers, ALL devices, NO popup issues
-    await window._fbAuth.signInWithRedirect(window._fbGoogleProvider);
-
-    // Page will redirect to Google — code below won't run until user comes back
+    if (btn) { btn.innerHTML = '⏳ Opening Google...'; btn.disabled = true; }
+    window._fbAuth.useDeviceLanguage();
+    const result = await window._fbAuth.signInWithPopup(window._fbGoogleProvider);
+    if (btn) { btn.innerHTML = '✅ Signed in!'; }
   } catch(e) {
-    if (btn) { btn.innerHTML = '<img src="https://www.google.com/favicon.ico" width="18" style="border-radius:3px"> Continue with Google'; btn.disabled = false; }
-    const msg = (e.message || '').replace('Firebase: ', '').replace(/\(.*\)/, '');
-    if (errEl) {
-      errEl.textContent = '❌ ' + (msg || 'Google sign-in failed. Try Email login.');
-      errEl.style.display = 'block';
-      errEl.style.color = 'var(--red)';
+    if (btn) { btn.innerHTML = '<img src="https://www.google.com/favicon.ico" width="16" style="border-radius:3px;vertical-align:middle"> Continue with Google'; btn.disabled = false; }
+    const code = e.code || '';
+    let msg = '';
+    if (code === 'auth/popup-blocked') {
+      msg = '⚠️ Popup blocked! Click the address bar → allow popups → try again.';
+    } else if (code === 'auth/popup-closed-by-user') {
+      msg = 'Sign-in cancelled. Try again!';
+    } else if (code === 'auth/cancelled-popup-request') {
+      msg = 'Multiple popups detected. Please try again.';
+    } else if (code === 'auth/network-request-failed') {
+      msg = '🌐 Network error. Check your connection.';
+    } else if (code === 'auth/unauthorized-domain') {
+      msg = '❌ Domain not authorized. Contact support.';
+    } else {
+      msg = e.message.replace('Firebase: ','').replace(/\(auth.*\)/,'').trim();
     }
-    console.log('Google login error:', e.code, e.message);
+    if (errEl && msg) {
+      errEl.textContent = msg;
+      errEl.style.display = 'block';
+      errEl.style.color = '#ff5b5b';
+    }
+    console.log('Google login error:', code, e.message);
   }
 }
 
 async function handleRedirectResult() {
-  // Kept for compatibility — redirect result handled in initFirebase
+  // Not used - popup method only
 }
 
 async function firebaseLogout() {
@@ -4955,4 +4955,4 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 window.addEventListener('load', initTheme);
 </script>
 </body>
-</html>        
+</html>
