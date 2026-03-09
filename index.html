@@ -1712,7 +1712,106 @@ body::before {
 }
 .unlock-btn:hover { background:var(--gold2);transform:translateY(-2px); }
 
-/* ── LIGHT MODE ── */
+/* ── HOME DASHBOARD ── */
+.home-stat-card {
+  background: var(--ink2);
+  border: 1px solid var(--line);
+  border-radius: var(--r2);
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.home-stat-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.home-stat-icon { font-size: 22px; margin-bottom: 8px; }
+.home-stat-val { font-size: 22px; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; }
+.home-stat-val.gold { color: var(--gold); }
+.home-stat-val.green { color: var(--green); }
+.home-stat-label { font-size: 11px; color: var(--silver); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+.quick-action-btn {
+  background: var(--ink3);
+  border: 1px solid var(--line2);
+  border-radius: var(--r);
+  padding: 12px;
+  color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+.quick-action-btn:hover { border-color: var(--gold); background: rgba(245,200,66,0.06); }
+
+/* ── MOBILE FAB ── */
+.fab-btn {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  width: 56px; height: 56px;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(245,200,66,0.4);
+  z-index: 90;
+  transition: all 0.2s;
+  align-items: center;
+  justify-content: center;
+}
+.fab-btn:active { transform: scale(0.93); }
+
+/* ── ONBOARDING ── */
+.onboarding-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+.onboarding-card {
+  background: var(--ink2);
+  border: 1px solid var(--line2);
+  border-radius: var(--r3);
+  padding: 36px 32px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+}
+.onboarding-step { font-size: 12px; color: var(--silver); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+.onboarding-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.onboarding-sub { font-size: 14px; color: var(--silver); margin-bottom: 24px; line-height: 1.6; }
+.onboarding-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.onboarding-opt {
+  background: var(--ink3);
+  border: 2px solid var(--line2);
+  border-radius: var(--r2);
+  padding: 14px 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+}
+.onboarding-opt:hover, .onboarding-opt.selected { border-color: var(--gold); background: rgba(245,200,66,0.08); }
+.onboarding-opt .opt-icon { font-size: 24px; margin-bottom: 6px; display: block; }
+.onboarding-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
+.onboarding-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line2); transition: all 0.2s; }
+.onboarding-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+@media (max-width: 680px) {
+  .fab-btn { display: flex; }
+  #homeStatsGrid { grid-template-columns: repeat(2, 1fr); }
+  .onboarding-card { padding: 24px 18px; }
+  .onboarding-options { grid-template-columns: 1fr 1fr; }
+}
 body.light-mode {
   --ink:   #f5f5f7;
   --ink2:  #ffffff;
@@ -1750,37 +1849,44 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
 <!-- PRICING MODAL -->
 <div class="pricing-modal-overlay" id="pricingModal">
   <div class="pricing-modal">
-    <h2>Upgrade FlowMind AI</h2>
-    <p class="pricing-modal-sub">Unlock your full productivity potential</p>
+    <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">Run Your Life With FlowMind</h2>
+    <p class="pricing-modal-sub">Most users see results in their first week 🚀</p>
     <div class="plans-grid">
       <!-- FREE PLAN -->
       <div class="plan-card">
-        <div class="plan-name">Free</div>
+        <div class="plan-name">Starter</div>
+        <div style="font-size:11px;color:var(--silver);margin-bottom:8px;">Test the system</div>
         <div class="plan-price">₹0 <span>/month</span></div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> 5 Tasks max</li>
-          <li><span class="fi">✓</span> 5 Goals max</li>
-          <li><span class="fi">✓</span> 10 AI chats/day</li>
-          <li><span class="fi">✓</span> 10 Quiz/day</li>
-          <li><span class="fi">✗</span> No Wealth section</li>
-          <li><span class="fi">✗</span> No Cloud Sync</li>
+          <li><span class="fi">✓</span> AI Coach (10 chats/day)</li>
+          <li><span class="fi">✓</span> 5 Tasks + 5 Goals</li>
+          <li><span class="fi">✓</span> Daily Quiz</li>
+          <li><span class="fi">✓</span> Basic Reports</li>
+          <li><span class="fi">✗</span> Wealth Dashboard</li>
+          <li><span class="fi">✗</span> Cloud Sync</li>
+          <li><span class="fi">✗</span> Voice Coaching</li>
+          <li><span class="fi">✗</span> Advanced AI Insights</li>
         </ul>
         <button class="plan-btn plan-btn-free" onclick="closePricing()">Current Plan</button>
       </div>
       <!-- PRO PLAN -->
       <div class="plan-card pro">
-        <div class="plan-card-badge">⚡ POPULAR</div>
+        <div class="plan-card-badge">⚡ BEST VALUE</div>
         <div class="plan-name" style="color:var(--gold)">Pro</div>
+        <div style="font-size:11px;color:var(--silver);margin-bottom:8px;">Run your life with FlowMind</div>
         <div class="plan-price">₹299 <span>/month</span></div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> Unlimited Tasks</li>
-          <li><span class="fi">✓</span> Unlimited Goals</li>
-          <li><span class="fi">✓</span> Unlimited AI chats</li>
-          <li><span class="fi">✓</span> Unlimited Quiz</li>
-          <li><span class="fi">✓</span> Wealth section</li>
-          <li><span class="fi">✓</span> Cloud Sync</li>
+          <li><span class="fi">✓</span> Unlimited AI Coach chats</li>
+          <li><span class="fi">✓</span> Unlimited Tasks + Goals</li>
+          <li><span class="fi">✓</span> 💰 Wealth Dashboard</li>
+          <li><span class="fi">✓</span> ☁️ Cloud Sync across devices</li>
+          <li><span class="fi">✓</span> 🎙 Voice Coaching mode</li>
+          <li><span class="fi">✓</span> 📊 Advanced Reports + Insights</li>
+          <li><span class="fi">✓</span> 🧠 Smart AI Memory</li>
+          <li><span class="fi">✓</span> Priority support</li>
         </ul>
-        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Upgrade Now →</button>
+        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Start Pro — ₹299/mo →</button>
+        <div style="text-align:center;font-size:11px;color:var(--silver);margin-top:8px;">Cancel anytime · Instant activation</div>
       </div>
     </div>
     <button class="plan-close-btn" onclick="closePricing()">✕ Maybe later</button>
@@ -1791,8 +1897,8 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
   <!-- Auth Screen -->
   <div class="landing-inner" id="authBox">
     <div class="landing-logo">Flow<span>Mind</span> · AI OS</div>
-    <h1 class="landing-headline">Your Personal Intelligence Layer</h1>
-    <p class="landing-sub">Sign in to sync your data across all devices.</p>
+    <h1 class="landing-headline">Your AI-Powered Life & Productivity OS</h1>
+    <p class="landing-sub">Plan smarter. Grow faster. Achieve more — with AI as your personal coach.</p>
 
     <!-- Tab Switch -->
     <div style="display:flex;gap:0;margin-bottom:24px;background:var(--ink3);border-radius:var(--r2);padding:4px;">
@@ -1881,7 +1987,10 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
     <div class="sidebar" id="sidebar">
       <div class="sidebar-section">
         <div class="sidebar-label">Navigation</div>
-        <button class="nav-item active" onclick="switchPanel('chat',this)">
+        <button class="nav-item active" onclick="switchPanel('home',this)">
+          <span class="nav-icon">🏠</span> Home
+        </button>
+        <button class="nav-item" onclick="switchPanel('chat',this)">
           <span class="nav-icon">💬</span> AI Chat
           <span class="nav-badge" id="msgBadge" style="display:none">0</span>
         </button>
@@ -1929,7 +2038,74 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
 
     <div class="content">
 
-      <div class="panel active" id="panel-chat">
+      <!-- ── HOME DASHBOARD ── -->
+      <div class="panel active" id="panel-home">
+        <div class="panel-topbar">
+          <div class="panel-heading">🏠 Dashboard</div>
+          <div id="homeDate" style="font-size:13px;color:var(--silver);font-family:'JetBrains Mono',monospace;"></div>
+        </div>
+        <div class="report-body" id="homeDashboard" style="display:flex;flex-direction:column;gap:16px;padding:20px;">
+
+          <!-- Greeting + AI Insight -->
+          <div style="background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(91,143,255,0.08));border:1px solid rgba(245,200,66,0.2);border-radius:var(--r2);padding:20px;">
+            <div style="font-size:13px;color:var(--gold);font-weight:700;margin-bottom:6px;">⚡ FLOWMIND INSIGHT</div>
+            <div id="homeInsight" style="font-size:15px;color:var(--text);line-height:1.6;">Loading your daily insight...</div>
+            <button onclick="refreshInsight()" style="margin-top:12px;background:transparent;border:1px solid var(--line2);border-radius:var(--r);padding:6px 14px;color:var(--silver);font-size:12px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--line2)'">🔄 Refresh Insight</button>
+          </div>
+
+          <!-- Stats Row -->
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;" id="homeStatsGrid">
+            <div class="home-stat-card" onclick="switchPanel('tasks',document.querySelector('.nav-item:nth-child(3)'))">
+              <div class="home-stat-icon">✅</div>
+              <div class="home-stat-val" id="hTasksDone">0</div>
+              <div class="home-stat-label">Tasks Done</div>
+            </div>
+            <div class="home-stat-card" onclick="switchPanel('goals',document.querySelector('.nav-item:nth-child(5)'))">
+              <div class="home-stat-icon">🎯</div>
+              <div class="home-stat-val" id="hGoalsActive">0</div>
+              <div class="home-stat-label">Active Goals</div>
+            </div>
+            <div class="home-stat-card" onclick="switchPanel('wealth',document.querySelector('.nav-item:nth-child(4)'))">
+              <div class="home-stat-icon">💰</div>
+              <div class="home-stat-val gold" id="hNetWorth">₹0</div>
+              <div class="home-stat-label">Net Worth</div>
+            </div>
+            <div class="home-stat-card">
+              <div class="home-stat-icon">🔥</div>
+              <div class="home-stat-val green" id="hStreak">0</div>
+              <div class="home-stat-label">Day Streak</div>
+            </div>
+          </div>
+
+          <!-- Today's Focus -->
+          <div style="background:var(--ink2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;">
+            <div style="font-size:13px;color:var(--silver);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">📋 Today's Top Tasks</div>
+            <div id="homeTodayTasks"></div>
+            <button onclick="switchPanel('tasks',document.querySelectorAll('.nav-item')[2])" style="margin-top:10px;background:transparent;border:1px solid var(--line2);border-radius:var(--r);padding:7px 14px;color:var(--silver);font-size:12px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;width:100%;text-align:center;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--line2)'">View All Tasks →</button>
+          </div>
+
+          <!-- Goals Progress -->
+          <div style="background:var(--ink2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;">
+            <div style="font-size:13px;color:var(--silver);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">🎯 Goal Progress</div>
+            <div id="homeGoalsPreview"></div>
+            <button onclick="switchPanel('goals',document.querySelectorAll('.nav-item')[4])" style="margin-top:10px;background:transparent;border:1px solid var(--line2);border-radius:var(--r);padding:7px 14px;color:var(--silver);font-size:12px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;width:100%;text-align:center;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--line2)'">View All Goals →</button>
+          </div>
+
+          <!-- Quick Actions -->
+          <div style="background:var(--ink2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;">
+            <div style="font-size:13px;color:var(--silver);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">⚡ Quick Actions</div>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+              <button onclick="switchPanel('chat',document.querySelectorAll('.nav-item')[1]);setTimeout(()=>document.getElementById('chatInput').focus(),300)" class="quick-action-btn">💬 Ask AI</button>
+              <button onclick="switchPanel('tasks',document.querySelectorAll('.nav-item')[2]);setTimeout(()=>document.getElementById('taskForm').classList.add('show'),300)" class="quick-action-btn">➕ Add Task</button>
+              <button onclick="switchPanel('goals',document.querySelectorAll('.nav-item')[4]);setTimeout(()=>openModal('goalModal'),300)" class="quick-action-btn">🎯 New Goal</button>
+              <button onclick="switchPanel('report',document.querySelectorAll('.nav-item')[5])" class="quick-action-btn">📊 My Report</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── AI CHAT ── -->
         <div class="chat-header">
           <div class="chat-title">AI Chat</div>
           <div style="display:flex;gap:8px;align-items:center;">
@@ -2558,15 +2734,74 @@ window.onFirebaseLogin = async function(user) {
   userName = user.displayName || user.email.split('@')[0] || 'Friend';
   localStorage.setItem('fm_name', userName);
   try {
-    const snap = await window._fbDb.collection('users').doc(user.uid).get();
+    const ref = window._fbDb.collection('users').doc(user.uid);
+    const snap = await ref.get();
     if (snap.exists) {
       const data = snap.data();
-      if (data.tasks) { tasks = data.tasks; localStorage.setItem('fm_tasks', JSON.stringify(tasks)); }
+      // Load data
+      if (data.tasks)  { tasks  = data.tasks;  localStorage.setItem('fm_tasks',  JSON.stringify(tasks));  }
       if (data.assets) { assets = data.assets; localStorage.setItem('fm_assets', JSON.stringify(assets)); }
-      if (data.goals) { goals = data.goals; localStorage.setItem('fm_goals', JSON.stringify(goals)); }
+      if (data.goals)  { goals  = data.goals;  localStorage.setItem('fm_goals',  JSON.stringify(goals));  }
       if (data.apiKey) { apiKey = data.apiKey; localStorage.setItem('fm_apikey', apiKey); }
+      // Load preferences
+      if (data.preferences) {
+        if (data.preferences.theme) localStorage.setItem('fm_theme', data.preferences.theme);
+        if (data.preferences.aiTone) localStorage.setItem('fm_ai_tone', data.preferences.aiTone);
+        if (data.preferences.mode) localStorage.setItem('fm_mode', data.preferences.mode);
+      }
+      // ✅ Plan verified from Firestore — server is source of truth
+      _planStatus = (data.subscription && data.subscription.plan === 'pro') ? 'pro' : 'free';
+      localStorage.setItem('fm_plan', _planStatus);
+      _planVerified = true;
+      // Update last seen
+      await ref.update({ 'profile.lastSeen': new Date().toISOString() });
+    } else {
+      // New user — create structured record
+      const newUserDoc = {
+        profile: {
+          name: userName,
+          email: user.email,
+          createdAt: new Date().toISOString(),
+          lastSeen: new Date().toISOString(),
+          onboardingCompleted: false
+        },
+        subscription: {
+          plan: 'free',
+          status: 'active',
+          verified: false,
+          startedAt: new Date().toISOString(),
+          source: 'signup'
+        },
+        usage: {
+          dailyChatCount: 0,
+          dailyChatDate: new Date().toDateString(),
+          taskCount: 0,
+          goalCount: 0
+        },
+        preferences: {
+          theme: localStorage.getItem('fm_theme') || 'dark',
+          aiTone: 'friendly',
+          mode: 'productivity'
+        },
+        stats: {
+          streak: 0,
+          completionRate: 0,
+          productivityScore: 0
+        },
+        tasks: [],
+        goals: [],
+        assets: [],
+        apiKey: ''
+      };
+      await ref.set(newUserDoc);
+      _planStatus = 'free';
+      _planVerified = true;
     }
-  } catch(e) { console.log('Firestore load error', e); }
+  } catch(e) {
+    console.log('Firestore load error', e);
+    _planStatus = localStorage.getItem('fm_plan') || 'free';
+    _planVerified = true;
+  }
   startApp();
 };
 
@@ -2948,29 +3183,59 @@ async function sendMessage() {
 
   const totalWealth = assets.reduce((s,a) => s + a.value, 0);
   
-  const systemPrompt = `You are FlowMind — ${userName}'s personal AI buddy. Talk like a smart friend, not a corporate assistant. Be casual, warm, direct, and real.
-You know their data:
-- Net Worth: $${totalWealth.toLocaleString()}
-- Tasks:
-${tasks.map(t => `  [ID: ${t.id}] ${t.title} (${t.done?'done':'active'})`).join('\n') || '  No tasks yet'}
-- Goals:
-${goals.map(g => `  [ID: ${g.id}] ${g.title} (${g.progress}%)`).join('\n') || '  No goals yet'}
+  // Build proactive insights based on user data
+  const doneTasks = tasks.filter(t=>t.done).length;
+  const pendingTasks = tasks.filter(t=>!t.done).length;
+  const overdueGoals = goals.filter(g=>!g.done && g.progress < 30).length;
+  const healthTasks = tasks.filter(t=>t.cat==='health' && !t.done).length;
+  const wealthTasks = tasks.filter(t=>t.cat==='wealth' && !t.done).length;
+  const streak = getStreak();
+  const userMode = localStorage.getItem('fm_mode') || 'productivity';
+  const aiTone = localStorage.getItem('fm_ai_tone') || 'friendly';
 
-*** IMPORTANT RULES ***
-1. NEVER add tasks or goals automatically unless the user EXPLICITLY says "add this task" or "add this goal" or "create a task/goal"
-2. NEVER suggest adding tasks unless asked
-3. Only use the special commands below when user specifically requests it
+  const proactiveInsights = [];
+  if (pendingTasks > 5) proactiveInsights.push(`⚠️ You have ${pendingTasks} pending tasks — consider prioritizing top 3 today.`);
+  if (doneTasks === 0 && tasks.length > 0) proactiveInsights.push(`You haven't completed any tasks yet today — start with the smallest one!`);
+  if (overdueGoals > 0) proactiveInsights.push(`${overdueGoals} goal(s) are below 30% progress — they may need attention.`);
+  if (healthTasks > 3) proactiveInsights.push(`Health tasks are piling up (${healthTasks} pending) — don't neglect your wellbeing!`);
+  if (streak >= 3) proactiveInsights.push(`🔥 ${streak}-day streak! Keep it going!`);
 
-*** SPECIAL COMMANDS (only when user explicitly asks) ***
+  const systemPrompt = `You are FlowMind — the AI Personal Operating System for ${userName}. 
+You help with goals, productivity, work, and wealth. You are warm, direct, and smart — like a brilliant friend who knows the user deeply.
+
+═══ USER CONTEXT ═══
+Name: ${userName}
+Net Worth: ₹${totalWealth.toLocaleString('en-IN')}
+Focus Mode: ${userMode}
+Day Streak: ${streak} days
+Tasks: ${tasks.length} total | ${doneTasks} done | ${pendingTasks} pending
+Active Goals: ${goals.filter(g=>!g.done).length}
+${proactiveInsights.length > 0 ? `\nProactive Insights:\n${proactiveInsights.map(i=>'• '+i).join('\n')}` : ''}
+
+═══ THEIR DATA ═══
+Tasks:
+${tasks.slice(0,10).map(t => `  • [${t.done?'✓':'○'}] ${t.title} (${t.cat})`).join('\n') || '  No tasks yet'}
+
+Goals:
+${goals.slice(0,6).map(g => `  • ${g.title} — ${g.progress}% ${g.done?'✅':'🔄'}`).join('\n') || '  No goals yet'}
+
+═══ RESPONSE STYLE ═══
+- Be structured when helpful: use headers, bullets, action steps
+- For planning requests: give Today's Focus → Why It Matters → 3 Actions → Estimated Time
+- For goal coaching: give Current Status → Gap Analysis → Next Best Action
+- For wealth advice: give Summary → Risk → Recommendation
+- Keep responses concise but complete
+- Always end with ONE specific next action the user should take RIGHT NOW
+- Tone: ${aiTone === 'formal' ? 'professional and precise' : 'warm, casual, like a smart friend'}
+
+═══ SPECIAL COMMANDS (only when user explicitly asks) ═══
 To ADD a task: [ADD_TASK: Task Title | category]
 (categories: wealth, strategy, personal, health, general)
-To DELETE a task: [DELETE_TASK: <ID>]
-
 To ADD a goal: [ADD_GOAL: Goal Title | Description | Progress Number]
+To DELETE a task: [DELETE_TASK: <ID>]
 To DELETE a goal: [DELETE_GOAL: <ID>]
 
-Example: User says "add a task to read 10 pages" → "Done! [ADD_TASK: Read 10 pages | personal]"
-Example: User says "help me plan my day" → Just give advice, NO task commands!`;
+RULE: NEVER auto-add tasks/goals. Only use commands when user EXPLICITLY asks to add/delete something.`;
 
   // Base API configuration
   let modelToUse = 'llama-3.3-70b-versatile';
@@ -4849,18 +5114,50 @@ function answerMM(i) {
 </script>
 <script>
 // ─── PLAN SYSTEM ─────────────────────────────────────────────
-// FREE limits: 5 tasks, 5 goals, 10 AI chats/day, 10 quiz/day, no wealth
-// PRO: unlimited everything + wealth section
-// Razorpay Key — replace with real key when selling
+// FREE: 5 tasks, 5 goals, 10 AI chats/day, no wealth
+// PRO: unlimited + wealth section
 const RAZORPAY_KEY = 'rzp_test_YourKeyHere';
 const PRO_AMOUNT = 29900; // ₹299 in paise
 
+// Plan stored in memory — verified from Firestore on login
+// localStorage is only cache — real source of truth is Firestore
+let _planVerified = false;
+let _planStatus = 'free';
+
 function getUserPlan() {
-  return localStorage.getItem('fm_plan') || 'free';
+  return _planStatus;
 }
 
 function isPro() {
-  return getUserPlan() === 'pro';
+  return _planStatus === 'pro';
+}
+
+// Called on login — verifies plan from Firestore (server source of truth)
+async function verifyPlanFromCloud() {
+  if (!window._fbDb || !window._fbCurrentUser) {
+    // Not logged in — use localStorage as fallback
+    _planStatus = localStorage.getItem('fm_plan') || 'free';
+    _planVerified = true;
+    updatePlanUI();
+    return;
+  }
+  try {
+    const doc = await window._fbDb.collection('users').doc(window._fbCurrentUser.uid).get();
+    if (doc.exists) {
+      const data = doc.data();
+      // Server is the source of truth
+      _planStatus = data.plan === 'pro' ? 'pro' : 'free';
+      localStorage.setItem('fm_plan', _planStatus);
+    } else {
+      _planStatus = 'free';
+    }
+  } catch(e) {
+    // Fallback to localStorage if Firestore fails
+    _planStatus = localStorage.getItem('fm_plan') || 'free';
+    console.log('Plan verify fallback:', e.message);
+  }
+  _planVerified = true;
+  updatePlanUI();
 }
 
 function getDailyCount(key) {
@@ -4882,7 +5179,6 @@ function updatePlanUI() {
   const badge = document.getElementById('planBadge');
   const wealthLock = document.getElementById('wealthLock');
   if (!badge) return;
-
   if (isPro()) {
     badge.textContent = '⚡ PRO';
     badge.className = 'pro-badge';
@@ -4910,21 +5206,19 @@ function closePricing() {
 
 function startPayment() {
   if (typeof Razorpay === 'undefined') {
-    // Razorpay not loaded — show demo mode
-    showToast('🎉 Demo Mode: Upgrading to Pro! (Add real Razorpay key to enable payments)');
+    showToast('🎉 Demo Mode: Upgrading to Pro!');
     activatePro('demo_' + Date.now());
     closePricing();
     return;
   }
-
   const options = {
     key: RAZORPAY_KEY,
     amount: PRO_AMOUNT,
     currency: 'INR',
     name: 'FlowMind AI',
     description: 'Pro Plan - Monthly Subscription',
-    image: 'https://flowmind-ai-five.vercel.app/favicon.ico',
     handler: function(response) {
+      // Verify payment on Firestore before activating
       activatePro(response.razorpay_payment_id);
       showToast('🎉 Payment successful! Welcome to Pro!');
       closePricing();
@@ -4934,13 +5228,8 @@ function startPayment() {
       email: window._fbCurrentUser ? window._fbCurrentUser.email : ''
     },
     theme: { color: '#f5c842' },
-    modal: {
-      ondismiss: function() {
-        showToast('Payment cancelled.');
-      }
-    }
+    modal: { ondismiss: function() { showToast('Payment cancelled.'); } }
   };
-
   try {
     const rzp = new Razorpay(options);
     rzp.open();
@@ -4949,16 +5238,27 @@ function startPayment() {
   }
 }
 
-function activatePro(paymentId) {
+async function activatePro(paymentId) {
+  _planStatus = 'pro';
   localStorage.setItem('fm_plan', 'pro');
   localStorage.setItem('fm_payment_id', paymentId);
   localStorage.setItem('fm_pro_since', new Date().toISOString());
   updatePlanUI();
-  // Save to Firestore if logged in
+  // Save to Firestore with proper structure
   if (window._fbDb && window._fbCurrentUser) {
-    window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
-      plan: 'pro', paymentId, proSince: new Date().toISOString()
-    }).catch(() => {});
+    try {
+      await window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
+        'subscription.plan': 'pro',
+        'subscription.status': 'active',
+        'subscription.verified': true,
+        'subscription.paymentId': paymentId,
+        'subscription.startedAt': new Date().toISOString(),
+        'subscription.source': 'razorpay'
+      });
+      showToast('✅ Pro plan activated and saved!');
+    } catch(e) {
+      console.log('Firestore pro save error:', e);
+    }
   }
 }
 
@@ -4970,8 +5270,8 @@ const FREE_CHAT_LIMIT = 10;
 function checkTaskLimit() {
   if (isPro()) return true;
   if (tasks.length >= FREE_TASK_LIMIT) {
-    showToast(`⚠️ Free plan limit: ${FREE_TASK_LIMIT} tasks max. Upgrade to Pro for unlimited!`);
-    setTimeout(openPricing, 1000);
+    showToast(`⚠️ Free plan: ${FREE_TASK_LIMIT} tasks max. Upgrade to Pro!`);
+    setTimeout(openPricing, 800);
     return false;
   }
   return true;
@@ -4980,8 +5280,8 @@ function checkTaskLimit() {
 function checkGoalLimit() {
   if (isPro()) return true;
   if (goals.length >= FREE_GOAL_LIMIT) {
-    showToast(`⚠️ Free plan limit: ${FREE_GOAL_LIMIT} goals max. Upgrade to Pro for unlimited!`);
-    setTimeout(openPricing, 1000);
+    showToast(`⚠️ Free plan: ${FREE_GOAL_LIMIT} goals max. Upgrade to Pro!`);
+    setTimeout(openPricing, 800);
     return false;
   }
   return true;
@@ -4991,8 +5291,8 @@ function checkChatLimit() {
   if (isPro()) return true;
   const count = getDailyCount('fm_chat_count');
   if (count >= FREE_CHAT_LIMIT) {
-    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day used. Upgrade to Pro for unlimited!`);
-    setTimeout(openPricing, 1200);
+    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day limit reached. Upgrade to Pro!`);
+    setTimeout(openPricing, 1000);
     return false;
   }
   incrementDailyCount('fm_chat_count');
@@ -5024,6 +5324,282 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 
 // Init theme on load
 window.addEventListener('load', initTheme);
+</script>
+
+<!-- Mobile FAB -->
+<button class="fab-btn" id="fabBtn" onclick="handleFab()" title="Quick Action">+</button>
+
+<!-- Onboarding Overlay -->
+<div class="onboarding-overlay" id="onboardingOverlay" style="display:none;">
+  <div class="onboarding-card">
+    <div class="onboarding-dots">
+      <div class="onboarding-dot active" id="dot0"></div>
+      <div class="onboarding-dot" id="dot1"></div>
+      <div class="onboarding-dot" id="dot2"></div>
+    </div>
+    <div id="onboardingContent"></div>
+  </div>
+</div>
+
+<script>
+// ── ONBOARDING ──────────────────────────────────────────────
+const onboardingSteps = [
+  {
+    step: 'Step 1 of 3',
+    title: 'Welcome to FlowMind! 🚀',
+    sub: 'Your AI-Powered Personal Operating System for goals, work, and wealth. Let\'s set you up in 30 seconds!',
+    type: 'welcome'
+  },
+  {
+    step: 'Step 2 of 3',
+    title: 'What\'s your main focus?',
+    sub: 'FlowMind will personalize your AI experience based on your priority.',
+    type: 'mode',
+    options: [
+      { icon: '🧠', label: 'Productivity', value: 'productivity' },
+      { icon: '🎯', label: 'Goals', value: 'goals' },
+      { icon: '💰', label: 'Wealth', value: 'wealth' },
+      { icon: '⚡', label: 'All of it!', value: 'all' }
+    ]
+  },
+  {
+    step: 'Step 3 of 3',
+    title: 'Set your Groq API Key',
+    sub: 'FlowMind uses Groq AI (free) for intelligent responses. Get your free key at console.groq.com',
+    type: 'apikey'
+  }
+];
+
+let onboardingStep = 0;
+let onboardingMode = 'all';
+
+function showOnboarding() {
+  document.getElementById('onboardingOverlay').style.display = 'flex';
+  renderOnboardingStep(0);
+}
+
+function renderOnboardingStep(step) {
+  onboardingStep = step;
+  const s = onboardingSteps[step];
+  // Update dots
+  document.querySelectorAll('.onboarding-dot').forEach((d,i) => {
+    d.classList.toggle('active', i === step);
+  });
+  let html = `<div class="onboarding-step">${s.step}</div>
+    <div class="onboarding-title">${s.title}</div>
+    <div class="onboarding-sub">${s.sub}</div>`;
+
+  if (s.type === 'welcome') {
+    html += `<button class="landing-btn" onclick="renderOnboardingStep(1)" style="width:100%;">Get Started →</button>`;
+  } else if (s.type === 'mode') {
+    html += `<div class="onboarding-options">`;
+    s.options.forEach(opt => {
+      html += `<button class="onboarding-opt" onclick="selectMode('${opt.value}',this)">
+        <span class="opt-icon">${opt.icon}</span>${opt.label}</button>`;
+    });
+    html += `</div>
+    <button class="landing-btn" onclick="renderOnboardingStep(2)" style="width:100%;">Continue →</button>`;
+  } else if (s.type === 'apikey') {
+    html += `<input class="landing-name-input" id="onboardApiKey" placeholder="gsk_..." style="margin-bottom:12px;" />
+    <button class="landing-btn" onclick="finishOnboarding()" style="width:100%;margin-bottom:10px;">Start Using FlowMind ⚡</button>
+    <button onclick="finishOnboarding()" style="background:transparent;border:none;color:var(--silver);font-size:12px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">Skip for now</button>`;
+  }
+  document.getElementById('onboardingContent').innerHTML = html;
+}
+
+function selectMode(mode, btn) {
+  document.querySelectorAll('.onboarding-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  onboardingMode = mode;
+  localStorage.setItem('fm_mode', mode);
+}
+
+function finishOnboarding() {
+  const keyInput = document.getElementById('onboardApiKey');
+  if (keyInput && keyInput.value.trim().startsWith('gsk_')) {
+    apiKey = keyInput.value.trim();
+    localStorage.setItem('fm_apikey', apiKey);
+    document.getElementById('apiKeyDisplay').textContent = apiKey.slice(0,8) + '...';
+    updateStatus();
+  }
+  localStorage.setItem('fm_onboarded', '1');
+  document.getElementById('onboardingOverlay').style.display = 'none';
+  toast('🎉 Welcome to FlowMind! Your AI OS is ready!');
+  renderHomeDashboard();
+}
+
+// ── HOME DASHBOARD ──────────────────────────────────────────
+function renderHomeDashboard() {
+  // Date
+  const dateEl = document.getElementById('homeDate');
+  if (dateEl) {
+    const now = new Date();
+    dateEl.textContent = now.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' });
+  }
+
+  // Stats
+  const doneTasks = tasks.filter(t => t.done).length;
+  const activeGoals = goals.filter(g => !g.done).length;
+  const totalWealth = assets.reduce((s,a) => s+a.value, 0);
+
+  const el = id => document.getElementById(id);
+  if (el('hTasksDone')) el('hTasksDone').textContent = `${doneTasks}/${tasks.length}`;
+  if (el('hGoalsActive')) el('hGoalsActive').textContent = activeGoals;
+  if (el('hNetWorth')) el('hNetWorth').textContent = '₹' + totalWealth.toLocaleString('en-IN');
+
+  // Streak
+  const streak = getStreak();
+  if (el('hStreak')) el('hStreak').textContent = streak;
+
+  // Today's top tasks
+  const taskEl = el('homeTodayTasks');
+  if (taskEl) {
+    const todayTasks = tasks.filter(t => !t.done).slice(0,3);
+    if (todayTasks.length === 0) {
+      taskEl.innerHTML = `<div style="text-align:center;padding:16px;color:var(--silver);font-size:13px;">
+        🎉 No pending tasks! <span style="color:var(--green);">You're all caught up!</span><br>
+        <span style="font-size:12px;margin-top:4px;display:block;">Add tasks to track your daily work.</span>
+      </div>`;
+    } else {
+      taskEl.innerHTML = todayTasks.map(t => `
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);">
+          <div onclick="toggleTask('${t.id}')" style="width:18px;height:18px;border:2px solid var(--line2);border-radius:5px;cursor:pointer;flex-shrink:0;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--line2)'"></div>
+          <span style="font-size:13px;color:var(--text);flex:1;">${t.title}</span>
+          <span style="font-size:10px;color:var(--silver);background:var(--ink3);padding:2px 8px;border-radius:10px;">${t.cat}</span>
+        </div>`).join('');
+    }
+  }
+
+  // Goals preview
+  const goalEl = el('homeGoalsPreview');
+  if (goalEl) {
+    const topGoals = goals.filter(g => !g.done).slice(0,3);
+    if (topGoals.length === 0) {
+      goalEl.innerHTML = `<div style="text-align:center;padding:16px;color:var(--silver);font-size:13px;">
+        No active goals yet.<br>
+        <span style="font-size:12px;color:var(--blue);">Set your first goal and let FlowMind guide you!</span>
+      </div>`;
+    } else {
+      goalEl.innerHTML = topGoals.map(g => `
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+            <span style="font-size:13px;color:var(--text);">${g.title}</span>
+            <span style="font-size:12px;color:var(--silver);">${g.progress}%</span>
+          </div>
+          <div style="height:6px;background:var(--ink3);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${g.progress}%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width 0.5s;"></div>
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  // Insight
+  generateHomeInsight();
+}
+
+function generateHomeInsight() {
+  const insightEl = document.getElementById('homeInsight');
+  if (!insightEl) return;
+
+  const doneTasks = tasks.filter(t => t.done).length;
+  const totalTasks = tasks.length;
+  const activeGoals = goals.filter(g => !g.done).length;
+  const overdueGoals = goals.filter(g => !g.done && g.progress < 30).length;
+  const hour = new Date().getHours();
+  const mode = localStorage.getItem('fm_mode') || 'all';
+
+  let insights = [];
+
+  if (totalTasks === 0) {
+    insights.push("Start by adding your first task. FlowMind will use your tasks to shape smarter AI planning for you! 💡");
+  } else if (doneTasks === totalTasks) {
+    insights.push(`🎉 Amazing! You've completed all ${totalTasks} tasks! Time to add new challenges and keep the momentum going!`);
+  } else if (doneTasks === 0 && totalTasks > 0) {
+    insights.push(`You have ${totalTasks} pending task${totalTasks>1?'s':''}. Start with the smallest one — momentum builds from small wins! 💪`);
+  } else {
+    const pct = Math.round(doneTasks/totalTasks*100);
+    insights.push(`You're ${pct}% done with your tasks today. ${pct >= 50 ? "Great progress! Keep pushing! 🔥" : "Focus on 1 task at a time — you've got this! 💪"}`);
+  }
+
+  if (activeGoals === 0) {
+    insights.push("No active goals set yet. Goals give your AI coach direction — add one now and watch FlowMind personalize your experience! 🎯");
+  } else if (overdueGoals > 0) {
+    insights.push(`${overdueGoals} goal${overdueGoals>1?'s are':' is'} below 30% progress. Ask the AI coach for a focused action plan to get back on track! 📈`);
+  }
+
+  if (hour < 10) {
+    insights.push("Good morning! 🌅 The best time to plan your day is NOW. Review your top 3 tasks and set your daily intention!");
+  } else if (hour >= 20) {
+    insights.push("Evening check-in time! 🌙 Review what you accomplished today and plan tomorrow's top priority before you sleep.");
+  }
+
+  if (mode === 'wealth') {
+    insights.push("💰 Wealth focus: Have you updated your asset values this week? Consistent tracking is the first step to financial clarity.");
+  } else if (mode === 'productivity') {
+    insights.push("🧠 Productivity tip: Use the Pomodoro technique — 25 min focused work, 5 min break. Try it with your next task!");
+  }
+
+  const randomInsight = insights[Math.floor(Math.random() * insights.length)];
+  insightEl.textContent = randomInsight;
+}
+
+function refreshInsight() {
+  generateHomeInsight();
+  toast('✨ Insight refreshed!');
+}
+
+function getStreak() {
+  const today = new Date().toDateString();
+  const streakData = JSON.parse(localStorage.getItem('fm_streak') || '{"count":0,"lastDate":""}');
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (streakData.lastDate === today) return streakData.count;
+  if (streakData.lastDate === yesterday) {
+    const newStreak = { count: streakData.count + 1, lastDate: today };
+    localStorage.setItem('fm_streak', JSON.stringify(newStreak));
+    return newStreak.count;
+  }
+  // Reset streak
+  const newStreak = { count: 1, lastDate: today };
+  localStorage.setItem('fm_streak', JSON.stringify(newStreak));
+  return 1;
+}
+
+// ── MOBILE FAB ──────────────────────────────────────────────
+function handleFab() {
+  const panel = activePanelName;
+  if (panel === 'tasks') {
+    document.getElementById('taskForm').classList.toggle('show');
+  } else if (panel === 'goals') {
+    openModal('goalModal');
+  } else if (panel === 'chat') {
+    document.getElementById('chatInput').focus();
+  } else if (panel === 'wealth') {
+    document.getElementById('assetForm').classList.toggle('show');
+  } else {
+    switchPanel('chat', document.querySelectorAll('.nav-item')[1]);
+    setTimeout(() => document.getElementById('chatInput').focus(), 300);
+  }
+}
+
+// Update FAB icon based on panel
+const _origSwitchPanel = switchPanel;
+function switchPanel(name, btn) {
+  _origSwitchPanel(name, btn);
+  const fab = document.getElementById('fabBtn');
+  if (!fab) return;
+  const icons = { chat:'💬', tasks:'➕', goals:'🎯', wealth:'💰', home:'⚡', report:'📊', quiz:'🧠', games:'🎮' };
+  fab.textContent = icons[name] || '+';
+  if (name === 'home') renderHomeDashboard();
+}
+
+// Show onboarding for new users
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (!localStorage.getItem('fm_onboarded') && document.getElementById('app').classList.contains('show')) {
+      showOnboarding();
+    }
+  }, 1000);
+});
 </script>
 </body>
 </html>
