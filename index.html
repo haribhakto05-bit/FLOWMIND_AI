@@ -1712,106 +1712,7 @@ body::before {
 }
 .unlock-btn:hover { background:var(--gold2);transform:translateY(-2px); }
 
-/* ── HOME DASHBOARD ── */
-.home-stat-card {
-  background: var(--ink2);
-  border: 1px solid var(--line);
-  border-radius: var(--r2);
-  padding: 16px 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.home-stat-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-.home-stat-icon { font-size: 22px; margin-bottom: 8px; }
-.home-stat-val { font-size: 22px; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; }
-.home-stat-val.gold { color: var(--gold); }
-.home-stat-val.green { color: var(--green); }
-.home-stat-label { font-size: 11px; color: var(--silver); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-
-.quick-action-btn {
-  background: var(--ink3);
-  border: 1px solid var(--line2);
-  border-radius: var(--r);
-  padding: 12px;
-  color: var(--text);
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-}
-.quick-action-btn:hover { border-color: var(--gold); background: rgba(245,200,66,0.06); }
-
-/* ── MOBILE FAB ── */
-.fab-btn {
-  display: none;
-  position: fixed;
-  bottom: 24px;
-  right: 20px;
-  width: 56px; height: 56px;
-  background: var(--gold);
-  color: var(--ink);
-  border: none;
-  border-radius: 50%;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 20px rgba(245,200,66,0.4);
-  z-index: 90;
-  transition: all 0.2s;
-  align-items: center;
-  justify-content: center;
-}
-.fab-btn:active { transform: scale(0.93); }
-
-/* ── ONBOARDING ── */
-.onboarding-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.85);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-}
-.onboarding-card {
-  background: var(--ink2);
-  border: 1px solid var(--line2);
-  border-radius: var(--r3);
-  padding: 36px 32px;
-  max-width: 440px;
-  width: 90%;
-  text-align: center;
-}
-.onboarding-step { font-size: 12px; color: var(--silver); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-.onboarding-title { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 10px; }
-.onboarding-sub { font-size: 14px; color: var(--silver); margin-bottom: 24px; line-height: 1.6; }
-.onboarding-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-.onboarding-opt {
-  background: var(--ink3);
-  border: 2px solid var(--line2);
-  border-radius: var(--r2);
-  padding: 14px 10px;
-  cursor: pointer;
-  transition: all 0.2s;
-  color: var(--text);
-  font-family: 'Cabinet Grotesk', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-}
-.onboarding-opt:hover, .onboarding-opt.selected { border-color: var(--gold); background: rgba(245,200,66,0.08); }
-.onboarding-opt .opt-icon { font-size: 24px; margin-bottom: 6px; display: block; }
-.onboarding-dots { display: flex; gap: 8px; justify-content: center; margin-bottom: 20px; }
-.onboarding-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line2); transition: all 0.2s; }
-.onboarding-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
-
-@media (max-width: 680px) {
-  .fab-btn { display: flex; }
-  #homeStatsGrid { grid-template-columns: repeat(2, 1fr); }
-  .onboarding-card { padding: 24px 18px; }
-  .onboarding-options { grid-template-columns: 1fr 1fr; }
-}
+/* ── LIGHT MODE ── */
 body.light-mode {
   --ink:   #f5f5f7;
   --ink2:  #ffffff;
@@ -1849,44 +1750,37 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
 <!-- PRICING MODAL -->
 <div class="pricing-modal-overlay" id="pricingModal">
   <div class="pricing-modal">
-    <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">Run Your Life With FlowMind</h2>
-    <p class="pricing-modal-sub">Most users see results in their first week 🚀</p>
+    <h2>Upgrade FlowMind AI</h2>
+    <p class="pricing-modal-sub">Unlock your full productivity potential</p>
     <div class="plans-grid">
       <!-- FREE PLAN -->
       <div class="plan-card">
-        <div class="plan-name">Starter</div>
-        <div style="font-size:11px;color:var(--silver);margin-bottom:8px;">Test the system</div>
+        <div class="plan-name">Free</div>
         <div class="plan-price">₹0 <span>/month</span></div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> AI Coach (10 chats/day)</li>
-          <li><span class="fi">✓</span> 5 Tasks + 5 Goals</li>
-          <li><span class="fi">✓</span> Daily Quiz</li>
-          <li><span class="fi">✓</span> Basic Reports</li>
-          <li><span class="fi">✗</span> Wealth Dashboard</li>
-          <li><span class="fi">✗</span> Cloud Sync</li>
-          <li><span class="fi">✗</span> Voice Coaching</li>
-          <li><span class="fi">✗</span> Advanced AI Insights</li>
+          <li><span class="fi">✓</span> 5 Tasks max</li>
+          <li><span class="fi">✓</span> 5 Goals max</li>
+          <li><span class="fi">✓</span> 10 AI chats/day</li>
+          <li><span class="fi">✓</span> 10 Quiz/day</li>
+          <li><span class="fi">✗</span> No Wealth section</li>
+          <li><span class="fi">✗</span> No Cloud Sync</li>
         </ul>
         <button class="plan-btn plan-btn-free" onclick="closePricing()">Current Plan</button>
       </div>
       <!-- PRO PLAN -->
       <div class="plan-card pro">
-        <div class="plan-card-badge">⚡ BEST VALUE</div>
+        <div class="plan-card-badge">⚡ POPULAR</div>
         <div class="plan-name" style="color:var(--gold)">Pro</div>
-        <div style="font-size:11px;color:var(--silver);margin-bottom:8px;">Run your life with FlowMind</div>
         <div class="plan-price">₹299 <span>/month</span></div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> Unlimited AI Coach chats</li>
-          <li><span class="fi">✓</span> Unlimited Tasks + Goals</li>
-          <li><span class="fi">✓</span> 💰 Wealth Dashboard</li>
-          <li><span class="fi">✓</span> ☁️ Cloud Sync across devices</li>
-          <li><span class="fi">✓</span> 🎙 Voice Coaching mode</li>
-          <li><span class="fi">✓</span> 📊 Advanced Reports + Insights</li>
-          <li><span class="fi">✓</span> 🧠 Smart AI Memory</li>
-          <li><span class="fi">✓</span> Priority support</li>
+          <li><span class="fi">✓</span> Unlimited Tasks</li>
+          <li><span class="fi">✓</span> Unlimited Goals</li>
+          <li><span class="fi">✓</span> Unlimited AI chats</li>
+          <li><span class="fi">✓</span> Unlimited Quiz</li>
+          <li><span class="fi">✓</span> Wealth section</li>
+          <li><span class="fi">✓</span> Cloud Sync</li>
         </ul>
-        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Start Pro — ₹299/mo →</button>
-        <div style="text-align:center;font-size:11px;color:var(--silver);margin-top:8px;">Cancel anytime · Instant activation</div>
+        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Upgrade Now →</button>
       </div>
     </div>
     <button class="plan-close-btn" onclick="closePricing()">✕ Maybe later</button>
@@ -2035,8 +1929,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
 
     <div class="content">
 
-      <!-- ── AI CHAT ── -->
-      <div class="panel active" id="panel-chat" style="display:flex;flex-direction:column;height:100%;overflow:hidden;">
+      <div class="panel active" id="panel-chat">
         <div class="chat-header">
           <div class="chat-title">AI Chat</div>
           <div style="display:flex;gap:8px;align-items:center;">
@@ -2125,7 +2018,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
             <button type="button" class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
           </div>
         </div>
-      </div><!-- end panel-chat -->
+      </div>
 
       <div class="panel" id="panel-tasks">
         <div class="panel-topbar">
@@ -2665,66 +2558,25 @@ window.onFirebaseLogin = async function(user) {
   userName = user.displayName || user.email.split('@')[0] || 'Friend';
   localStorage.setItem('fm_name', userName);
   try {
-    const ref = window._fbDb.collection('users').doc(user.uid);
-    const snap = await ref.get();
+    const snap = await window._fbDb.collection('users').doc(user.uid).get();
     if (snap.exists) {
       const data = snap.data();
-      // Load data
       if (data.tasks)  { tasks  = data.tasks;  localStorage.setItem('fm_tasks',  JSON.stringify(tasks));  }
       if (data.assets) { assets = data.assets; localStorage.setItem('fm_assets', JSON.stringify(assets)); }
       if (data.goals)  { goals  = data.goals;  localStorage.setItem('fm_goals',  JSON.stringify(goals));  }
       if (data.apiKey) { apiKey = data.apiKey; localStorage.setItem('fm_apikey', apiKey); }
-      // Load preferences
-      if (data.preferences) {
-        if (data.preferences.theme) localStorage.setItem('fm_theme', data.preferences.theme);
-        if (data.preferences.aiTone) localStorage.setItem('fm_ai_tone', data.preferences.aiTone);
-        if (data.preferences.mode) localStorage.setItem('fm_mode', data.preferences.mode);
-      }
-      // ✅ Plan verified from Firestore — server is source of truth
-      _planStatus = (data.subscription && data.subscription.plan === 'pro') ? 'pro' : 'free';
+      // ✅ Verify plan from Firestore — not localStorage
+      _planStatus = data.plan === 'pro' ? 'pro' : 'free';
       localStorage.setItem('fm_plan', _planStatus);
       _planVerified = true;
-      // Update last seen
-      await ref.update({ 'profile.lastSeen': new Date().toISOString() });
     } else {
-      // New user — create structured record
-      const newUserDoc = {
-        profile: {
-          name: userName,
-          email: user.email,
-          createdAt: new Date().toISOString(),
-          lastSeen: new Date().toISOString(),
-          onboardingCompleted: false
-        },
-        subscription: {
-          plan: 'free',
-          status: 'active',
-          verified: false,
-          startedAt: new Date().toISOString(),
-          source: 'signup'
-        },
-        usage: {
-          dailyChatCount: 0,
-          dailyChatDate: new Date().toDateString(),
-          taskCount: 0,
-          goalCount: 0
-        },
-        preferences: {
-          theme: localStorage.getItem('fm_theme') || 'dark',
-          aiTone: 'friendly',
-          mode: 'productivity'
-        },
-        stats: {
-          streak: 0,
-          completionRate: 0,
-          productivityScore: 0
-        },
-        tasks: [],
-        goals: [],
-        assets: [],
-        apiKey: ''
-      };
-      await ref.set(newUserDoc);
+      // New user — create record
+      await window._fbDb.collection('users').doc(user.uid).set({
+        name: userName,
+        email: user.email,
+        plan: 'free',
+        createdAt: new Date().toISOString()
+      });
       _planStatus = 'free';
       _planVerified = true;
     }
@@ -2771,12 +2623,16 @@ function enterApp() {
 }
 
 function startApp() {
+  // Always force the correct visibility — even if called multiple times
   const landing = document.getElementById('landing');
   const app     = document.getElementById('app');
 
   landing.classList.add('hide');
   app.classList.add('show');
-  app.style.display = 'flex';
+  app.style.display = 'flex';   // belt-and-suspenders: force display
+
+  // Fully remove landing from DOM after its fade animation (600ms)
+  // This prevents it from ever re-appearing on file:// page events
   setTimeout(() => landing.classList.add('gone'), 650);
 
   updateClock();
@@ -2788,8 +2644,8 @@ function startApp() {
 
   document.getElementById('welcomeBubble').innerHTML =
     `Hey ${esc(userName)}! 👋 I'm your FlowMind AI. ${apiKey
-      ? "I'm connected and ready — what's on your mind?"
-      : "⚠️ Set your Groq API key using the 🔑 button (top right) to activate me!"}`;
+      ? "I'm connected and ready — what's on your mind? You can attach images, PDFs or text files using the attach button."
+      : "Set your Groq API key (top right) to activate me, then let's get to work!"}`;
 
   if (apiKey) document.getElementById('apiKeyInput').value = apiKey;
 
@@ -2799,21 +2655,13 @@ function startApp() {
   renderWealth();
   renderGoals();
   updateSidebar();
-  document.getElementById('reportDate').textContent = 'All Time · ' + new Date().toLocaleDateString('en-IN',
+  document.getElementById('reportDate').textContent = 'All Time · ' + new Date().toLocaleDateString('en-US',
     { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-
-  // ✅ Set chat as default active panel
-  activePanelName = 'chat';
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  const chatPanel = document.getElementById('panel-chat');
-  if (chatPanel) chatPanel.classList.add('active');
-  const chatBtn = document.querySelector('.nav-item');
-  if (chatBtn) chatBtn.classList.add('active');
 
   document.getElementById('goalTitleInput').addEventListener('keydown', e => { if (e.key==='Enter') addGoal(); });
   initQuiz();
 
+  // Close attach menu when clicking outside
   document.addEventListener('click', function(e) {
     const wrap = document.getElementById('attachWrap');
     if (wrap && !wrap.contains(e.target)) closeAttachMenu();
@@ -2828,6 +2676,25 @@ function startApp() {
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('show');
+}
+
+function switchPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  btn.classList.add('active');
+  activePanelName = name;
+  if (name === 'chat') {
+    const badge = document.getElementById('msgBadge');
+    badge.style.display = 'none';
+  }
+  if (name === 'quiz') {
+    initQuiz();
+    renderQuiz();
+  }
+  if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
+    toggleSidebar();
+  }
 }
 
 // ─── MODAL ───────────────────────────────────────────────────
@@ -2850,27 +2717,13 @@ function toast(msg) {
 // ─── API KEY ─────────────────────────────────────────────────
 function saveApiKey() {
   const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key) { toast('❌ Please enter your Groq API key'); return; }
-  if (!key.startsWith('gsk_')) { toast('❌ Groq keys start with gsk_ — check your key'); return; }
+  if (!key.startsWith('gsk_')) { toast('❌ Groq keys start with gsk_'); return; }
   apiKey = key;
   localStorage.setItem('fm_apikey', key);
-  // Sync to cloud if logged in
-  if (window._fbDb && window._fbCurrentUser) {
-    window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({ apiKey: key }).catch(()=>{});
-  }
   closeModal('apiModal');
   updateStatus(true);
-  // Update welcome bubble
-  const wb = document.getElementById('welcomeBubble');
-  if (wb) wb.innerHTML = `✅ Connected! I'm online and ready, ${esc(userName)}. Ask me anything — plan your day, set goals, or talk strategy!`;
-  // Switch to chat panel
-  const chatBtn = document.querySelectorAll('.nav-item')[1];
-  if (chatBtn) switchPanel('chat', chatBtn);
-  setTimeout(() => {
-    const inp = document.getElementById('chatInput');
-    if (inp) inp.focus();
-  }, 300);
-  toast('✅ Groq API connected! AI is ready 🚀');
+  addMsg('ai', `✅ Connected! I'm online and ready, ${userName}. What would you like to work on?`);
+  toast('✅ API key saved!');
 }
 function updateStatus(online) {
   document.getElementById('statusDot').className = 'status-dot' + (online ? ' online' : '');
@@ -3113,133 +2966,29 @@ async function sendMessage() {
 
   const totalWealth = assets.reduce((s,a) => s + a.value, 0);
   
-  // Build context data
-  const doneTasks = tasks.filter(t=>t.done).length;
-  const pendingTasks = tasks.filter(t=>!t.done).length;
-  const overdueGoals = goals.filter(g=>!g.done && g.progress < 30).length;
-  const healthTasks = tasks.filter(t=>t.cat==='health' && !t.done).length;
-  const wealthTasks = tasks.filter(t=>t.cat==='wealth' && !t.done).length;
-  const streak = getStreak();
-  const hour = new Date().getHours();
-  const timeOfDay = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
-  const dayName = new Date().toLocaleDateString('en-IN', { weekday: 'long' });
+  const systemPrompt = `You are FlowMind — ${userName}'s personal AI buddy. Talk like a smart friend, not a corporate assistant. Be casual, warm, direct, and real.
+You know their data:
+- Net Worth: $${totalWealth.toLocaleString()}
+- Tasks:
+${tasks.map(t => `  [ID: ${t.id}] ${t.title} (${t.done?'done':'active'})`).join('\n') || '  No tasks yet'}
+- Goals:
+${goals.map(g => `  [ID: ${g.id}] ${g.title} (${g.progress}%)`).join('\n') || '  No goals yet'}
 
-  const proactiveAlerts = [];
-  if (pendingTasks > 5) proactiveAlerts.push(`${pendingTasks} pending tasks need prioritization`);
-  if (doneTasks === 0 && tasks.length > 0) proactiveAlerts.push(`No tasks completed yet today`);
-  if (overdueGoals > 0) proactiveAlerts.push(`${overdueGoals} goal(s) stuck below 30% — need attention`);
-  if (healthTasks > 2) proactiveAlerts.push(`${healthTasks} health tasks being ignored`);
-  if (streak >= 3) proactiveAlerts.push(`${streak}-day streak active — protect it`);
+*** IMPORTANT RULES ***
+1. NEVER add tasks or goals automatically unless the user EXPLICITLY says "add this task" or "add this goal" or "create a task/goal"
+2. NEVER suggest adding tasks unless asked
+3. Only use the special commands below when user specifically requests it
 
-  // Detect if this is a daily planning request
-  const msgLower = msg.toLowerCase();
-  const isPlanRequest = /plan my day|daily plan|what should i do today|schedule my day|plan for today|today.?s plan|how should i spend/.test(msgLower);
-  const isGoalRequest = /break.?down|help.*(achieve|reach|goal)|goal plan/.test(msgLower);
-  const isWeeklyReview = /weekly review|how was my week|week summary/.test(msgLower);
-  const isFocusMode = /help me focus|i.?m distracted|can.?t concentrate|procrastinat/.test(msgLower);
-  const isWealthMode = /\b(money|savings|invest|financial|net worth|wealth|income|expenses)\b/.test(msgLower);
-  const isBusinessMode = /\b(business|strategy|startup|grow|marketing|revenue|sales|profit)\b/.test(msgLower);
-  const isProblemMode = /\b(problem|stuck|help me figure|what should i do|advice|confused)\b/.test(msgLower);
+*** SPECIAL COMMANDS (only when user explicitly asks) ***
+To ADD a task: [ADD_TASK: Task Title | category]
+(categories: wealth, strategy, personal, health, general)
+To DELETE a task: [DELETE_TASK: <ID>]
 
-  // For plan requests with no data, inject a strong instruction into the message
-  let enhancedMsg = msg;
-  if (isPlanRequest) {
-    enhancedMsg = `[DAILY PLANNER MODE ACTIVATED]
-User request: "${msg}"
-Time: ${timeOfDay}, ${dayName}
-Tasks available: ${tasks.filter(t=>!t.done).length > 0 ? tasks.filter(t=>!t.done).slice(0,5).map(t=>t.title).join(', ') : 'NONE — use default productive schedule'}
-Goals available: ${goals.filter(g=>!g.done).length > 0 ? goals.filter(g=>!g.done).slice(0,3).map(g=>g.title).join(', ') : 'NONE — use default productive schedule'}
+To ADD a goal: [ADD_GOAL: Goal Title | Description | Progress Number]
+To DELETE a goal: [DELETE_GOAL: <ID>]
 
-INSTRUCTION: Generate a COMPLETE structured daily plan right now. DO NOT suggest relaxing or say "blank slate". If no tasks/goals exist, create a powerful default productive schedule covering Morning, Midday, Afternoon, Evening. End with 3 suggested tasks to add.`;
-  }
-
-  const systemPrompt = `You are FlowMind — a world-class AI Life Planner, Business Strategist, and Personal Coach.
-
-YOUR IDENTITY: You are the AI brain behind a premium productivity OS. Think like a ₹10,000/hour executive coach. Sharp. Structured. High-value. Every response must make the user's life better.
-
-YOUR MISSION: Help ${userName} achieve goals, solve problems, build wealth, and become the best version of themselves — starting TODAY.
-
-━━━ USER DATA ━━━
-Name: ${userName} | Time: ${timeOfDay}, ${dayName}
-Net Worth: ₹${totalWealth.toLocaleString('en-IN')} | Streak: ${streak} days
-Tasks: ${tasks.length} total | ${doneTasks} done | ${pendingTasks} pending
-Goals: ${goals.filter(g=>!g.done).length} active
-${proactiveAlerts.length > 0 ? 'Alerts: ' + proactiveAlerts.join(' · ') : ''}
-
-Pending Tasks: ${tasks.filter(t=>!t.done).slice(0,8).map(t=>`${t.title}[${t.cat}]`).join(', ') || 'none'}
-Active Goals: ${goals.filter(g=>!g.done).slice(0,5).map(g=>`${g.title}(${g.progress}%)`).join(', ') || 'none'}
-
-━━━ HOW TO RESPOND ━━━
-
-${isPlanRequest ? `🚨 DAILY PLAN REQUEST DETECTED — MANDATORY FORMAT:
-
-Produce this EXACT structure — no exceptions:
-
-**⚡ FlowMind Daily Plan — ${dayName}**
-
-**🌅 Morning**
-• [action with time]
-• [action with time]
-• [action with time]
-
-**☀️ Midday**
-• [action with time]
-• [action with time]
-
-**🌆 Afternoon**
-• [action with time]
-• [action with time]
-
-**🌙 Evening**
-• [action with time]
-• Reflect: What did I accomplish today?
-
-**💡 Pro Tip**
-[Personalized insight based on their data]
-
-**🎯 Want me to add these tasks?**
-• [suggested task 1]
-• [suggested task 2]
-• [suggested task 3]
-Just reply "yes add them"!
-
-RULES FOR THIS PLAN:
-- If tasks exist → schedule them by time of day
-- If goals exist → convert them into today's actions
-- If NO data → use this default: Morning=learning+planning, Midday=deep work+exercise, Afternoon=skill building+review, Evening=reflection+prep tomorrow
-- NEVER say "relax", "chill", "blank slate", or give vague answers
-- Be specific with times and actions` : `
-
-MODE DETECTED: ${isGoalRequest ? '🎯 GOAL BREAKDOWN' : isWeeklyReview ? '📊 WEEKLY REVIEW' : isFocusMode ? '🧠 FOCUS COACH' : isWealthMode ? '💰 WEALTH COACH' : isBusinessMode ? '🏢 BUSINESS STRATEGY' : isProblemMode ? '💪 PROBLEM SOLVER' : '💬 GENERAL COACH'}
-
-${isGoalRequest ? 'Format: Current Status → Gap Analysis → Weekly Action Plan → Do This RIGHT NOW' : ''}
-${isWeeklyReview ? 'Format: Wins ✅ → Misses ❌ → Patterns 🔄 → Next Week Focus 🎯' : ''}
-${isFocusMode ? 'Format: Root Cause → 3 Focus Techniques → Do This in Next 5 Minutes' : ''}
-${isWealthMode ? 'Format: Current Situation → Gap to Goal → 3 Smart Money Moves → Risk Level' : ''}
-${isBusinessMode ? 'Format: Situation Analysis → Options → Best Path → First Action TODAY' : ''}
-${isProblemMode ? 'Format: Problem → Root Cause → 3 Solutions → Best Option → Do This NOW' : ''}
-`}
-
-━━━ ABSOLUTE RULES ━━━
-1. ALWAYS produce structured output with headers + bullets + bold
-2. ALWAYS end with ONE action the user can take in the next 5 minutes
-3. NEVER say "relax", "chill", "take it easy", "blank slate" — you are a HIGH-PERFORMANCE coach
-4. NEVER give generic advice — use their real task/goal data
-5. If zero data exists → create a powerful default plan — NEVER refuse
-6. Every response must feel like it came from a world-class coach, not a chatbot
-
-━━━ TASK/GOAL COMMANDS (only when user says "add" or "yes add them") ━━━
-[ADD_TASK: Title | category] — categories: wealth, strategy, personal, health, general
-[ADD_GOAL: Title | Description | Progress%]
-NEVER auto-add without explicit user confirmation.`;
-
-  // Override msg with enhanced version for plan requests
-  if (isPlanRequest || isGoalRequest || isWeeklyReview || isFocusMode || isWealthMode || isBusinessMode) {
-    // Replace last message in chatHistory with enhanced version
-    if (chatHistory.length > 0 && chatHistory[chatHistory.length-1].role === 'user') {
-      chatHistory[chatHistory.length-1] = { role: 'user', content: enhancedMsg };
-    }
-  }
+Example: User says "add a task to read 10 pages" → "Done! [ADD_TASK: Read 10 pages | personal]"
+Example: User says "help me plan my day" → Just give advice, NO task commands!`;
 
   // Base API configuration
   let modelToUse = 'llama-3.3-70b-versatile';
@@ -3293,8 +3042,8 @@ NEVER auto-add without explicit user confirmation.`;
       body: JSON.stringify({
         model: modelToUse,
         messages: apiMessages,
-        temperature: isPlanRequest ? 0.4 : 0.7,
-        max_tokens: isPlanRequest ? 1800 : 1200
+        temperature: 0.72,
+        max_tokens: 1200
       })
     });
     const data = await res.json();
@@ -4630,71 +4379,22 @@ function resetGameAreas(exceptId) {
 }
 
 // Wealth IQ Quiz
-const wqAllQuestions = [
+const wqQuestions = [
   { q:"What does 'compound interest' mean?", opts:["Interest on interest","Simple interest rate","Bank fee","Credit score"], ans:0 },
   { q:"What is an ETF?", opts:["Exchange-Traded Fund","Electronic Transfer Fee","Equity Tax Form","Emerging Trade Fund"], ans:0 },
   { q:"What does 'diversification' reduce?", opts:["Returns","Risk","Taxes","Inflation"], ans:1 },
   { q:"What is a P/E ratio?", opts:["Profit/Expense","Price/Earnings","Principal/Equity","Portfolio/Estimate"], ans:1 },
-  { q:"Which asset is typically most volatile?", opts:["Bonds","Real estate","Crypto","Cash"], ans:2 },
-  { q:"What is dollar-cost averaging?", opts:["Buying low selling high","Investing fixed amounts regularly","Converting USD","Tracking inflation"], ans:1 },
+  { q:"Which asset class is typically most volatile?", opts:["Bonds","Real estate","Crypto","Cash"], ans:2 },
+  { q:"What is dollar-cost averaging?", opts:["Buying low, selling high","Investing fixed amounts regularly","Converting USD","Tracking inflation"], ans:1 },
   { q:"What does 'liquidity' refer to?", opts:["Cash flow","How easily an asset converts to cash","Market cap","Interest rate"], ans:1 },
-  { q:"What is a bull market?", opts:["Prices falling 20%+","Prices rising consistently","Flat market","High volatility"], ans:1 },
+  { q:"What is a bull market?", opts:["Prices falling >20%","Prices rising consistently","Flat market","High volatility"], ans:1 },
   { q:"What is the '4% rule'?", opts:["Tax bracket","Safe retirement withdrawal rate","Savings rate","Bond yield"], ans:1 },
-  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 },
-  { q:"What is a mutual fund?", opts:["Single stock","Pooled investment managed by professionals","Government bond","Savings account"], ans:1 },
-  { q:"What is inflation?", opts:["Rise in asset prices","General increase in prices over time","Decrease in money supply","Interest rate change"], ans:1 },
-  { q:"What is a stock dividend?", opts:["Loan repayment","Share of company profits paid to investors","New stock issue","Tax deduction"], ans:1 },
-  { q:"Which is a fixed-income investment?", opts:["Stocks","Bonds","Crypto","Real estate"], ans:1 },
-  { q:"What is a bear market?", opts:["Market rising 10%+","Prices falling 20%+ from peak","Stable market","New IPO market"], ans:1 },
-  { q:"What does SIP stand for in investing?", opts:["Systematic Investment Plan","Stock Income Portfolio","Secured Interest Payment","Simple Index Plan"], ans:0 },
-  { q:"What is the Sensex?", opts:["A savings scheme","Index of 30 major BSE companies","Government bond","Mutual fund"], ans:1 },
-  { q:"What is net worth?", opts:["Monthly income","Assets minus liabilities","Total savings","Annual revenue"], ans:1 },
-  { q:"What is a liability?", opts:["Something you own","Something you owe","Monthly income","Investment return"], ans:1 },
-  { q:"What does CAGR mean?", opts:["Current Annual Gross Revenue","Compound Annual Growth Rate","Capital Asset Growth Ratio","Credit Adjusted Growth Rate"], ans:1 },
-  { q:"What is an IPO?", opts:["Interest Payment Option","Initial Public Offering","Internal Portfolio Order","Index Price Option"], ans:1 },
-  { q:"What is 'hedging' in finance?", opts:["Doubling your bet","Reducing risk by taking offsetting positions","Borrowing more","Selling all assets"], ans:1 },
-  { q:"What is a credit score used for?", opts:["Tracking expenses","Determining loan eligibility","Calculating taxes","Measuring net worth"], ans:1 },
-  { q:"What is a Roth IRA equivalent in India?", opts:["PPF","NPS","ELSS","All of the above"], ans:3 },
-  { q:"What does 'equity' mean in investing?", opts:["Debt owed","Ownership stake in a company","Monthly interest","Fixed deposit"], ans:1 },
-  { q:"What is a stop-loss order?", opts:["Order to buy at a low price","Order to sell when price falls to a limit","Order to hold stocks","Order to double investment"], ans:1 },
-  { q:"Which is generally the safest investment?", opts:["Penny stocks","Crypto","Government bonds","Speculative real estate"], ans:2 },
-  { q:"What is 'market capitalization'?", opts:["Total company debt","Total value of all company shares","Annual revenue","Book value"], ans:1 },
-  { q:"What does NAV stand for in mutual funds?", opts:["Net Annual Value","Net Asset Value","New Allocation Volume","Nominal Asset Valuation"], ans:1 },
-  { q:"What is 'rebalancing' a portfolio?", opts:["Selling all assets","Adjusting allocations back to target percentages","Buying more stocks","Moving to cash"], ans:1 },
-  { q:"What is a 'blue chip' stock?", opts:["Cheap penny stock","Stock of a well-established large company","New IPO stock","High-risk startup stock"], ans:1 },
-  { q:"What is 'short selling'?", opts:["Selling stocks you own","Borrowing and selling stocks hoping price falls","Quick day trading","Selling bonds"], ans:1 },
-  { q:"What is an 'index fund'?", opts:["Fund managed actively","Fund that tracks a market index","Government savings scheme","Insurance product"], ans:1 },
-  { q:"What does 'portfolio' mean?", opts:["Single investment","Collection of all your investments","Trading account","Bank statement"], ans:1 },
-  { q:"What is 'passive income'?", opts:["Income from a job","Income earned with minimal ongoing effort","Freelance income","Government salary"], ans:1 },
-  { q:"What is 'depreciation'?", opts:["Rise in asset value","Decrease in asset value over time","Interest earned","Tax paid"], ans:1 },
-  { q:"What is a 'fixed deposit' (FD)?", opts:["A stock with fixed price","Bank deposit earning fixed interest for set term","A mutual fund","Government bond"], ans:1 },
-  { q:"What is 'working capital'?", opts:["Long-term investment","Current assets minus current liabilities","Total revenue","Annual profit"], ans:1 },
-  { q:"What is 'leverage' in investing?", opts:["Owning multiple assets","Using borrowed money to invest","Diversifying portfolio","Reducing debt"], ans:1 },
-  { q:"What does 'yield' mean in finance?", opts:["Total investment value","Return generated on investment as percentage","Annual expense","Market cap"], ans:1 },
-  { q:"What is the Rule of 72?", opts:["A tax rule","Estimates years to double money by dividing 72 by return rate","A bond pricing rule","Expense ratio limit"], ans:1 },
-  { q:"What is 'asset allocation'?", opts:["Choosing one stock","Distributing investments across different asset classes","Calculating net worth","Setting up a bank account"], ans:1 },
-  { q:"What is 'inflation hedge'?", opts:["A type of mutual fund","Investment that protects against inflation","Government tax","Insurance policy"], ans:1 },
-  { q:"What is a 'mid-cap' stock?", opts:["Large company stock","Medium-sized company stock","Small startup stock","Government company"], ans:1 },
-  { q:"What is 'book value' of a company?", opts:["Market price","Net asset value per share on balance sheet","Annual revenue","Brand value"], ans:1 },
-  { q:"What is an 'expense ratio' in mutual funds?", opts:["Total investment cost","Annual fee charged by fund as % of assets","Tax on returns","Entry/exit load"], ans:1 },
-  { q:"What is 'debt-to-equity ratio'?", opts:["Profit margin","Measures financial leverage — debt vs equity","Revenue growth rate","Cash flow ratio"], ans:1 },
-  { q:"What is 'cash flow'?", opts:["Net profit","Movement of money in and out of business","Total assets","Market cap"], ans:1 },
-  { q:"What does 'XIRR' measure?", opts:["Exchange rate","Returns on investments with irregular cash flows","Credit rating","Net income"], ans:1 },
-  { q:"What is 'rupee cost averaging'?", opts:["Converting rupees to dollars","Buying more units when price is low via regular investing","Hedging currency risk","A tax strategy"], ans:1 },
+  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 }
 ];
-
-// Pick 10 random unique questions each game
-function getRandomWQQuestions() {
-  const shuffled = [...wqAllQuestions].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 10);
-}
-
-let wqQuestions = getRandomWQQuestions();
 let wqCurrent = 0, wqScore = 0, wqActive = false;
 
 function startWealthQuiz() {
   resetGameAreas('wqArea');
-  wqQuestions = getRandomWQQuestions(); // Fresh random set every game!
   wqCurrent = 0; wqScore = 0; wqActive = true;
   renderWealthQuizQ();
 }
@@ -4721,29 +4421,19 @@ function answerWQ(i) {
 }
 
 // Startup CEO Game
-const allCeoEvents = [
+const ceoEvents = [
   { q:"Viral tweet about your product! Do you?", opts:[{t:"Hire 10 engineers",r:{team:2,cash:-30,rev:5}},{t:"Run targeted ads",r:{team:0,cash:-15,rev:20}},{t:"Ignore it",r:{team:0,cash:0,rev:-5}}] },
   { q:"Key engineer quits. Do you?", opts:[{t:"Hire two replacements",r:{team:1,cash:-40,rev:-10}},{t:"Promote intern",r:{team:0,cash:-5,rev:-5}},{t:"Outsource",r:{team:0,cash:-20,rev:0}}] },
   { q:"Competitor launches similar product!", opts:[{t:"Cut prices 20%",r:{team:0,cash:-10,rev:-15}},{t:"Double down on features",r:{team:0,cash:-25,rev:10}},{t:"Partner with them",r:{team:1,cash:10,rev:15}}] },
   { q:"VC offers $1M for 30% equity. Do you?", opts:[{t:"Accept",r:{team:2,cash:100,rev:0}},{t:"Counter at 15%",r:{team:0,cash:0,rev:5}},{t:"Decline",r:{team:0,cash:0,rev:10}}] },
-  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] },
-  { q:"A big client wants 50% discount for volume!", opts:[{t:"Accept the deal",r:{team:0,cash:-10,rev:25}},{t:"Negotiate 20% off",r:{team:0,cash:0,rev:15}},{t:"Decline",r:{team:0,cash:0,rev:-5}}] },
-  { q:"Chance to expand to a new market!", opts:[{t:"Go all in — full launch",r:{team:3,cash:-50,rev:30}},{t:"Soft launch with pilot",r:{team:1,cash:-15,rev:10}},{t:"Stay focused",r:{team:0,cash:10,rev:5}}] },
-  { q:"A major bug is found in production!", opts:[{t:"All hands — fix immediately",r:{team:0,cash:-20,rev:-10}},{t:"Patch quietly",r:{team:0,cash:-5,rev:-5}},{t:"Deny it",r:{team:-1,cash:0,rev:-25}}] },
-  { q:"Team wants remote work policy!", opts:[{t:"Full remote",r:{team:2,cash:10,rev:0}},{t:"Hybrid 3 days office",r:{team:1,cash:5,rev:5}},{t:"Mandatory office",r:{team:-2,cash:0,rev:-5}}] },
-  { q:"Influencer offers to promote for equity!", opts:[{t:"Give 2% equity",r:{team:0,cash:0,rev:30}},{t:"Pay cash instead",r:{team:0,cash:-20,rev:20}},{t:"Pass",r:{team:0,cash:0,rev:0}}] },
-  { q:"Economic downturn — customers are churning!", opts:[{t:"Cut all costs aggressively",r:{team:-2,cash:30,rev:-15}},{t:"Double down on retention",r:{team:0,cash:-20,rev:5}},{t:"Launch freemium tier",r:{team:0,cash:-10,rev:10}}] },
-  { q:"Acquisition offer at 5x revenue!", opts:[{t:"Accept and exit",r:{team:0,cash:200,rev:0}},{t:"Counter at 8x",r:{team:0,cash:0,rev:10}},{t:"Decline — stay independent",r:{team:1,cash:0,rev:15}}] },
+  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] }
 ];
-
+let ceoState = {};
 function startCEOGame() {
   resetGameAreas('ceoArea');
-  // Pick 5 random events each game
-  ceoEvents = [...allCeoEvents].sort(()=>Math.random()-0.5).slice(0,5);
   ceoState = { round:0, cash:50, rev:10, team:3 };
   renderCEO();
 }
-let ceoEvents = allCeoEvents.slice(0,5);
 function renderCEO() {
   const area = document.getElementById('ceoArea');
   area.style.display = 'block';
@@ -5210,6 +4900,7 @@ async function verifyPlanFromCloud() {
       const data = doc.data();
       // Server is the source of truth
       _planStatus = data.plan === 'pro' ? 'pro' : 'free';
+      // Sync to localStorage as cache
       localStorage.setItem('fm_plan', _planStatus);
     } else {
       _planStatus = 'free';
@@ -5307,18 +4998,16 @@ async function activatePro(paymentId) {
   localStorage.setItem('fm_payment_id', paymentId);
   localStorage.setItem('fm_pro_since', new Date().toISOString());
   updatePlanUI();
-  // Save to Firestore with proper structure
+  // Save to Firestore — this is the real record
   if (window._fbDb && window._fbCurrentUser) {
     try {
       await window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
-        'subscription.plan': 'pro',
-        'subscription.status': 'active',
-        'subscription.verified': true,
-        'subscription.paymentId': paymentId,
-        'subscription.startedAt': new Date().toISOString(),
-        'subscription.source': 'razorpay'
+        plan: 'pro',
+        paymentId: paymentId,
+        proSince: new Date().toISOString(),
+        proActivatedAt: firebase.firestore.FieldValue.serverTimestamp()
       });
-      showToast('✅ Pro plan activated and saved!');
+      showToast('✅ Pro plan saved to your account!');
     } catch(e) {
       console.log('Firestore pro save error:', e);
     }
@@ -5387,316 +5076,6 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 
 // Init theme on load
 window.addEventListener('load', initTheme);
-</script>
-
-<!-- Mobile FAB -->
-<button class="fab-btn" id="fabBtn" onclick="handleFab()" title="Quick Action">+</button>
-
-<!-- Onboarding Overlay -->
-<div class="onboarding-overlay" id="onboardingOverlay" style="display:none;">
-  <div class="onboarding-card">
-    <div class="onboarding-dots">
-      <div class="onboarding-dot active" id="dot0"></div>
-      <div class="onboarding-dot" id="dot1"></div>
-      <div class="onboarding-dot" id="dot2"></div>
-    </div>
-    <div id="onboardingContent"></div>
-  </div>
-</div>
-
-<script>
-// ── ONBOARDING ──────────────────────────────────────────────
-const onboardingSteps = [
-  {
-    step: 'Step 1 of 3',
-    title: 'Welcome to FlowMind! 🚀',
-    sub: 'Your AI-Powered Personal Operating System for goals, work, and wealth. Let\'s set you up in 30 seconds!',
-    type: 'welcome'
-  },
-  {
-    step: 'Step 2 of 3',
-    title: 'What\'s your main focus?',
-    sub: 'FlowMind will personalize your AI experience based on your priority.',
-    type: 'mode',
-    options: [
-      { icon: '🧠', label: 'Productivity', value: 'productivity' },
-      { icon: '🎯', label: 'Goals', value: 'goals' },
-      { icon: '💰', label: 'Wealth', value: 'wealth' },
-      { icon: '⚡', label: 'All of it!', value: 'all' }
-    ]
-  },
-  {
-    step: 'Step 3 of 3',
-    title: 'Set your Groq API Key',
-    sub: 'FlowMind uses Groq AI (free) for intelligent responses. Get your free key at console.groq.com',
-    type: 'apikey'
-  }
-];
-
-let onboardingStep = 0;
-let onboardingMode = 'all';
-
-function showOnboarding() {
-  document.getElementById('onboardingOverlay').style.display = 'flex';
-  renderOnboardingStep(0);
-}
-
-function renderOnboardingStep(step) {
-  onboardingStep = step;
-  const s = onboardingSteps[step];
-  // Update dots
-  document.querySelectorAll('.onboarding-dot').forEach((d,i) => {
-    d.classList.toggle('active', i === step);
-  });
-  let html = `<div class="onboarding-step">${s.step}</div>
-    <div class="onboarding-title">${s.title}</div>
-    <div class="onboarding-sub">${s.sub}</div>`;
-
-  if (s.type === 'welcome') {
-    html += `<button class="landing-btn" onclick="renderOnboardingStep(1)" style="width:100%;">Get Started →</button>`;
-  } else if (s.type === 'mode') {
-    html += `<div class="onboarding-options">`;
-    s.options.forEach(opt => {
-      html += `<button class="onboarding-opt" onclick="selectMode('${opt.value}',this)">
-        <span class="opt-icon">${opt.icon}</span>${opt.label}</button>`;
-    });
-    html += `</div>
-    <button class="landing-btn" onclick="renderOnboardingStep(2)" style="width:100%;">Continue →</button>`;
-  } else if (s.type === 'apikey') {
-    html += `<input class="landing-name-input" id="onboardApiKey" placeholder="gsk_..." style="margin-bottom:12px;" />
-    <button class="landing-btn" onclick="finishOnboarding()" style="width:100%;margin-bottom:10px;">Start Using FlowMind ⚡</button>
-    <button onclick="finishOnboarding()" style="background:transparent;border:none;color:var(--silver);font-size:12px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;">Skip for now</button>`;
-  }
-  document.getElementById('onboardingContent').innerHTML = html;
-}
-
-function selectMode(mode, btn) {
-  document.querySelectorAll('.onboarding-opt').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  onboardingMode = mode;
-  localStorage.setItem('fm_mode', mode);
-}
-
-function finishOnboarding() {
-  const keyInput = document.getElementById('onboardApiKey');
-  if (keyInput && keyInput.value.trim().startsWith('gsk_')) {
-    apiKey = keyInput.value.trim();
-    localStorage.setItem('fm_apikey', apiKey);
-    document.getElementById('apiKeyDisplay').textContent = apiKey.slice(0,8) + '...';
-    updateStatus();
-  }
-  localStorage.setItem('fm_onboarded', '1');
-  document.getElementById('onboardingOverlay').style.display = 'none';
-  toast('🎉 Welcome to FlowMind! Your AI OS is ready!');
-  renderHomeDashboard();
-}
-
-// ── HOME DASHBOARD ──────────────────────────────────────────
-function renderHomeDashboard() {
-  // Date
-  const dateEl = document.getElementById('homeDate');
-  if (dateEl) {
-    const now = new Date();
-    dateEl.textContent = now.toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long' });
-  }
-
-  // Stats
-  const doneTasks = tasks.filter(t => t.done).length;
-  const activeGoals = goals.filter(g => !g.done).length;
-  const totalWealth = assets.reduce((s,a) => s+a.value, 0);
-
-  const el = id => document.getElementById(id);
-  if (el('hTasksDone')) el('hTasksDone').textContent = `${doneTasks}/${tasks.length}`;
-  if (el('hGoalsActive')) el('hGoalsActive').textContent = activeGoals;
-  if (el('hNetWorth')) el('hNetWorth').textContent = '₹' + totalWealth.toLocaleString('en-IN');
-
-  // Streak
-  const streak = getStreak();
-  if (el('hStreak')) el('hStreak').textContent = streak;
-
-  // Today's top tasks
-  const taskEl = el('homeTodayTasks');
-  if (taskEl) {
-    const todayTasks = tasks.filter(t => !t.done).slice(0,3);
-    if (todayTasks.length === 0) {
-      taskEl.innerHTML = `<div style="text-align:center;padding:16px;color:var(--silver);font-size:13px;">
-        🎉 No pending tasks! <span style="color:var(--green);">You're all caught up!</span><br>
-        <span style="font-size:12px;margin-top:4px;display:block;">Add tasks to track your daily work.</span>
-      </div>`;
-    } else {
-      taskEl.innerHTML = todayTasks.map(t => `
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);">
-          <div onclick="toggleTask('${t.id}')" style="width:18px;height:18px;border:2px solid var(--line2);border-radius:5px;cursor:pointer;flex-shrink:0;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--line2)'"></div>
-          <span style="font-size:13px;color:var(--text);flex:1;">${t.title}</span>
-          <span style="font-size:10px;color:var(--silver);background:var(--ink3);padding:2px 8px;border-radius:10px;">${t.cat}</span>
-        </div>`).join('');
-    }
-  }
-
-  // Goals preview
-  const goalEl = el('homeGoalsPreview');
-  if (goalEl) {
-    const topGoals = goals.filter(g => !g.done).slice(0,3);
-    if (topGoals.length === 0) {
-      goalEl.innerHTML = `<div style="text-align:center;padding:16px;color:var(--silver);font-size:13px;">
-        No active goals yet.<br>
-        <span style="font-size:12px;color:var(--blue);">Set your first goal and let FlowMind guide you!</span>
-      </div>`;
-    } else {
-      goalEl.innerHTML = topGoals.map(g => `
-        <div style="margin-bottom:12px;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-            <span style="font-size:13px;color:var(--text);">${g.title}</span>
-            <span style="font-size:12px;color:var(--silver);">${g.progress}%</span>
-          </div>
-          <div style="height:6px;background:var(--ink3);border-radius:3px;overflow:hidden;">
-            <div style="height:100%;width:${g.progress}%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:3px;transition:width 0.5s;"></div>
-          </div>
-        </div>`).join('');
-    }
-  }
-
-  // Insight
-  generateHomeInsight();
-
-  // Performance Snapshot
-  const snapEl = document.getElementById('homeReportSnap');
-  if (snapEl) {
-    const totalTasks = tasks.length;
-    const doneCount  = tasks.filter(t=>t.done).length;
-    const completion = totalTasks > 0 ? Math.round(doneCount/totalTasks*100) : 0;
-    const goalsCount = goals.filter(g=>!g.done).length;
-    const avgGoalPct = goalsCount > 0 ? Math.round(goals.filter(g=>!g.done).reduce((s,g)=>s+g.progress,0)/goalsCount) : 0;
-    const chatCount  = getDailyCount('fm_chat_count');
-
-    snapEl.innerHTML = [
-      { label:'Task Completion', val: completion+'%', color:'var(--green)' },
-      { label:'Avg Goal Progress', val: avgGoalPct+'%', color:'var(--blue)' },
-      { label:'AI Chats Today', val: chatCount, color:'var(--gold)' },
-    ].map(s=>`
-      <div style="background:var(--ink3);border-radius:var(--r);padding:12px;text-align:center;">
-        <div style="font-size:20px;font-weight:800;color:${s.color};">${s.val}</div>
-        <div style="font-size:11px;color:var(--silver);margin-top:3px;">${s.label}</div>
-      </div>`).join('');
-  }
-}
-
-function generateHomeInsight() {
-  const insightEl = document.getElementById('homeInsight');
-  if (!insightEl) return;
-
-  const doneTasks = tasks.filter(t => t.done).length;
-  const totalTasks = tasks.length;
-  const activeGoals = goals.filter(g => !g.done).length;
-  const overdueGoals = goals.filter(g => !g.done && g.progress < 30).length;
-  const hour = new Date().getHours();
-  const mode = localStorage.getItem('fm_mode') || 'all';
-
-  let insights = [];
-
-  if (totalTasks === 0) {
-    insights.push("Start by adding your first task. FlowMind will use your tasks to shape smarter AI planning for you! 💡");
-  } else if (doneTasks === totalTasks) {
-    insights.push(`🎉 Amazing! You've completed all ${totalTasks} tasks! Time to add new challenges and keep the momentum going!`);
-  } else if (doneTasks === 0 && totalTasks > 0) {
-    insights.push(`You have ${totalTasks} pending task${totalTasks>1?'s':''}. Start with the smallest one — momentum builds from small wins! 💪`);
-  } else {
-    const pct = Math.round(doneTasks/totalTasks*100);
-    insights.push(`You're ${pct}% done with your tasks today. ${pct >= 50 ? "Great progress! Keep pushing! 🔥" : "Focus on 1 task at a time — you've got this! 💪"}`);
-  }
-
-  if (activeGoals === 0) {
-    insights.push("No active goals set yet. Goals give your AI coach direction — add one now and watch FlowMind personalize your experience! 🎯");
-  } else if (overdueGoals > 0) {
-    insights.push(`${overdueGoals} goal${overdueGoals>1?'s are':' is'} below 30% progress. Ask the AI coach for a focused action plan to get back on track! 📈`);
-  }
-
-  if (hour < 10) {
-    insights.push("Good morning! 🌅 The best time to plan your day is NOW. Review your top 3 tasks and set your daily intention!");
-  } else if (hour >= 20) {
-    insights.push("Evening check-in time! 🌙 Review what you accomplished today and plan tomorrow's top priority before you sleep.");
-  }
-
-  if (mode === 'wealth') {
-    insights.push("💰 Wealth focus: Have you updated your asset values this week? Consistent tracking is the first step to financial clarity.");
-  } else if (mode === 'productivity') {
-    insights.push("🧠 Productivity tip: Use the Pomodoro technique — 25 min focused work, 5 min break. Try it with your next task!");
-  }
-
-  const randomInsight = insights[Math.floor(Math.random() * insights.length)];
-  insightEl.textContent = randomInsight;
-}
-
-function refreshInsight() {
-  generateHomeInsight();
-  toast('✨ Insight refreshed!');
-}
-
-function getStreak() {
-  const today = new Date().toDateString();
-  const streakData = JSON.parse(localStorage.getItem('fm_streak') || '{"count":0,"lastDate":""}');
-  const yesterday = new Date(Date.now() - 86400000).toDateString();
-  if (streakData.lastDate === today) return streakData.count;
-  if (streakData.lastDate === yesterday) {
-    const newStreak = { count: streakData.count + 1, lastDate: today };
-    localStorage.setItem('fm_streak', JSON.stringify(newStreak));
-    return newStreak.count;
-  }
-  // Reset streak
-  const newStreak = { count: 1, lastDate: today };
-  localStorage.setItem('fm_streak', JSON.stringify(newStreak));
-  return 1;
-}
-
-// ── MOBILE FAB ──────────────────────────────────────────────
-function handleFab() {
-  const panel = activePanelName;
-  if (panel === 'tasks') {
-    document.getElementById('taskForm').classList.toggle('show');
-  } else if (panel === 'goals') {
-    openModal('goalModal');
-  } else if (panel === 'chat') {
-    document.getElementById('chatInput').focus();
-  } else if (panel === 'wealth') {
-    document.getElementById('assetForm').classList.toggle('show');
-  } else {
-    switchPanel('chat', document.querySelectorAll('.nav-item')[0]);
-    setTimeout(() => document.getElementById('chatInput').focus(), 300);
-  }
-}
-
-function switchPanel(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  const panel = document.getElementById('panel-' + name);
-  if (!panel) return;
-  panel.classList.add('active');
-  if (btn) btn.classList.add('active');
-  activePanelName = name;
-  if (name === 'chat') {
-    const badge = document.getElementById('msgBadge');
-    if (badge) badge.style.display = 'none';
-  }
-  if (name === 'quiz') { initQuiz(); renderQuiz(); }
-  // Update FAB icon
-  const fab = document.getElementById('fabBtn');
-  if (fab) {
-    const icons = { chat:'💬', tasks:'➕', goals:'🎯', wealth:'💰', report:'📊', quiz:'🧠', games:'🎮' };
-    fab.textContent = icons[name] || '+';
-  }
-  if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
-    toggleSidebar();
-  }
-}
-
-// Show onboarding for new users
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    if (!localStorage.getItem('fm_onboarded') && document.getElementById('app').classList.contains('show')) {
-      showOnboarding();
-    }
-  }, 1000);
-});
 </script>
 </body>
 </html>
