@@ -2094,12 +2094,23 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
           <!-- Quick Actions -->
           <div style="background:var(--ink2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;">
             <div style="font-size:13px;color:var(--silver);font-weight:700;margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;">⚡ Quick Actions</div>
-            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
               <button onclick="switchPanel('chat',document.querySelectorAll('.nav-item')[1]);setTimeout(()=>document.getElementById('chatInput').focus(),300)" class="quick-action-btn">💬 Ask AI</button>
               <button onclick="switchPanel('tasks',document.querySelectorAll('.nav-item')[2]);setTimeout(()=>document.getElementById('taskForm').classList.add('show'),300)" class="quick-action-btn">➕ Add Task</button>
               <button onclick="switchPanel('goals',document.querySelectorAll('.nav-item')[4]);setTimeout(()=>openModal('goalModal'),300)" class="quick-action-btn">🎯 New Goal</button>
-              <button onclick="switchPanel('report',document.querySelectorAll('.nav-item')[5])" class="quick-action-btn">📊 My Report</button>
+              <button onclick="switchPanel('report',document.querySelectorAll('.nav-item')[5])" class="quick-action-btn">📊 Reports</button>
+              <button onclick="switchPanel('games',document.querySelectorAll('.nav-item')[6])" class="quick-action-btn">🎮 Games</button>
+              <button onclick="switchPanel('quiz',document.querySelectorAll('.nav-item')[7])" class="quick-action-btn">🧠 Quiz</button>
             </div>
+          </div>
+
+          <!-- Mini Report Preview -->
+          <div style="background:var(--ink2);border:1px solid var(--line);border-radius:var(--r2);padding:18px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+              <div style="font-size:13px;color:var(--silver);font-weight:700;text-transform:uppercase;letter-spacing:1px;">📊 Performance Snapshot</div>
+              <button onclick="switchPanel('report',document.querySelectorAll('.nav-item')[5])" style="background:transparent;border:1px solid var(--line2);border-radius:var(--r);padding:5px 12px;color:var(--silver);font-size:11px;cursor:pointer;font-family:'Cabinet Grotesk',sans-serif;" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--line2)'">Full Report →</button>
+            </div>
+            <div id="homeReportSnap" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
           </div>
 
         </div>
@@ -2840,16 +2851,12 @@ function enterApp() {
 }
 
 function startApp() {
-  // Always force the correct visibility — even if called multiple times
   const landing = document.getElementById('landing');
   const app     = document.getElementById('app');
 
   landing.classList.add('hide');
   app.classList.add('show');
-  app.style.display = 'flex';   // belt-and-suspenders: force display
-
-  // Fully remove landing from DOM after its fade animation (600ms)
-  // This prevents it from ever re-appearing on file:// page events
+  app.style.display = 'flex';
   setTimeout(() => landing.classList.add('gone'), 650);
 
   updateClock();
@@ -2861,8 +2868,8 @@ function startApp() {
 
   document.getElementById('welcomeBubble').innerHTML =
     `Hey ${esc(userName)}! 👋 I'm your FlowMind AI. ${apiKey
-      ? "I'm connected and ready — what's on your mind? You can attach images, PDFs or text files using the attach button."
-      : "Set your Groq API key (top right) to activate me, then let's get to work!"}`;
+      ? "I'm connected and ready — what's on your mind?"
+      : "⚠️ Set your Groq API key using the 🔑 button (top right) to activate me!"}`;
 
   if (apiKey) document.getElementById('apiKeyInput').value = apiKey;
 
@@ -2872,13 +2879,22 @@ function startApp() {
   renderWealth();
   renderGoals();
   updateSidebar();
-  document.getElementById('reportDate').textContent = 'All Time · ' + new Date().toLocaleDateString('en-US',
+  document.getElementById('reportDate').textContent = 'All Time · ' + new Date().toLocaleDateString('en-IN',
     { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // ✅ FIX: Set home as active panel properly
+  activePanelName = 'home';
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const homePanel = document.getElementById('panel-home');
+  if (homePanel) homePanel.classList.add('active');
+  const homeBtn = document.querySelector('.nav-item');
+  if (homeBtn) homeBtn.classList.add('active');
+  renderHomeDashboard();
 
   document.getElementById('goalTitleInput').addEventListener('keydown', e => { if (e.key==='Enter') addGoal(); });
   initQuiz();
 
-  // Close attach menu when clicking outside
   document.addEventListener('click', function(e) {
     const wrap = document.getElementById('attachWrap');
     if (wrap && !wrap.contains(e.target)) closeAttachMenu();
@@ -2934,13 +2950,27 @@ function toast(msg) {
 // ─── API KEY ─────────────────────────────────────────────────
 function saveApiKey() {
   const key = document.getElementById('apiKeyInput').value.trim();
-  if (!key.startsWith('gsk_')) { toast('❌ Groq keys start with gsk_'); return; }
+  if (!key) { toast('❌ Please enter your Groq API key'); return; }
+  if (!key.startsWith('gsk_')) { toast('❌ Groq keys start with gsk_ — check your key'); return; }
   apiKey = key;
   localStorage.setItem('fm_apikey', key);
+  // Sync to cloud if logged in
+  if (window._fbDb && window._fbCurrentUser) {
+    window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({ apiKey: key }).catch(()=>{});
+  }
   closeModal('apiModal');
   updateStatus(true);
-  addMsg('ai', `✅ Connected! I'm online and ready, ${userName}. What would you like to work on?`);
-  toast('✅ API key saved!');
+  // Update welcome bubble
+  const wb = document.getElementById('welcomeBubble');
+  if (wb) wb.innerHTML = `✅ Connected! I'm online and ready, ${esc(userName)}. Ask me anything — plan your day, set goals, or talk strategy!`;
+  // Switch to chat panel
+  const chatBtn = document.querySelectorAll('.nav-item')[1];
+  if (chatBtn) switchPanel('chat', chatBtn);
+  setTimeout(() => {
+    const inp = document.getElementById('chatInput');
+    if (inp) inp.focus();
+  }, 300);
+  toast('✅ Groq API connected! AI is ready 🚀');
 }
 function updateStatus(online) {
   document.getElementById('statusDot').className = 'status-dot' + (online ? ' online' : '');
@@ -4700,22 +4730,71 @@ function resetGameAreas(exceptId) {
 }
 
 // Wealth IQ Quiz
-const wqQuestions = [
+const wqAllQuestions = [
   { q:"What does 'compound interest' mean?", opts:["Interest on interest","Simple interest rate","Bank fee","Credit score"], ans:0 },
   { q:"What is an ETF?", opts:["Exchange-Traded Fund","Electronic Transfer Fee","Equity Tax Form","Emerging Trade Fund"], ans:0 },
   { q:"What does 'diversification' reduce?", opts:["Returns","Risk","Taxes","Inflation"], ans:1 },
   { q:"What is a P/E ratio?", opts:["Profit/Expense","Price/Earnings","Principal/Equity","Portfolio/Estimate"], ans:1 },
-  { q:"Which asset class is typically most volatile?", opts:["Bonds","Real estate","Crypto","Cash"], ans:2 },
-  { q:"What is dollar-cost averaging?", opts:["Buying low, selling high","Investing fixed amounts regularly","Converting USD","Tracking inflation"], ans:1 },
+  { q:"Which asset is typically most volatile?", opts:["Bonds","Real estate","Crypto","Cash"], ans:2 },
+  { q:"What is dollar-cost averaging?", opts:["Buying low selling high","Investing fixed amounts regularly","Converting USD","Tracking inflation"], ans:1 },
   { q:"What does 'liquidity' refer to?", opts:["Cash flow","How easily an asset converts to cash","Market cap","Interest rate"], ans:1 },
-  { q:"What is a bull market?", opts:["Prices falling >20%","Prices rising consistently","Flat market","High volatility"], ans:1 },
+  { q:"What is a bull market?", opts:["Prices falling 20%+","Prices rising consistently","Flat market","High volatility"], ans:1 },
   { q:"What is the '4% rule'?", opts:["Tax bracket","Safe retirement withdrawal rate","Savings rate","Bond yield"], ans:1 },
-  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 }
+  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 },
+  { q:"What is a mutual fund?", opts:["Single stock","Pooled investment managed by professionals","Government bond","Savings account"], ans:1 },
+  { q:"What is inflation?", opts:["Rise in asset prices","General increase in prices over time","Decrease in money supply","Interest rate change"], ans:1 },
+  { q:"What is a stock dividend?", opts:["Loan repayment","Share of company profits paid to investors","New stock issue","Tax deduction"], ans:1 },
+  { q:"Which is a fixed-income investment?", opts:["Stocks","Bonds","Crypto","Real estate"], ans:1 },
+  { q:"What is a bear market?", opts:["Market rising 10%+","Prices falling 20%+ from peak","Stable market","New IPO market"], ans:1 },
+  { q:"What does SIP stand for in investing?", opts:["Systematic Investment Plan","Stock Income Portfolio","Secured Interest Payment","Simple Index Plan"], ans:0 },
+  { q:"What is the Sensex?", opts:["A savings scheme","Index of 30 major BSE companies","Government bond","Mutual fund"], ans:1 },
+  { q:"What is net worth?", opts:["Monthly income","Assets minus liabilities","Total savings","Annual revenue"], ans:1 },
+  { q:"What is a liability?", opts:["Something you own","Something you owe","Monthly income","Investment return"], ans:1 },
+  { q:"What does CAGR mean?", opts:["Current Annual Gross Revenue","Compound Annual Growth Rate","Capital Asset Growth Ratio","Credit Adjusted Growth Rate"], ans:1 },
+  { q:"What is an IPO?", opts:["Interest Payment Option","Initial Public Offering","Internal Portfolio Order","Index Price Option"], ans:1 },
+  { q:"What is 'hedging' in finance?", opts:["Doubling your bet","Reducing risk by taking offsetting positions","Borrowing more","Selling all assets"], ans:1 },
+  { q:"What is a credit score used for?", opts:["Tracking expenses","Determining loan eligibility","Calculating taxes","Measuring net worth"], ans:1 },
+  { q:"What is a Roth IRA equivalent in India?", opts:["PPF","NPS","ELSS","All of the above"], ans:3 },
+  { q:"What does 'equity' mean in investing?", opts:["Debt owed","Ownership stake in a company","Monthly interest","Fixed deposit"], ans:1 },
+  { q:"What is a stop-loss order?", opts:["Order to buy at a low price","Order to sell when price falls to a limit","Order to hold stocks","Order to double investment"], ans:1 },
+  { q:"Which is generally the safest investment?", opts:["Penny stocks","Crypto","Government bonds","Speculative real estate"], ans:2 },
+  { q:"What is 'market capitalization'?", opts:["Total company debt","Total value of all company shares","Annual revenue","Book value"], ans:1 },
+  { q:"What does NAV stand for in mutual funds?", opts:["Net Annual Value","Net Asset Value","New Allocation Volume","Nominal Asset Valuation"], ans:1 },
+  { q:"What is 'rebalancing' a portfolio?", opts:["Selling all assets","Adjusting allocations back to target percentages","Buying more stocks","Moving to cash"], ans:1 },
+  { q:"What is a 'blue chip' stock?", opts:["Cheap penny stock","Stock of a well-established large company","New IPO stock","High-risk startup stock"], ans:1 },
+  { q:"What is 'short selling'?", opts:["Selling stocks you own","Borrowing and selling stocks hoping price falls","Quick day trading","Selling bonds"], ans:1 },
+  { q:"What is an 'index fund'?", opts:["Fund managed actively","Fund that tracks a market index","Government savings scheme","Insurance product"], ans:1 },
+  { q:"What does 'portfolio' mean?", opts:["Single investment","Collection of all your investments","Trading account","Bank statement"], ans:1 },
+  { q:"What is 'passive income'?", opts:["Income from a job","Income earned with minimal ongoing effort","Freelance income","Government salary"], ans:1 },
+  { q:"What is 'depreciation'?", opts:["Rise in asset value","Decrease in asset value over time","Interest earned","Tax paid"], ans:1 },
+  { q:"What is a 'fixed deposit' (FD)?", opts:["A stock with fixed price","Bank deposit earning fixed interest for set term","A mutual fund","Government bond"], ans:1 },
+  { q:"What is 'working capital'?", opts:["Long-term investment","Current assets minus current liabilities","Total revenue","Annual profit"], ans:1 },
+  { q:"What is 'leverage' in investing?", opts:["Owning multiple assets","Using borrowed money to invest","Diversifying portfolio","Reducing debt"], ans:1 },
+  { q:"What does 'yield' mean in finance?", opts:["Total investment value","Return generated on investment as percentage","Annual expense","Market cap"], ans:1 },
+  { q:"What is the Rule of 72?", opts:["A tax rule","Estimates years to double money by dividing 72 by return rate","A bond pricing rule","Expense ratio limit"], ans:1 },
+  { q:"What is 'asset allocation'?", opts:["Choosing one stock","Distributing investments across different asset classes","Calculating net worth","Setting up a bank account"], ans:1 },
+  { q:"What is 'inflation hedge'?", opts:["A type of mutual fund","Investment that protects against inflation","Government tax","Insurance policy"], ans:1 },
+  { q:"What is a 'mid-cap' stock?", opts:["Large company stock","Medium-sized company stock","Small startup stock","Government company"], ans:1 },
+  { q:"What is 'book value' of a company?", opts:["Market price","Net asset value per share on balance sheet","Annual revenue","Brand value"], ans:1 },
+  { q:"What is an 'expense ratio' in mutual funds?", opts:["Total investment cost","Annual fee charged by fund as % of assets","Tax on returns","Entry/exit load"], ans:1 },
+  { q:"What is 'debt-to-equity ratio'?", opts:["Profit margin","Measures financial leverage — debt vs equity","Revenue growth rate","Cash flow ratio"], ans:1 },
+  { q:"What is 'cash flow'?", opts:["Net profit","Movement of money in and out of business","Total assets","Market cap"], ans:1 },
+  { q:"What does 'XIRR' measure?", opts:["Exchange rate","Returns on investments with irregular cash flows","Credit rating","Net income"], ans:1 },
+  { q:"What is 'rupee cost averaging'?", opts:["Converting rupees to dollars","Buying more units when price is low via regular investing","Hedging currency risk","A tax strategy"], ans:1 },
 ];
+
+// Pick 10 random unique questions each game
+function getRandomWQQuestions() {
+  const shuffled = [...wqAllQuestions].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 10);
+}
+
+let wqQuestions = getRandomWQQuestions();
 let wqCurrent = 0, wqScore = 0, wqActive = false;
 
 function startWealthQuiz() {
   resetGameAreas('wqArea');
+  wqQuestions = getRandomWQQuestions(); // Fresh random set every game!
   wqCurrent = 0; wqScore = 0; wqActive = true;
   renderWealthQuizQ();
 }
@@ -4742,19 +4821,29 @@ function answerWQ(i) {
 }
 
 // Startup CEO Game
-const ceoEvents = [
+const allCeoEvents = [
   { q:"Viral tweet about your product! Do you?", opts:[{t:"Hire 10 engineers",r:{team:2,cash:-30,rev:5}},{t:"Run targeted ads",r:{team:0,cash:-15,rev:20}},{t:"Ignore it",r:{team:0,cash:0,rev:-5}}] },
   { q:"Key engineer quits. Do you?", opts:[{t:"Hire two replacements",r:{team:1,cash:-40,rev:-10}},{t:"Promote intern",r:{team:0,cash:-5,rev:-5}},{t:"Outsource",r:{team:0,cash:-20,rev:0}}] },
   { q:"Competitor launches similar product!", opts:[{t:"Cut prices 20%",r:{team:0,cash:-10,rev:-15}},{t:"Double down on features",r:{team:0,cash:-25,rev:10}},{t:"Partner with them",r:{team:1,cash:10,rev:15}}] },
   { q:"VC offers $1M for 30% equity. Do you?", opts:[{t:"Accept",r:{team:2,cash:100,rev:0}},{t:"Counter at 15%",r:{team:0,cash:0,rev:5}},{t:"Decline",r:{team:0,cash:0,rev:10}}] },
-  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] }
+  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] },
+  { q:"A big client wants 50% discount for volume!", opts:[{t:"Accept the deal",r:{team:0,cash:-10,rev:25}},{t:"Negotiate 20% off",r:{team:0,cash:0,rev:15}},{t:"Decline",r:{team:0,cash:0,rev:-5}}] },
+  { q:"Chance to expand to a new market!", opts:[{t:"Go all in — full launch",r:{team:3,cash:-50,rev:30}},{t:"Soft launch with pilot",r:{team:1,cash:-15,rev:10}},{t:"Stay focused",r:{team:0,cash:10,rev:5}}] },
+  { q:"A major bug is found in production!", opts:[{t:"All hands — fix immediately",r:{team:0,cash:-20,rev:-10}},{t:"Patch quietly",r:{team:0,cash:-5,rev:-5}},{t:"Deny it",r:{team:-1,cash:0,rev:-25}}] },
+  { q:"Team wants remote work policy!", opts:[{t:"Full remote",r:{team:2,cash:10,rev:0}},{t:"Hybrid 3 days office",r:{team:1,cash:5,rev:5}},{t:"Mandatory office",r:{team:-2,cash:0,rev:-5}}] },
+  { q:"Influencer offers to promote for equity!", opts:[{t:"Give 2% equity",r:{team:0,cash:0,rev:30}},{t:"Pay cash instead",r:{team:0,cash:-20,rev:20}},{t:"Pass",r:{team:0,cash:0,rev:0}}] },
+  { q:"Economic downturn — customers are churning!", opts:[{t:"Cut all costs aggressively",r:{team:-2,cash:30,rev:-15}},{t:"Double down on retention",r:{team:0,cash:-20,rev:5}},{t:"Launch freemium tier",r:{team:0,cash:-10,rev:10}}] },
+  { q:"Acquisition offer at 5x revenue!", opts:[{t:"Accept and exit",r:{team:0,cash:200,rev:0}},{t:"Counter at 8x",r:{team:0,cash:0,rev:10}},{t:"Decline — stay independent",r:{team:1,cash:0,rev:15}}] },
 ];
-let ceoState = {};
+
 function startCEOGame() {
   resetGameAreas('ceoArea');
+  // Pick 5 random events each game
+  ceoEvents = [...allCeoEvents].sort(()=>Math.random()-0.5).slice(0,5);
   ceoState = { round:0, cash:50, rev:10, team:3 };
   renderCEO();
 }
+let ceoEvents = allCeoEvents.slice(0,5);
 function renderCEO() {
   const area = document.getElementById('ceoArea');
   area.style.display = 'block';
@@ -5569,6 +5658,27 @@ function renderHomeDashboard() {
 
   // Insight
   generateHomeInsight();
+
+  // Performance Snapshot
+  const snapEl = document.getElementById('homeReportSnap');
+  if (snapEl) {
+    const totalTasks = tasks.length;
+    const doneCount  = tasks.filter(t=>t.done).length;
+    const completion = totalTasks > 0 ? Math.round(doneCount/totalTasks*100) : 0;
+    const goalsCount = goals.filter(g=>!g.done).length;
+    const avgGoalPct = goalsCount > 0 ? Math.round(goals.filter(g=>!g.done).reduce((s,g)=>s+g.progress,0)/goalsCount) : 0;
+    const chatCount  = getDailyCount('fm_chat_count');
+
+    snapEl.innerHTML = [
+      { label:'Task Completion', val: completion+'%', color:'var(--green)' },
+      { label:'Avg Goal Progress', val: avgGoalPct+'%', color:'var(--blue)' },
+      { label:'AI Chats Today', val: chatCount, color:'var(--gold)' },
+    ].map(s=>`
+      <div style="background:var(--ink3);border-radius:var(--r);padding:12px;text-align:center;">
+        <div style="font-size:20px;font-weight:800;color:${s.color};">${s.val}</div>
+        <div style="font-size:11px;color:var(--silver);margin-top:3px;">${s.label}</div>
+      </div>`).join('');
+  }
 }
 
 function generateHomeInsight() {
