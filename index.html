@@ -3183,59 +3183,133 @@ async function sendMessage() {
 
   const totalWealth = assets.reduce((s,a) => s + a.value, 0);
   
-  // Build proactive insights based on user data
+  // Build context data
   const doneTasks = tasks.filter(t=>t.done).length;
   const pendingTasks = tasks.filter(t=>!t.done).length;
   const overdueGoals = goals.filter(g=>!g.done && g.progress < 30).length;
   const healthTasks = tasks.filter(t=>t.cat==='health' && !t.done).length;
   const wealthTasks = tasks.filter(t=>t.cat==='wealth' && !t.done).length;
   const streak = getStreak();
-  const userMode = localStorage.getItem('fm_mode') || 'productivity';
-  const aiTone = localStorage.getItem('fm_ai_tone') || 'friendly';
+  const hour = new Date().getHours();
+  const timeOfDay = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
+  const dayName = new Date().toLocaleDateString('en-IN', { weekday: 'long' });
 
-  const proactiveInsights = [];
-  if (pendingTasks > 5) proactiveInsights.push(`⚠️ You have ${pendingTasks} pending tasks — consider prioritizing top 3 today.`);
-  if (doneTasks === 0 && tasks.length > 0) proactiveInsights.push(`You haven't completed any tasks yet today — start with the smallest one!`);
-  if (overdueGoals > 0) proactiveInsights.push(`${overdueGoals} goal(s) are below 30% progress — they may need attention.`);
-  if (healthTasks > 3) proactiveInsights.push(`Health tasks are piling up (${healthTasks} pending) — don't neglect your wellbeing!`);
-  if (streak >= 3) proactiveInsights.push(`🔥 ${streak}-day streak! Keep it going!`);
+  const proactiveAlerts = [];
+  if (pendingTasks > 5) proactiveAlerts.push(`${pendingTasks} pending tasks need prioritization`);
+  if (doneTasks === 0 && tasks.length > 0) proactiveAlerts.push(`No tasks completed yet today`);
+  if (overdueGoals > 0) proactiveAlerts.push(`${overdueGoals} goal(s) stuck below 30% — need attention`);
+  if (healthTasks > 2) proactiveAlerts.push(`${healthTasks} health tasks being ignored`);
+  if (streak >= 3) proactiveAlerts.push(`${streak}-day streak active — protect it`);
 
-  const systemPrompt = `You are FlowMind — the AI Personal Operating System for ${userName}. 
-You help with goals, productivity, work, and wealth. You are warm, direct, and smart — like a brilliant friend who knows the user deeply.
+  // Detect if this is a daily planning request
+  const msgLower = msg.toLowerCase();
+  const isPlanRequest = /plan my day|daily plan|what should i do today|schedule my day|plan for today|today.?s plan|how should i spend/.test(msgLower);
+  const isGoalRequest = /break.?down|help.*(achieve|reach|goal)|goal plan/.test(msgLower);
+  const isWeeklyReview = /weekly review|how was my week|week summary/.test(msgLower);
+  const isFocusMode = /help me focus|i.?m distracted|can.?t concentrate|procrastinat/.test(msgLower);
+  const isWealthMode = /\b(money|savings|invest|financial|net worth|wealth|income|expenses)\b/.test(msgLower);
+  const isBusinessMode = /\b(business|strategy|startup|grow|marketing|revenue|sales|profit)\b/.test(msgLower);
+  const isProblemMode = /\b(problem|stuck|help me figure|what should i do|advice|confused)\b/.test(msgLower);
 
-═══ USER CONTEXT ═══
-Name: ${userName}
-Net Worth: ₹${totalWealth.toLocaleString('en-IN')}
-Focus Mode: ${userMode}
-Day Streak: ${streak} days
+  // For plan requests with no data, inject a strong instruction into the message
+  let enhancedMsg = msg;
+  if (isPlanRequest) {
+    enhancedMsg = `[DAILY PLANNER MODE ACTIVATED]
+User request: "${msg}"
+Time: ${timeOfDay}, ${dayName}
+Tasks available: ${tasks.filter(t=>!t.done).length > 0 ? tasks.filter(t=>!t.done).slice(0,5).map(t=>t.title).join(', ') : 'NONE — use default productive schedule'}
+Goals available: ${goals.filter(g=>!g.done).length > 0 ? goals.filter(g=>!g.done).slice(0,3).map(g=>g.title).join(', ') : 'NONE — use default productive schedule'}
+
+INSTRUCTION: Generate a COMPLETE structured daily plan right now. DO NOT suggest relaxing or say "blank slate". If no tasks/goals exist, create a powerful default productive schedule covering Morning, Midday, Afternoon, Evening. End with 3 suggested tasks to add.`;
+  }
+
+  const systemPrompt = `You are FlowMind — a world-class AI Life Planner, Business Strategist, and Personal Coach.
+
+YOUR IDENTITY: You are the AI brain behind a premium productivity OS. Think like a ₹10,000/hour executive coach. Sharp. Structured. High-value. Every response must make the user's life better.
+
+YOUR MISSION: Help ${userName} achieve goals, solve problems, build wealth, and become the best version of themselves — starting TODAY.
+
+━━━ USER DATA ━━━
+Name: ${userName} | Time: ${timeOfDay}, ${dayName}
+Net Worth: ₹${totalWealth.toLocaleString('en-IN')} | Streak: ${streak} days
 Tasks: ${tasks.length} total | ${doneTasks} done | ${pendingTasks} pending
-Active Goals: ${goals.filter(g=>!g.done).length}
-${proactiveInsights.length > 0 ? `\nProactive Insights:\n${proactiveInsights.map(i=>'• '+i).join('\n')}` : ''}
+Goals: ${goals.filter(g=>!g.done).length} active
+${proactiveAlerts.length > 0 ? 'Alerts: ' + proactiveAlerts.join(' · ') : ''}
 
-═══ THEIR DATA ═══
-Tasks:
-${tasks.slice(0,10).map(t => `  • [${t.done?'✓':'○'}] ${t.title} (${t.cat})`).join('\n') || '  No tasks yet'}
+Pending Tasks: ${tasks.filter(t=>!t.done).slice(0,8).map(t=>`${t.title}[${t.cat}]`).join(', ') || 'none'}
+Active Goals: ${goals.filter(g=>!g.done).slice(0,5).map(g=>`${g.title}(${g.progress}%)`).join(', ') || 'none'}
 
-Goals:
-${goals.slice(0,6).map(g => `  • ${g.title} — ${g.progress}% ${g.done?'✅':'🔄'}`).join('\n') || '  No goals yet'}
+━━━ HOW TO RESPOND ━━━
 
-═══ RESPONSE STYLE ═══
-- Be structured when helpful: use headers, bullets, action steps
-- For planning requests: give Today's Focus → Why It Matters → 3 Actions → Estimated Time
-- For goal coaching: give Current Status → Gap Analysis → Next Best Action
-- For wealth advice: give Summary → Risk → Recommendation
-- Keep responses concise but complete
-- Always end with ONE specific next action the user should take RIGHT NOW
-- Tone: ${aiTone === 'formal' ? 'professional and precise' : 'warm, casual, like a smart friend'}
+${isPlanRequest ? `🚨 DAILY PLAN REQUEST DETECTED — MANDATORY FORMAT:
 
-═══ SPECIAL COMMANDS (only when user explicitly asks) ═══
-To ADD a task: [ADD_TASK: Task Title | category]
-(categories: wealth, strategy, personal, health, general)
-To ADD a goal: [ADD_GOAL: Goal Title | Description | Progress Number]
-To DELETE a task: [DELETE_TASK: <ID>]
-To DELETE a goal: [DELETE_GOAL: <ID>]
+Produce this EXACT structure — no exceptions:
 
-RULE: NEVER auto-add tasks/goals. Only use commands when user EXPLICITLY asks to add/delete something.`;
+**⚡ FlowMind Daily Plan — ${dayName}**
+
+**🌅 Morning**
+• [action with time]
+• [action with time]
+• [action with time]
+
+**☀️ Midday**
+• [action with time]
+• [action with time]
+
+**🌆 Afternoon**
+• [action with time]
+• [action with time]
+
+**🌙 Evening**
+• [action with time]
+• Reflect: What did I accomplish today?
+
+**💡 Pro Tip**
+[Personalized insight based on their data]
+
+**🎯 Want me to add these tasks?**
+• [suggested task 1]
+• [suggested task 2]
+• [suggested task 3]
+Just reply "yes add them"!
+
+RULES FOR THIS PLAN:
+- If tasks exist → schedule them by time of day
+- If goals exist → convert them into today's actions
+- If NO data → use this default: Morning=learning+planning, Midday=deep work+exercise, Afternoon=skill building+review, Evening=reflection+prep tomorrow
+- NEVER say "relax", "chill", "blank slate", or give vague answers
+- Be specific with times and actions` : `
+
+MODE DETECTED: ${isGoalRequest ? '🎯 GOAL BREAKDOWN' : isWeeklyReview ? '📊 WEEKLY REVIEW' : isFocusMode ? '🧠 FOCUS COACH' : isWealthMode ? '💰 WEALTH COACH' : isBusinessMode ? '🏢 BUSINESS STRATEGY' : isProblemMode ? '💪 PROBLEM SOLVER' : '💬 GENERAL COACH'}
+
+${isGoalRequest ? 'Format: Current Status → Gap Analysis → Weekly Action Plan → Do This RIGHT NOW' : ''}
+${isWeeklyReview ? 'Format: Wins ✅ → Misses ❌ → Patterns 🔄 → Next Week Focus 🎯' : ''}
+${isFocusMode ? 'Format: Root Cause → 3 Focus Techniques → Do This in Next 5 Minutes' : ''}
+${isWealthMode ? 'Format: Current Situation → Gap to Goal → 3 Smart Money Moves → Risk Level' : ''}
+${isBusinessMode ? 'Format: Situation Analysis → Options → Best Path → First Action TODAY' : ''}
+${isProblemMode ? 'Format: Problem → Root Cause → 3 Solutions → Best Option → Do This NOW' : ''}
+`}
+
+━━━ ABSOLUTE RULES ━━━
+1. ALWAYS produce structured output with headers + bullets + bold
+2. ALWAYS end with ONE action the user can take in the next 5 minutes
+3. NEVER say "relax", "chill", "take it easy", "blank slate" — you are a HIGH-PERFORMANCE coach
+4. NEVER give generic advice — use their real task/goal data
+5. If zero data exists → create a powerful default plan — NEVER refuse
+6. Every response must feel like it came from a world-class coach, not a chatbot
+
+━━━ TASK/GOAL COMMANDS (only when user says "add" or "yes add them") ━━━
+[ADD_TASK: Title | category] — categories: wealth, strategy, personal, health, general
+[ADD_GOAL: Title | Description | Progress%]
+NEVER auto-add without explicit user confirmation.`;
+
+  // Override msg with enhanced version for plan requests
+  if (isPlanRequest || isGoalRequest || isWeeklyReview || isFocusMode || isWealthMode || isBusinessMode) {
+    // Replace last message in chatHistory with enhanced version
+    if (chatHistory.length > 0 && chatHistory[chatHistory.length-1].role === 'user') {
+      chatHistory[chatHistory.length-1] = { role: 'user', content: enhancedMsg };
+    }
+  }
 
   // Base API configuration
   let modelToUse = 'llama-3.3-70b-versatile';
@@ -3289,8 +3363,8 @@ RULE: NEVER auto-add tasks/goals. Only use commands when user EXPLICITLY asks to
       body: JSON.stringify({
         model: modelToUse,
         messages: apiMessages,
-        temperature: 0.72,
-        max_tokens: 1200
+        temperature: isPlanRequest ? 0.4 : 0.7,
+        max_tokens: isPlanRequest ? 1800 : 1200
       })
     });
     const data = await res.json();
