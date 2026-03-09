@@ -1791,8 +1791,8 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
   <!-- Auth Screen -->
   <div class="landing-inner" id="authBox">
     <div class="landing-logo">Flow<span>Mind</span> · AI OS</div>
-    <h1 class="landing-headline">Your AI-Powered Life & Productivity OS</h1>
-    <p class="landing-sub">Plan smarter. Grow faster. Achieve more — with AI as your personal coach.</p>
+    <h1 class="landing-headline">Your Personal Intelligence Layer</h1>
+    <p class="landing-sub">Sign in to sync your data across all devices.</p>
 
     <!-- Tab Switch -->
     <div style="display:flex;gap:0;margin-bottom:24px;background:var(--ink3);border-radius:var(--r2);padding:4px;">
@@ -2561,30 +2561,12 @@ window.onFirebaseLogin = async function(user) {
     const snap = await window._fbDb.collection('users').doc(user.uid).get();
     if (snap.exists) {
       const data = snap.data();
-      if (data.tasks)  { tasks  = data.tasks;  localStorage.setItem('fm_tasks',  JSON.stringify(tasks));  }
+      if (data.tasks) { tasks = data.tasks; localStorage.setItem('fm_tasks', JSON.stringify(tasks)); }
       if (data.assets) { assets = data.assets; localStorage.setItem('fm_assets', JSON.stringify(assets)); }
-      if (data.goals)  { goals  = data.goals;  localStorage.setItem('fm_goals',  JSON.stringify(goals));  }
+      if (data.goals) { goals = data.goals; localStorage.setItem('fm_goals', JSON.stringify(goals)); }
       if (data.apiKey) { apiKey = data.apiKey; localStorage.setItem('fm_apikey', apiKey); }
-      // ✅ Verify plan from Firestore — not localStorage
-      _planStatus = data.plan === 'pro' ? 'pro' : 'free';
-      localStorage.setItem('fm_plan', _planStatus);
-      _planVerified = true;
-    } else {
-      // New user — create record
-      await window._fbDb.collection('users').doc(user.uid).set({
-        name: userName,
-        email: user.email,
-        plan: 'free',
-        createdAt: new Date().toISOString()
-      });
-      _planStatus = 'free';
-      _planVerified = true;
     }
-  } catch(e) {
-    console.log('Firestore load error', e);
-    _planStatus = localStorage.getItem('fm_plan') || 'free';
-    _planVerified = true;
-  }
+  } catch(e) { console.log('Firestore load error', e); }
   startApp();
 };
 
@@ -4867,51 +4849,18 @@ function answerMM(i) {
 </script>
 <script>
 // ─── PLAN SYSTEM ─────────────────────────────────────────────
-// FREE: 5 tasks, 5 goals, 10 AI chats/day, no wealth
-// PRO: unlimited + wealth section
+// FREE limits: 5 tasks, 5 goals, 10 AI chats/day, 10 quiz/day, no wealth
+// PRO: unlimited everything + wealth section
+// Razorpay Key — replace with real key when selling
 const RAZORPAY_KEY = 'rzp_test_YourKeyHere';
 const PRO_AMOUNT = 29900; // ₹299 in paise
 
-// Plan stored in memory — verified from Firestore on login
-// localStorage is only cache — real source of truth is Firestore
-let _planVerified = false;
-let _planStatus = 'free';
-
 function getUserPlan() {
-  return _planStatus;
+  return localStorage.getItem('fm_plan') || 'free';
 }
 
 function isPro() {
-  return _planStatus === 'pro';
-}
-
-// Called on login — verifies plan from Firestore (server source of truth)
-async function verifyPlanFromCloud() {
-  if (!window._fbDb || !window._fbCurrentUser) {
-    // Not logged in — use localStorage as fallback
-    _planStatus = localStorage.getItem('fm_plan') || 'free';
-    _planVerified = true;
-    updatePlanUI();
-    return;
-  }
-  try {
-    const doc = await window._fbDb.collection('users').doc(window._fbCurrentUser.uid).get();
-    if (doc.exists) {
-      const data = doc.data();
-      // Server is the source of truth
-      _planStatus = data.plan === 'pro' ? 'pro' : 'free';
-      // Sync to localStorage as cache
-      localStorage.setItem('fm_plan', _planStatus);
-    } else {
-      _planStatus = 'free';
-    }
-  } catch(e) {
-    // Fallback to localStorage if Firestore fails
-    _planStatus = localStorage.getItem('fm_plan') || 'free';
-    console.log('Plan verify fallback:', e.message);
-  }
-  _planVerified = true;
-  updatePlanUI();
+  return getUserPlan() === 'pro';
 }
 
 function getDailyCount(key) {
@@ -4933,6 +4882,7 @@ function updatePlanUI() {
   const badge = document.getElementById('planBadge');
   const wealthLock = document.getElementById('wealthLock');
   if (!badge) return;
+
   if (isPro()) {
     badge.textContent = '⚡ PRO';
     badge.className = 'pro-badge';
@@ -4960,19 +4910,21 @@ function closePricing() {
 
 function startPayment() {
   if (typeof Razorpay === 'undefined') {
-    showToast('🎉 Demo Mode: Upgrading to Pro!');
+    // Razorpay not loaded — show demo mode
+    showToast('🎉 Demo Mode: Upgrading to Pro! (Add real Razorpay key to enable payments)');
     activatePro('demo_' + Date.now());
     closePricing();
     return;
   }
+
   const options = {
     key: RAZORPAY_KEY,
     amount: PRO_AMOUNT,
     currency: 'INR',
     name: 'FlowMind AI',
     description: 'Pro Plan - Monthly Subscription',
+    image: 'https://flowmind-ai-five.vercel.app/favicon.ico',
     handler: function(response) {
-      // Verify payment on Firestore before activating
       activatePro(response.razorpay_payment_id);
       showToast('🎉 Payment successful! Welcome to Pro!');
       closePricing();
@@ -4982,8 +4934,13 @@ function startPayment() {
       email: window._fbCurrentUser ? window._fbCurrentUser.email : ''
     },
     theme: { color: '#f5c842' },
-    modal: { ondismiss: function() { showToast('Payment cancelled.'); } }
+    modal: {
+      ondismiss: function() {
+        showToast('Payment cancelled.');
+      }
+    }
   };
+
   try {
     const rzp = new Razorpay(options);
     rzp.open();
@@ -4992,25 +4949,16 @@ function startPayment() {
   }
 }
 
-async function activatePro(paymentId) {
-  _planStatus = 'pro';
+function activatePro(paymentId) {
   localStorage.setItem('fm_plan', 'pro');
   localStorage.setItem('fm_payment_id', paymentId);
   localStorage.setItem('fm_pro_since', new Date().toISOString());
   updatePlanUI();
-  // Save to Firestore — this is the real record
+  // Save to Firestore if logged in
   if (window._fbDb && window._fbCurrentUser) {
-    try {
-      await window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
-        plan: 'pro',
-        paymentId: paymentId,
-        proSince: new Date().toISOString(),
-        proActivatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      showToast('✅ Pro plan saved to your account!');
-    } catch(e) {
-      console.log('Firestore pro save error:', e);
-    }
+    window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
+      plan: 'pro', paymentId, proSince: new Date().toISOString()
+    }).catch(() => {});
   }
 }
 
@@ -5022,8 +4970,8 @@ const FREE_CHAT_LIMIT = 10;
 function checkTaskLimit() {
   if (isPro()) return true;
   if (tasks.length >= FREE_TASK_LIMIT) {
-    showToast(`⚠️ Free plan: ${FREE_TASK_LIMIT} tasks max. Upgrade to Pro!`);
-    setTimeout(openPricing, 800);
+    showToast(`⚠️ Free plan limit: ${FREE_TASK_LIMIT} tasks max. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1000);
     return false;
   }
   return true;
@@ -5032,8 +4980,8 @@ function checkTaskLimit() {
 function checkGoalLimit() {
   if (isPro()) return true;
   if (goals.length >= FREE_GOAL_LIMIT) {
-    showToast(`⚠️ Free plan: ${FREE_GOAL_LIMIT} goals max. Upgrade to Pro!`);
-    setTimeout(openPricing, 800);
+    showToast(`⚠️ Free plan limit: ${FREE_GOAL_LIMIT} goals max. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1000);
     return false;
   }
   return true;
@@ -5043,8 +4991,8 @@ function checkChatLimit() {
   if (isPro()) return true;
   const count = getDailyCount('fm_chat_count');
   if (count >= FREE_CHAT_LIMIT) {
-    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day limit reached. Upgrade to Pro!`);
-    setTimeout(openPricing, 1000);
+    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day used. Upgrade to Pro for unlimited!`);
+    setTimeout(openPricing, 1200);
     return false;
   }
   incrementDailyCount('fm_chat_count');
