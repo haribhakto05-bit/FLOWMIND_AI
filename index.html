@@ -2830,25 +2830,6 @@ function toggleSidebar() {
   document.getElementById('sidebarOverlay').classList.toggle('show');
 }
 
-function switchPanel(name, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + name).classList.add('active');
-  btn.classList.add('active');
-  activePanelName = name;
-  if (name === 'chat') {
-    const badge = document.getElementById('msgBadge');
-    badge.style.display = 'none';
-  }
-  if (name === 'quiz') {
-    initQuiz();
-    renderQuiz();
-  }
-  if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
-    toggleSidebar();
-  }
-}
-
 // ─── MODAL ───────────────────────────────────────────────────
 function openModal(id) { document.getElementById(id).classList.add('show'); }
 function closeModal(id) { document.getElementById(id).classList.remove('show'); }
@@ -5679,20 +5660,33 @@ function handleFab() {
   } else if (panel === 'wealth') {
     document.getElementById('assetForm').classList.toggle('show');
   } else {
-    switchPanel('chat', document.querySelectorAll('.nav-item')[1]);
+    switchPanel('chat', document.querySelectorAll('.nav-item')[0]);
     setTimeout(() => document.getElementById('chatInput').focus(), 300);
   }
 }
 
-// Update FAB icon based on panel
-const _origSwitchPanel = switchPanel;
 function switchPanel(name, btn) {
-  _origSwitchPanel(name, btn);
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('panel-' + name);
+  if (!panel) return;
+  panel.classList.add('active');
+  if (btn) btn.classList.add('active');
+  activePanelName = name;
+  if (name === 'chat') {
+    const badge = document.getElementById('msgBadge');
+    if (badge) badge.style.display = 'none';
+  }
+  if (name === 'quiz') { initQuiz(); renderQuiz(); }
+  // Update FAB icon
   const fab = document.getElementById('fabBtn');
-  if (!fab) return;
-  const icons = { chat:'💬', tasks:'➕', goals:'🎯', wealth:'💰', home:'⚡', report:'📊', quiz:'🧠', games:'🎮' };
-  fab.textContent = icons[name] || '+';
-  if (name === 'home') renderHomeDashboard();
+  if (fab) {
+    const icons = { chat:'💬', tasks:'➕', goals:'🎯', wealth:'💰', report:'📊', quiz:'🧠', games:'🎮' };
+    fab.textContent = icons[name] || '+';
+  }
+  if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
+    toggleSidebar();
+  }
 }
 
 // Show onboarding for new users
