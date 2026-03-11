@@ -1210,50 +1210,52 @@ body::before {
 /* ── SAVED CHATS PANEL ── */
 .saved-chats-panel {
   position: fixed; top: 58px; right: 0; bottom: 0;
-  width: 300px;
+  width: 320px;
   background: var(--ink2);
   border-left: 1px solid var(--line);
   z-index: 200;
   display: flex; flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
-  box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -12px 0 40px rgba(0,0,0,0.45);
 }
 .saved-chats-panel.open { transform: translateX(0); }
 .saved-chats-header {
-  padding: 18px 20px;
+  padding: 16px 18px;
   border-bottom: 1px solid var(--line);
   display: flex; align-items: center; justify-content: space-between;
   flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(245,200,66,0.04) 0%, transparent 60%);
 }
-.saved-chats-title { font-weight: 700; font-size: 15px; }
+.saved-chats-title { font-weight: 800; font-size: 14px; letter-spacing: 0.5px; color: var(--text); }
 .saved-chats-close {
   background: none; border: none; color: var(--silver);
   font-size: 18px; cursor: pointer; padding: 4px;
   border-radius: 6px; transition: color 0.2s;
 }
-.saved-chats-close:hover { color: var(--text); }
-.saved-chats-list { flex: 1; overflow-y: auto; padding: 12px; }
+.saved-chats-close:hover { color: var(--red); }
+.saved-chats-list { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
 .saved-chat-item {
   background: var(--ink3);
   border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: 12px 14px;
-  margin-bottom: 8px;
+  border-radius: var(--r2);
+  padding: 14px 16px;
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
 }
-.saved-chat-item:hover { border-color: var(--gold); background: rgba(245,200,66,0.04); }
-.saved-chat-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 24px; }
-.saved-chat-meta { font-size: 11px; color: var(--silver); font-family: 'JetBrains Mono', monospace; }
+.saved-chat-item:hover { border-color: var(--gold); background: rgba(245,200,66,0.05); transform: translateX(-2px); }
+.saved-chat-item:hover .saved-chat-del { opacity: 1; }
+.saved-chat-name { font-size: 13px; font-weight: 700; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 28px; color: var(--text); }
+.saved-chat-meta { font-size: 11px; color: var(--silver); font-family: 'JetBrains Mono', monospace; display: flex; gap: 10px; align-items: center; }
+.saved-chat-tag { background: var(--ink2); border: 1px solid var(--line2); border-radius: 4px; padding: 1px 6px; font-size: 10px; color: var(--silver); }
 .saved-chat-del {
   position: absolute; top: 10px; right: 10px;
-  background: none; border: none; color: var(--line2);
-  font-size: 12px; cursor: pointer; padding: 2px 4px;
-  border-radius: 4px; transition: all 0.2s;
+  background: rgba(255,91,91,0.1); border: 1px solid rgba(255,91,91,0.2); color: var(--red);
+  font-size: 11px; cursor: pointer; padding: 2px 6px;
+  border-radius: 4px; transition: all 0.2s; opacity: 0;
 }
-.saved-chat-del:hover { color: var(--red); }
+.saved-chat-del:hover { background: rgba(255,91,91,0.25); }
 .save-chat-btn {
   background: transparent;
   border: 1px solid var(--line2);
@@ -1265,7 +1267,7 @@ body::before {
   cursor: pointer;
   transition: all 0.2s;
 }
-.save-chat-btn:hover { border-color: var(--green); color: var(--green); }
+.save-chat-btn:hover { border-color: var(--green); color: var(--green); background: rgba(61,255,160,0.05); }
 .history-btn {
   background: transparent;
   border: 1px solid var(--line);
@@ -1285,11 +1287,16 @@ body::before {
   background: var(--ink2);
   border: 1px solid var(--line);
   border-radius: var(--r2);
-  padding: 20px;
+  padding: 16px;
   margin-bottom: 10px;
+  max-height: 260px;
+  overflow: hidden;
 }
-.chart-title-label { font-size: 12px; font-weight: 600; color: var(--silver); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.chart-wrapper canvas {
+  max-height: 180px !important;
+}
+.chart-title-label { font-size: 12px; font-weight: 600; color: var(--silver); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 
 /* ── VOICE STATUS ── */
 .voice-status {
@@ -1771,7 +1778,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
       <div class="plan-card pro">
         <div class="plan-card-badge">⚡ POPULAR</div>
         <div class="plan-name" style="color:var(--gold)">Pro</div>
-        <div class="plan-price">₹299 <span>/month</span></div>
+        <div class="plan-price">₹600 <span>/month</span></div>
         <ul class="plan-features">
           <li><span class="fi">✓</span> Unlimited Tasks</li>
           <li><span class="fi">✓</span> Unlimited Goals</li>
@@ -2025,6 +2032,18 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
           <div class="panel-heading">📋 Tasks</div>
           <button class="add-btn" onclick="toggleForm('taskForm')">+ Add Task</button>
         </div>
+        <div id="taskMotivation" style="
+          margin: 0 0 16px 0;
+          padding: 12px 16px;
+          background: linear-gradient(135deg, rgba(245,200,66,0.06) 0%, rgba(245,160,32,0.04) 100%);
+          border-left: 3px solid var(--gold);
+          border-radius: 0 var(--r) var(--r) 0;
+          font-size: 12px;
+          color: var(--gold);
+          font-style: italic;
+          letter-spacing: 0.3px;
+          line-height: 1.5;
+        "></div>
         <div class="tasks-body" id="tasksBody">
           <div class="filter-tabs" id="taskFilterTabs">
             <div class="filter-tab active" onclick="filterTasks('all',this)">All</div>
@@ -2054,7 +2073,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
         <div class="locked-overlay" id="wealthLock">
           <div style="font-size:40px;">🔒</div>
           <h3>Pro Feature</h3>
-          <p>Wealth Tracker is available on the Pro plan. Upgrade for ₹299/month!</p>
+          <p>Wealth Tracker is available on the Pro plan. Upgrade for ₹600/month!</p>
           <button class="unlock-btn" onclick="openPricing()">Upgrade to Pro →</button>
         </div>
         <div class="panel-topbar">
@@ -2099,6 +2118,18 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
             <button class="add-btn" onclick="openModal('goalModal')">+ New Goal</button>
           </div>
         </div>
+        <div id="goalMotivation" style="
+          margin: 0 0 16px 0;
+          padding: 12px 16px;
+          background: linear-gradient(135deg, rgba(91,143,255,0.06) 0%, rgba(168,85,247,0.04) 100%);
+          border-left: 3px solid var(--blue);
+          border-radius: 0 var(--r) var(--r) 0;
+          font-size: 12px;
+          color: var(--blue);
+          font-style: italic;
+          letter-spacing: 0.3px;
+          line-height: 1.5;
+        "></div>
         <div class="goals-grid" id="goalsGrid">
           <div class="empty" style="grid-column:1/-1">
             <div class="empty-icon">🎯</div>
@@ -2642,6 +2673,7 @@ function startApp() {
 
   document.getElementById('goalTitleInput').addEventListener('keydown', e => { if (e.key==='Enter') addGoal(); });
   initQuiz();
+  renderMotivationBanners();
 
   // Close attach menu when clicking outside
   document.addEventListener('click', function(e) {
@@ -3160,6 +3192,91 @@ function toggleForm(id) {
   }
 }
 
+// ─── DAILY MOTIVATIONAL QUOTES ───────────────────────────────
+const TASK_QUOTES = [
+  "✦ What you do today is the foundation of who you become tomorrow.",
+  "✦ One completed task is worth more than a hundred plans.",
+  "✦ Discipline is choosing what you want most over what you want now.",
+  "✦ Your to-do list is your battle plan. Treat it like one.",
+  "✦ The most successful people aren't the most talented — they're the most consistent.",
+  "✦ Small actions, done relentlessly, create extraordinary results.",
+  "✦ Don't count the days. Make the days count.",
+  "✦ Every task you finish is a vote for the person you're becoming.",
+  "✦ Motivation gets you started. Systems keep you going.",
+  "✦ The hardest task to do is the first one. Start there.",
+  "✦ Done is better than perfect. Ship it.",
+  "✦ Execution is the strategy. Everything else is theory.",
+  "✦ Protect your time like it's your most valuable asset — because it is.",
+  "✦ Your future self is watching you work right now.",
+  "✦ Progress, not perfection. Show up, do the work, move on.",
+  "✦ The difference between a dream and a goal is a deadline and a task list.",
+  "✦ Clarity on what matters + action on those things = results.",
+  "✦ A task undone never leaves your mind. Finish it and free yourself.",
+  "✦ Hard work is a form of respect — for yourself, your team, your vision.",
+  "✦ You don't need more time. You need better priorities.",
+  "✦ Top performers don't wait for inspiration. They schedule it.",
+  "✦ Every expert was once a beginner who refused to stop.",
+  "✦ The best time to act was yesterday. The next best time is right now.",
+  "✦ Be so good at execution that your ideas have no choice but to work.",
+  "✦ Compound action: small tasks done daily change everything over time.",
+  "✦ What gets scheduled gets done. What gets done gets results.",
+  "✦ Your habits are the architecture of your success.",
+  "✦ Stop waiting for the right moment. Create it with the right actions.",
+  "✦ Silence the noise. Pick the task that matters most. Start.",
+  "✦ The real flex is finishing what you started.",
+];
+
+const GOAL_QUOTES = [
+  "◆ A goal without a deadline is just a wish.",
+  "◆ You are either building your dream or building someone else's.",
+  "◆ The people who achieve the most are not lucky — they are intentional.",
+  "◆ Write your goals down. Review them daily. They will find a way to happen.",
+  "◆ Most people overestimate what they can do in a week and underestimate what they can do in a year.",
+  "◆ Every goal starts with the decision that you are worth the effort.",
+  "◆ Vision without execution is hallucination. Track your progress.",
+  "◆ The gap between where you are and where you want to be is called effort.",
+  "◆ Your goals don't care about your feelings. They care about your actions.",
+  "◆ Champions are not born. They are built — goal by goal, day by day.",
+  "◆ Set goals that make you a little scared and a little excited.",
+  "◆ The secret of getting ahead is getting started on your goals today.",
+  "◆ Think big. Plan precisely. Execute relentlessly.",
+  "◆ A 1% improvement every day makes you 37x better in a year.",
+  "◆ Your goals reveal your character. Your follow-through defines it.",
+  "◆ Dream it. Plan it. Track it. Live it.",
+  "◆ Success is the sum of small efforts repeated day in and day out.",
+  "◆ Don't lower your goals to match your current reality. Raise your actions.",
+  "◆ The clearer your goal, the more magnetic it becomes.",
+  "◆ You don't rise to the level of your goals. You fall to the level of your systems.",
+  "◆ Stop explaining your goals to people who are not on your level yet.",
+  "◆ A goal is a dream with a plan and a deadline. Add both.",
+  "◆ The moment you commit fully to a goal, the universe starts working with you.",
+  "◆ Track your progress obsessively. What you measure, you improve.",
+  "◆ Ambition is the starting point. Execution is the finish line.",
+  "◆ Every goal you've ever achieved started as a thought you took seriously.",
+  "◆ Build goals around who you're becoming, not just what you want to have.",
+  "◆ Urgency is the engine of achievement. Treat your goals like they're overdue.",
+  "◆ The best investment you'll ever make is in your own progress.",
+  "◆ Future you is begging present you to take this goal seriously.",
+];
+
+function getDailyQuote(quotesArray, storageKey) {
+  const today = new Date().toISOString().split('T')[0];
+  const stored = JSON.parse(localStorage.getItem(storageKey) || '{}');
+  if (stored.date === today) return stored.quote;
+  // Pick deterministically by date so it changes daily
+  const seed = parseInt(today.replace(/-/g,'')) % quotesArray.length;
+  const quote = quotesArray[seed];
+  localStorage.setItem(storageKey, JSON.stringify({ date: today, quote }));
+  return quote;
+}
+
+function renderMotivationBanners() {
+  const taskEl = document.getElementById('taskMotivation');
+  const goalEl = document.getElementById('goalMotivation');
+  if (taskEl) taskEl.textContent = getDailyQuote(TASK_QUOTES, 'fm_task_quote');
+  if (goalEl) goalEl.textContent = getDailyQuote(GOAL_QUOTES, 'fm_goal_quote');
+}
+
 function filterTasks(f, btn) {
   taskFilter = f;
   document.querySelectorAll('#panel-tasks .filter-tab').forEach(t => t.classList.remove('active'));
@@ -3654,16 +3771,37 @@ function saveCurrentChat() {
 
 function renderSavedChats() {
   const list = document.getElementById('savedChatsList');
+  // Update header count
+  const title = document.querySelector('.saved-chats-title');
+  if (title) title.textContent = `📁 Saved Chats ${savedChats.length > 0 ? '('+savedChats.length+')' : ''}`;
+
   if (savedChats.length === 0) {
-    list.innerHTML = `<div class="empty-saved">No saved chats yet.<br>Click 💾 Save in the chat to save a session.</div>`;
+    list.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;color:var(--silver);">
+        <div style="font-size:36px;margin-bottom:12px;">💬</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:8px;">No saved chats yet</div>
+        <div style="font-size:12px;line-height:1.6;">Click <strong style="color:var(--gold);">💾 Save</strong> in the chat header to save a session and access it later.</div>
+      </div>`;
     return;
   }
-  list.innerHTML = savedChats.map(c => `
+
+  list.innerHTML = savedChats.map(c => {
+    const d = new Date(c.date);
+    const dateStr = d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    const timeStr = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    const isToday = d.toDateString() === new Date().toDateString();
+    return `
     <div class="saved-chat-item" onclick="loadSavedChat(${c.id})">
-      <button class="saved-chat-del" onclick="event.stopPropagation();deleteSavedChat(${c.id})">✕</button>
-      <div class="saved-chat-name">${esc(c.name)}${c.autoSaved ? ' <span style="font-size:9px;color:var(--silver);background:var(--ink3);padding:1px 5px;border-radius:4px;margin-left:4px;">AUTO</span>' : ''}</div>
-      <div class="saved-chat-meta">${c.msgCount} messages · ${new Date(c.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div>
-    </div>`).join('');
+      <button class="saved-chat-del" onclick="event.stopPropagation();deleteSavedChat(${c.id})" title="Delete">✕</button>
+      <div class="saved-chat-name">${esc(c.name)}</div>
+      <div class="saved-chat-meta">
+        <span>💬 ${c.msgCount} msg</span>
+        <span>·</span>
+        <span>${isToday ? 'Today '+timeStr : dateStr}</span>
+        ${c.autoSaved ? '<span class="saved-chat-tag">AUTO</span>' : '<span class="saved-chat-tag" style="color:var(--gold);border-color:rgba(245,200,66,0.3);">SAVED</span>'}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function deleteAllChats() {
@@ -4027,7 +4165,7 @@ function renderReportCharts(filteredTasks, filteredGoals, filteredAssets) {
     reportCharts.push(new Chart(document.getElementById('wealthChart'), {
       type: 'doughnut',
       data: { labels: Object.keys(catTotals).map(k=>k[0].toUpperCase()+k.slice(1)), datasets: [{ data: Object.values(catTotals), backgroundColor: Object.keys(catTotals).map(k=>catColors[k]||'#888'), borderColor:'#16161f', borderWidth:3 }] },
-      options: { responsive:true, plugins: { legend: legendOpts } }
+      options: { responsive:true, maintainAspectRatio:false, plugins: { legend: legendOpts } }
     }));
   }
 
@@ -4037,7 +4175,7 @@ function renderReportCharts(filteredTasks, filteredGoals, filteredAssets) {
     reportCharts.push(new Chart(document.getElementById('taskChart'), {
       type: 'bar',
       data: { labels:['Done','Pending'], datasets: [{ data:[done, tTasks.length-done], backgroundColor:['rgba(61,255,160,0.7)','rgba(91,143,255,0.7)'], borderColor:['#3dffa0','#5b8fff'], borderWidth:2, borderRadius:8 }] },
-      options: { responsive:true, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:tickColor},grid:{color:gridColor}}, y:{ticks:{color:tickColor,stepSize:1},grid:{color:gridColor}} } }
+      options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:tickColor},grid:{color:gridColor}}, y:{ticks:{color:tickColor,stepSize:1},grid:{color:gridColor}} } }
     }));
   }
 
@@ -4047,7 +4185,7 @@ function renderReportCharts(filteredTasks, filteredGoals, filteredAssets) {
     reportCharts.push(new Chart(document.getElementById('goalChart'), {
       type: 'bar',
       data: { labels: top6.map(g=>g.title.length>18?g.title.slice(0,18)+'…':g.title), datasets: [{ data:top6.map(g=>g.progress), backgroundColor:top6.map(g=>g.done?'rgba(61,255,160,0.7)':'rgba(168,85,247,0.7)'), borderColor:top6.map(g=>g.done?'#3dffa0':'#a855f7'), borderWidth:2, borderRadius:8 }] },
-      options: { indexAxis:'y', responsive:true, plugins:{legend:{display:false}}, scales:{ x:{min:0,max:100,ticks:{color:tickColor,callback:v=>v+'%'},grid:{color:gridColor}}, y:{ticks:{color:tickColor},grid:{display:false}} } }
+      options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{min:0,max:100,ticks:{color:tickColor,callback:v=>v+'%'},grid:{color:gridColor}}, y:{ticks:{color:tickColor},grid:{display:false}} } }
     }));
   }
 
@@ -4059,7 +4197,7 @@ function renderReportCharts(filteredTasks, filteredGoals, filteredAssets) {
     reportCharts.push(new Chart(document.getElementById('taskCatChart'), {
       type: 'doughnut',
       data: { labels: Object.keys(catCount).map(k=>k[0].toUpperCase()+k.slice(1)), datasets: [{ data:Object.values(catCount), backgroundColor:Object.keys(catCount).map(k=>catColors2[k]||'#888'), borderColor:'#16161f', borderWidth:3 }] },
-      options: { responsive:true, plugins:{ legend:legendOpts } }
+      options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:legendOpts } }
     }));
   }
 }
@@ -4415,28 +4553,38 @@ const wqQuestions = [
   { q:"What is the '4% rule'?", opts:["Tax bracket","Safe retirement withdrawal rate","Savings rate","Bond yield"], ans:1 },
   { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 }
 ];
-let wqCurrent = 0, wqScore = 0, wqActive = false;
+let wqCurrent = 0, wqScore = 0, wqActive = false, wqShuffled = [];
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 function startWealthQuiz() {
   resetGameAreas('wqArea');
   wqCurrent = 0; wqScore = 0; wqActive = true;
+  wqShuffled = shuffleArray(wqQuestions);
   renderWealthQuizQ();
 }
 function renderWealthQuizQ() {
   const area = document.getElementById('wqArea');
   area.style.display = 'block';
-  if (wqCurrent >= wqQuestions.length) {
+  if (wqCurrent >= wqShuffled.length) {
     const best = Math.max(wqScore, parseInt(localStorage.getItem('fm_wq_best')||'0'));
     localStorage.setItem('fm_wq_best', best);
     const el = document.getElementById('wqBest'); if(el) el.textContent = best+'/10';
     area.innerHTML = `<div class="game-score-big">${wqScore}/10</div><div class="game-score-lbl">${wqScore>=8?'🏆 Wealth genius!':wqScore>=5?'📈 Good instincts!':'📚 Keep learning!'}</div><button class="game-restart" onclick="startWealthQuiz()">▶ Play Again</button>`;
     return;
   }
-  const q = wqQuestions[wqCurrent];
+  const q = wqShuffled[wqCurrent];
   area.innerHTML = `<div class="game-q">Q${wqCurrent+1}/10: ${esc(q.q)}</div><div class="game-opts">${q.opts.map((o,i)=>`<button class="game-opt" onclick="answerWQ(${i})">${esc(o)}</button>`).join('')}</div>`;
 }
 function answerWQ(i) {
-  const q = wqQuestions[wqCurrent];
+  const q = wqShuffled[wqCurrent];
   const opts = document.querySelectorAll('#wqArea .game-opt');
   opts.forEach((b,idx)=>{ b.classList.add(idx===q.ans?'correct':(idx===i?'wrong':'reveal')); });
   if (i===q.ans) wqScore++;
@@ -4450,18 +4598,24 @@ const ceoEvents = [
   { q:"Key engineer quits. Do you?", opts:[{t:"Hire two replacements",r:{team:1,cash:-40,rev:-10}},{t:"Promote intern",r:{team:0,cash:-5,rev:-5}},{t:"Outsource",r:{team:0,cash:-20,rev:0}}] },
   { q:"Competitor launches similar product!", opts:[{t:"Cut prices 20%",r:{team:0,cash:-10,rev:-15}},{t:"Double down on features",r:{team:0,cash:-25,rev:10}},{t:"Partner with them",r:{team:1,cash:10,rev:15}}] },
   { q:"VC offers $1M for 30% equity. Do you?", opts:[{t:"Accept",r:{team:2,cash:100,rev:0}},{t:"Counter at 15%",r:{team:0,cash:0,rev:5}},{t:"Decline",r:{team:0,cash:0,rev:10}}] },
-  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] }
+  { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] },
+  { q:"A big enterprise wants a custom deal. Do you?", opts:[{t:"Build custom for them",r:{team:0,cash:-20,rev:40}},{t:"Offer standard plan discount",r:{team:0,cash:-5,rev:15}},{t:"Decline to stay focused",r:{team:1,cash:0,rev:5}}] },
+  { q:"Your app goes down on a Friday night!", opts:[{t:"All hands on deck — fix now",r:{team:-1,cash:-10,rev:10}},{t:"Post a status update, fix Monday",r:{team:0,cash:0,rev:-15}},{t:"Bring in contractors",r:{team:0,cash:-20,rev:5}}] },
+  { q:"A top competitor offers to acquire you for 5x revenue.", opts:[{t:"Accept the offer",r:{team:0,cash:200,rev:0}},{t:"Counter at 10x",r:{team:0,cash:0,rev:5}},{t:"Decline, stay independent",r:{team:2,cash:0,rev:15}}] },
+  { q:"You can hire a superstar CMO or 3 junior engineers.", opts:[{t:"Hire the CMO",r:{team:1,cash:-60,rev:25}},{t:"Hire 3 engineers",r:{team:3,cash:-45,rev:5}},{t:"Hire nobody — conserve cash",r:{team:0,cash:0,rev:-5}}] },
+  { q:"Churn rate spikes 20% this month. Do you?", opts:[{t:"Survey churned users immediately",r:{team:0,cash:-5,rev:10}},{t:"Discount to retain them",r:{team:0,cash:-20,rev:5}},{t:"Ignore — focus on new sales",r:{team:0,cash:0,rev:-10}}] },
 ];
-let ceoState = {};
+let ceoState = {}, ceoShuffledEvents = [];
 function startCEOGame() {
   resetGameAreas('ceoArea');
+  ceoShuffledEvents = shuffleArray(ceoEvents).slice(0, 5);
   ceoState = { round:0, cash:50, rev:10, team:3 };
   renderCEO();
 }
 function renderCEO() {
   const area = document.getElementById('ceoArea');
   area.style.display = 'block';
-  if (ceoState.round >= ceoEvents.length || ceoState.cash <= 0) {
+  if (ceoState.round >= ceoShuffledEvents.length || ceoState.cash <= 0) {
     const best = Math.max(ceoState.rev, parseInt(localStorage.getItem('fm_ceo_best')||'0'));
     localStorage.setItem('fm_ceo_best', best);
     const el = document.getElementById('ceoBest'); if(el) el.textContent='$'+best+'K';
@@ -4469,7 +4623,7 @@ function renderCEO() {
     area.innerHTML = `<div class="game-score-big">${won?'🚀':'💸'}</div><div class="game-score-lbl">${won?'Company survived! Revenue: $'+ceoState.rev+'K':'You ran out of cash!'}</div><button class="game-restart" onclick="startCEOGame()">▶ Try Again</button>`;
     return;
   }
-  const ev = ceoEvents[ceoState.round];
+  const ev = ceoShuffledEvents[ceoState.round];
   area.innerHTML = `
     <div class="ceo-bars">
       <div class="ceo-stat"><span class="ceo-stat-label">💵 Cash</span><span class="ceo-stat-val ${ceoState.cash>20?'good':'bad'}">$${ceoState.cash}K</span></div>
@@ -4854,29 +5008,37 @@ const mmScenarios = [
   { q:"Inflation hits 8%. Your portfolio?", opts:[{t:"Sell everything",outcome:-5},{t:"Buy TIPS & commodities",outcome:10},{t:"Double down on growth",outcome:-8},{t:"Nothing",outcome:-3}], best:1 },
   { q:"Market crashes 20%. You have cash. Do you?", opts:[{t:"Buy the dip",outcome:18},{t:"Wait for bottom",outcome:5},{t:"Buy inverse ETF",outcome:8},{t:"Stay in cash",outcome:0}], best:0 },
   { q:"A stock you own jumps 40% in a week.", opts:[{t:"Take profits (sell 50%)",outcome:6},{t:"Hold and add more",outcome:-10},{t:"Sell all",outcome:4},{t:"Set a stop loss",outcome:3}], best:0 },
-  { q:"New AI startup IPO! P/E of 300.", opts:[{t:"Buy big",outcome:-20},{t:"Skip it",outcome:0},{t:"Wait 6 months",outcome:15},{t:"Small speculative bet",outcome:5}], best:2 }
+  { q:"New AI startup IPO! P/E of 300.", opts:[{t:"Buy big",outcome:-20},{t:"Skip it",outcome:0},{t:"Wait 6 months",outcome:15},{t:"Small speculative bet",outcome:5}], best:2 },
+  { q:"Your biggest holding drops 30% on bad earnings.", opts:[{t:"Average down aggressively",outcome:-8},{t:"Sell half, hold rest",outcome:4},{t:"Sell all, cut losses",outcome:2},{t:"Buy more — it's a deal",outcome:12}], best:3 },
+  { q:"A recession is predicted in 6 months. You?", opts:[{t:"Move to 100% cash",outcome:-5},{t:"Rebalance to defensive stocks",outcome:8},{t:"Ignore predictions, stay invested",outcome:6},{t:"Short the market",outcome:-15}], best:1 },
+  { q:"Crypto drops 60% in a month. Do you?", opts:[{t:"Buy as much as possible",outcome:-20},{t:"Small allocation (5% portfolio)",outcome:8},{t:"Avoid entirely",outcome:2},{t:"Short it",outcome:10}], best:1 },
+  { q:"Interest rates are at 0%. Where do you invest?", opts:[{t:"Savings account",outcome:-2},{t:"Real estate & equities",outcome:12},{t:"Bonds",outcome:1},{t:"Cash",outcome:-3}], best:1 },
+  { q:"A major company you own announces a stock split. You?", opts:[{t:"Sell immediately before split",outcome:-5},{t:"Hold — fundamentals unchanged",outcome:8},{t:"Buy more before split",outcome:6},{t:"Sell half",outcome:3}], best:1 },
 ];
-let mmPortfolio = 10000, mmRound = 0;
+let mmPortfolio = 10000, mmRound = 0, mmShuffled = [];
 function startMarketMind() {
   resetGameAreas('mmArea');
-  mmPortfolio = parseFloat(localStorage.getItem('fm_mm_portfolio')||'10000'); mmRound = 0; renderMM();
+  mmPortfolio = parseFloat(localStorage.getItem('fm_mm_portfolio')||'10000');
+  mmRound = 0;
+  mmShuffled = shuffleArray(mmScenarios).slice(0, 5);
+  renderMM();
 }
 function renderMM() {
   const area = document.getElementById('mmArea');
   area.style.display = 'block';
-  if (mmRound >= mmScenarios.length) {
+  if (mmRound >= mmShuffled.length) {
     localStorage.setItem('fm_mm_portfolio', mmPortfolio);
     const el = document.getElementById('mmPortfolio'); if(el) el.textContent='$'+Math.round(mmPortfolio).toLocaleString();
     area.innerHTML = `<div class="game-score-big">${mmPortfolio>=10000?'📈':'📉'}</div><div class="game-score-lbl">Portfolio: $${Math.round(mmPortfolio).toLocaleString()}</div><button class="game-restart" onclick="startMarketMind()">▶ Play Again</button>`;
     return;
   }
-  const sc = mmScenarios[mmRound];
+  const sc = mmShuffled[mmRound];
   area.innerHTML = `<div style="font-size:11px;color:var(--silver);margin-bottom:6px">Portfolio: <span style="color:var(--gold);font-weight:700">$${Math.round(mmPortfolio).toLocaleString()}</span></div>
   <div class="game-q">${esc(sc.q)}</div>
   <div class="game-opts">${sc.opts.map((o,i)=>`<button class="game-opt" onclick="answerMM(${i})">${esc(o.t)}</button>`).join('')}</div>`;
 }
 function answerMM(i) {
-  const sc = mmScenarios[mmRound];
+  const sc = mmShuffled[mmRound];
   const change = sc.opts[i].outcome;
   mmPortfolio = mmPortfolio * (1 + change/100);
   const opts = document.querySelectorAll('#mmArea .game-opt');
@@ -4895,7 +5057,7 @@ function answerMM(i) {
 // PRO: unlimited everything + wealth section
 // Razorpay Key — replace with real key when selling
 const RAZORPAY_KEY = 'rzp_test_YourKeyHere';
-const PRO_AMOUNT = 29900; // ₹299 in paise
+const PRO_AMOUNT = 60000; // ₹600 in paise
 
 function getUserPlan() {
   return localStorage.getItem('fm_plan') || 'free';
