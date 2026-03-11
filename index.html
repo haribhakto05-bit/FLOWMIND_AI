@@ -1287,16 +1287,18 @@ body::before {
   background: var(--ink2);
   border: 1px solid var(--line);
   border-radius: var(--r2);
-  padding: 16px;
-  margin-bottom: 10px;
-  max-height: 260px;
+  padding: 14px 16px;
   overflow: hidden;
 }
 .chart-wrapper canvas {
-  max-height: 180px !important;
+  max-height: 160px !important;
+  display: block;
 }
-.chart-title-label { font-size: 12px; font-weight: 600; color: var(--silver); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; }
-.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.chart-wrapper.goals-chart canvas {
+  max-height: 120px !important;
+}
+.chart-title-label { font-size: 11px; font-weight: 700; color: var(--silver); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+.charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
 
 /* ── VOICE STATUS ── */
 .voice-status {
@@ -2706,6 +2708,9 @@ function switchPanel(name, btn) {
     initQuiz();
     renderQuiz();
   }
+  if (name === 'tasks' || name === 'goals') {
+    renderMotivationBanners();
+  }
   if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
     toggleSidebar();
   }
@@ -3627,10 +3632,10 @@ async function generateReport() {
     <div class="report-section">
       <div class="report-section-title">📊 Visual Analytics</div>
       <div class="charts-grid">
-        ${filteredAssets.length > 0 ? `<div class="chart-wrapper"><div class="chart-title-label">Wealth by Category</div><canvas id="wealthChart" height="200"></canvas></div>` : ''}
-        ${filteredTasks.length > 0  ? `<div class="chart-wrapper"><div class="chart-title-label">Task Completion</div><canvas id="taskChart" height="200"></canvas></div>` : ''}
-        ${filteredGoals.length > 0  ? `<div class="chart-wrapper"><div class="chart-title-label">Goals Progress</div><canvas id="goalChart" height="200"></canvas></div>` : ''}
-        ${filteredTasks.length > 0  ? `<div class="chart-wrapper"><div class="chart-title-label">Tasks by Category</div><canvas id="taskCatChart" height="200"></canvas></div>` : ''}
+        ${filteredAssets.length > 0 ? `<div class="chart-wrapper"><div class="chart-title-label">Wealth by Category</div><canvas id="wealthChart" height="160"></canvas></div>` : ''}
+        ${filteredTasks.length > 0  ? `<div class="chart-wrapper"><div class="chart-title-label">Task Completion</div><canvas id="taskChart" height="160"></canvas></div>` : ''}
+        ${filteredGoals.length > 0  ? `<div class="chart-wrapper goals-chart"><div class="chart-title-label">Goals Progress</div><canvas id="goalChart" height="130"></canvas></div>` : ''}
+        ${filteredTasks.length > 0  ? `<div class="chart-wrapper"><div class="chart-title-label">Tasks by Category</div><canvas id="taskCatChart" height="160"></canvas></div>` : ''}
       </div>
     </div>
     <div class="report-section">
@@ -4634,7 +4639,7 @@ function renderCEO() {
     <div class="game-opts">${ev.opts.map((o,i)=>`<button class="game-opt" onclick="answerCEO(${i})">${esc(o.t)}</button>`).join('')}</div>`;
 }
 function answerCEO(i) {
-  const r = ceoEvents[ceoState.round].opts[i].r;
+  const r = ceoShuffledEvents[ceoState.round].opts[i].r;
   ceoState.cash += r.cash; ceoState.rev += r.rev; ceoState.team += r.team;
   ceoState.cash = Math.max(0, ceoState.cash);
   ceoState.round++;
