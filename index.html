@@ -2047,7 +2047,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
             <button class="live-voice-btn" onclick="openLiveChat()" title="Live Voice Chat">🎙 Live</button>
             <button class="save-chat-btn" onclick="saveCurrentChat()">💾 Save</button>
             <button class="history-btn" onclick="toggleSavedChats()">📁 History</button>
-            <button class="clear-btn" onclick="clearChat()">Clear</button>
+            <button class="clear-btn" onclick="newChat()" title="Save current chat and start fresh">✏️ New Chat</button>
           </div>
         </div>
         <div class="messages" id="messages">
@@ -2335,6 +2335,20 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
         </div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- ── LIMIT REACHED OVERLAY ── -->
+<div id="limitOverlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(13,13,18,0.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
+  <div style="background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r3);padding:40px 36px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.6);animation:fadeUp 0.4s ease;">
+    <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+    <div style="font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:8px;background:linear-gradient(135deg,var(--text) 40%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Daily Limit Reached</div>
+    <div style="color:var(--silver);font-size:14px;line-height:1.7;margin-bottom:28px;" id="limitOverlayMsg">You've used all <strong style="color:var(--text)">10 free AI chats</strong> for today.<br>Your limit resets at midnight. Upgrade for unlimited access.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button onclick="openPricing();closeLimitOverlay();" style="background:var(--gold);color:var(--ink);border:none;border-radius:var(--r2);padding:14px 24px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s;">⚡ Upgrade to Pro — Unlimited Chats</button>
+      <button onclick="newChat();closeLimitOverlay();" style="background:transparent;color:var(--text2);border:1px solid var(--line2);border-radius:var(--r2);padding:12px 24px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">✏️ Start New Chat (resets tomorrow)</button>
+      <div style="font-size:11px;color:var(--silver);margin-top:4px;" id="limitResetTimer"></div>
     </div>
   </div>
 </div>
@@ -2988,14 +3002,40 @@ function chipSend(el) {
   sendMessage();
 }
 
-function clearChat() {
+// ─── NEW CHAT (replaces clearChat) ────────────────────────────
+function newChat() {
   if (window.speechSynthesis) stopTTS();
+
+  // Auto-save current chat before clearing (if there are messages)
+  if (chatHistory.length > 0) {
+    savedChats = JSON.parse(localStorage.getItem('fm_saved_chats') || '[]');
+    const topic = getChatTitle();
+    const name = `${topic} · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}`;
+    let existing = savedChats.find(c => c.id === currentChatId);
+    if (existing) {
+      existing.name = name;
+      existing.history = [...chatHistory];
+      existing.msgCount = chatHistory.length;
+      existing.autoSaved = false;
+    } else {
+      currentChatId = genId();
+      savedChats.unshift({ id: currentChatId, name, date: new Date().toISOString(), history: [...chatHistory], msgCount: chatHistory.length, autoSaved: false });
+    }
+    if (savedChats.length > 50) savedChats = savedChats.slice(0, 50);
+    try { localStorage.setItem('fm_saved_chats', JSON.stringify(savedChats)); } catch(e) {}
+  }
+
+  // Now clear the UI for a fresh session
   const msgs   = document.getElementById('messages');
   const typing = document.getElementById('typing');
   [...msgs.children].forEach(c => { if (c !== typing) c.remove(); });
-  
+
   chatHistory = [];
-  currentChatId = null; // Reset current session so new messages save as a new chat
+  currentChatId = null;
+
+  // Reset daily chat count so fresh session works
+  const today = new Date().toDateString();
+  localStorage.setItem('fm_chat_count', JSON.stringify({ date: today, count: 0 }));
 
   const div  = document.createElement('div');
   div.className = 'msg ai';
@@ -3004,14 +3044,43 @@ function clearChat() {
   div.innerHTML = `
     <div class="msg-avatar">⚡</div>
     <div class="msg-content">
-      <div class="msg-bubble" id="welcomeBubble">Hey ${esc(userName)}! 👋 Chat cleared — fresh start. ${apiKey ? "What's on your mind?" : "Set your Groq API key (top right) to activate me!"}</div>
+      <div class="msg-bubble" id="welcomeBubble">Hey ${esc(userName)}! 👋 New chat started — previous conversation saved to History. ${apiKey ? "What's on your mind?" : "Set your Groq API key (top right) to activate me!"}</div>
       <div class="msg-meta"><span class="msg-time">${time}</span></div>
     </div>`;
   msgs.insertBefore(div, typing);
 
   document.getElementById('chipsRow').style.display = 'flex';
   document.getElementById('msgBadge').style.display = 'none';
-  toast('🗑 Chat cleared');
+  toast('✏️ New chat started — previous chat saved!');
+}
+
+// Keep clearChat as alias for backward compat
+function clearChat() { newChat(); }
+
+// ─── LIMIT OVERLAY ─────────────────────────────────────────────
+function showLimitOverlay() {
+  const overlay = document.getElementById('limitOverlay');
+  overlay.style.display = 'flex';
+
+  // Countdown timer to midnight reset
+  function updateTimer() {
+    const now = new Date();
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const diff = midnight - now;
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    const el = document.getElementById('limitResetTimer');
+    if (el) el.textContent = `⏰ Resets in ${h}h ${m}m ${s}s`;
+  }
+  updateTimer();
+  window._limitTimer = setInterval(updateTimer, 1000);
+}
+
+function closeLimitOverlay() {
+  document.getElementById('limitOverlay').style.display = 'none';
+  if (window._limitTimer) clearInterval(window._limitTimer);
 }
 
 // ─── MAGIC COMMAND PARSER ───
@@ -3228,38 +3297,39 @@ To DELETE a goal: [DELETE_GOAL: <ID>]
       })
     });
     const data = await res.json();
-
-    // Safely extract error message from Groq's nested error structure
     if (data.error) {
       const errMsg = (typeof data.error === 'object')
         ? (data.error.message || data.error.error?.message || JSON.stringify(data.error))
         : String(data.error);
       throw new Error(errMsg);
     }
-    
+
     let reply = data.choices?.[0]?.message?.content;
-    
     reply = processAiCommands(reply);
-    
     if (!reply) { reply = "Done! I've sorted that out for you."; }
+
+    // ✅ Only count a successful chat against the daily limit
+    if (!isPro()) incrementDailyCount('fm_chat_count');
 
     chatHistory.push({ role: 'assistant', content: reply });
     document.getElementById('typing').classList.remove('show');
-    
-    addMsg('ai', reply); 
+    addMsg('ai', reply);
+
+    // Auto-save to history after every AI reply
+    autoSaveChat();
 
   } catch (err) {
     document.getElementById('typing').classList.remove('show');
     const errText = err?.message || String(err) || 'Unknown error';
     let e = '❌ ' + errText;
-    if (errText.includes('401')) e = '❌ Invalid API key — please check it.';
-    else if (errText.includes('429') || errText.toLowerCase().includes('rate limit') || errText.toLowerCase().includes('tokens per minute')) {
-      e = '⏳ Rate limit hit — your message was too large or you sent too many requests. Wait a moment and try a shorter message.';
-    }
-    else if (errText.includes('fetch') || errText.includes('network')) e = '🌐 Network error. Check your connection.';
+    if (errText.includes('401')) e = '❌ Invalid API key — please check it in the top-right button.';
+    else if (errText.includes('429') || errText.toLowerCase().includes('rate limit') || errText.toLowerCase().includes('tokens per minute'))
+      e = '⏳ Rate limit hit — message too large or too many requests. Wait a moment and try again with a shorter message.';
+    else if (errText.includes('fetch') || errText.includes('Failed to fetch')) e = '🌐 Network error. Check your internet connection.';
     addMsg('ai', e);
   } finally {
-    // ALWAYS re-enable the send button no matter what happens
+    // ✅ ALWAYS re-enable send button no matter what
+    document.getElementById('typing').classList.remove('show');
     const sendBtn = document.getElementById('sendBtn');
     if (sendBtn) sendBtn.disabled = false;
   }
@@ -3909,6 +3979,27 @@ function saveCurrentChat() {
     toast('⚠️ Could not save — storage full.');
   }
   renderSavedChats();
+}
+
+// Auto-save silently after every AI reply
+function autoSaveChat() {
+  if (chatHistory.length === 0) return;
+  try {
+    savedChats = JSON.parse(localStorage.getItem('fm_saved_chats') || '[]');
+    const topic = getChatTitle();
+    const name = `${topic} · ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}`;
+    let existing = savedChats.find(c => c.id === currentChatId);
+    if (existing) {
+      existing.history = [...chatHistory];
+      existing.msgCount = chatHistory.length;
+      existing.date = new Date().toISOString();
+    } else {
+      if (!currentChatId) currentChatId = genId();
+      savedChats.unshift({ id: currentChatId, name, date: new Date().toISOString(), history: [...chatHistory], msgCount: chatHistory.length, autoSaved: true });
+      if (savedChats.length > 50) savedChats = savedChats.slice(0, 50);
+    }
+    localStorage.setItem('fm_saved_chats', JSON.stringify(savedChats));
+  } catch(e) {}
 }
 
 function renderSavedChats() {
@@ -5841,7 +5932,7 @@ function activatePro(paymentId) { activatePlan('pro', paymentId); }
 // ─── FREE PLAN LIMIT CHECKS ──────────────────────────────────
 const FREE_TASK_LIMIT = 5;
 const FREE_GOAL_LIMIT = 5;
-const FREE_CHAT_LIMIT = 10;
+const FREE_CHAT_LIMIT = 50; // 50 free chats per day
 
 function checkTaskLimit() {
   if (isPro()) return true;
@@ -5867,11 +5958,13 @@ function checkChatLimit() {
   if (isPro()) return true;
   const count = getDailyCount('fm_chat_count');
   if (count >= FREE_CHAT_LIMIT) {
-    showToast(`⚠️ Free plan: ${FREE_CHAT_LIMIT} AI chats/day used. Upgrade to Pro for unlimited!`);
-    setTimeout(openPricing, 1200);
+    // Show the beautiful limit overlay instead of just a toast
+    const msgEl = document.getElementById('limitOverlayMsg');
+    if (msgEl) msgEl.innerHTML = `You've used all <strong style="color:var(--text)">${FREE_CHAT_LIMIT} free AI chats</strong> for today.<br>Your limit resets at midnight. Upgrade to Pro for unlimited access.`;
+    showLimitOverlay();
     return false;
   }
-  incrementDailyCount('fm_chat_count');
+  // NOTE: only increment on successful response, not here
   return true;
 }
 
