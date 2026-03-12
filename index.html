@@ -3228,9 +3228,16 @@ To DELETE a goal: [DELETE_GOAL: <ID>]
       })
     });
     const data = await res.json();
-    if (data.error) throw new Error(data.error.message);
+
+    // Safely extract error message from Groq's nested error structure
+    if (data.error) {
+      const errMsg = (typeof data.error === 'object')
+        ? (data.error.message || data.error.error?.message || JSON.stringify(data.error))
+        : String(data.error);
+      throw new Error(errMsg);
+    }
     
-    let reply = data.choices[0].message.content;
+    let reply = data.choices?.[0]?.message?.content;
     
     reply = processAiCommands(reply);
     
@@ -3243,13 +3250,19 @@ To DELETE a goal: [DELETE_GOAL: <ID>]
 
   } catch (err) {
     document.getElementById('typing').classList.remove('show');
-    let e = '❌ ' + err.message;
-    if (err.message.includes('401')) e = '❌ Invalid API key — please check it.';
-    else if (err.message.includes('429')) e = '⏳ Rate limit hit. Wait a moment and retry.';
-    else if (err.message.includes('fetch')) e = '🌐 Network error. Check your connection.';
+    const errText = err?.message || String(err) || 'Unknown error';
+    let e = '❌ ' + errText;
+    if (errText.includes('401')) e = '❌ Invalid API key — please check it.';
+    else if (errText.includes('429') || errText.toLowerCase().includes('rate limit') || errText.toLowerCase().includes('tokens per minute')) {
+      e = '⏳ Rate limit hit — your message was too large or you sent too many requests. Wait a moment and try a shorter message.';
+    }
+    else if (errText.includes('fetch') || errText.includes('network')) e = '🌐 Network error. Check your connection.';
     addMsg('ai', e);
+  } finally {
+    // ALWAYS re-enable the send button no matter what happens
+    const sendBtn = document.getElementById('sendBtn');
+    if (sendBtn) sendBtn.disabled = false;
   }
-  document.getElementById('sendBtn').disabled = false;
 }
 
 function addMsg(type, text, attachmentHTML = '') {
