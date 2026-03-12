@@ -4547,7 +4547,7 @@ function resetGameAreas(exceptId) {
 
 // Wealth IQ Quiz
 const wqQuestions = [
-  { q:"What does 'compound interest' mean?", opts:["Interest on interest","Simple interest rate","Bank fee","Credit score"], ans:0 },
+  { q:"What does 'compound interest' mean?", opts:["Interest on interest only","Simple interest rate","Bank fee","Credit score"], ans:0 },
   { q:"What is an ETF?", opts:["Exchange-Traded Fund","Electronic Transfer Fee","Equity Tax Form","Emerging Trade Fund"], ans:0 },
   { q:"What does 'diversification' reduce?", opts:["Returns","Risk","Taxes","Inflation"], ans:1 },
   { q:"What is a P/E ratio?", opts:["Profit/Expense","Price/Earnings","Principal/Equity","Portfolio/Estimate"], ans:1 },
@@ -4556,9 +4556,119 @@ const wqQuestions = [
   { q:"What does 'liquidity' refer to?", opts:["Cash flow","How easily an asset converts to cash","Market cap","Interest rate"], ans:1 },
   { q:"What is a bull market?", opts:["Prices falling >20%","Prices rising consistently","Flat market","High volatility"], ans:1 },
   { q:"What is the '4% rule'?", opts:["Tax bracket","Safe retirement withdrawal rate","Savings rate","Bond yield"], ans:1 },
-  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 }
+  { q:"What does ROI stand for?", opts:["Rate of Inflation","Return on Investment","Risk of Insolvency","Ratio of Income"], ans:1 },
+  { q:"What is a bear market?", opts:["Prices rising 20%+","Prices falling 20%+","Stable market","Opening bell"], ans:1 },
+  { q:"What is an index fund?", opts:["A fund managed by experts","A fund tracking a market index","A bond fund","A hedge fund"], ans:1 },
+  { q:"What does 'asset allocation' mean?", opts:["Choosing a broker","Dividing investments across asset classes","Buying a house","Saving in a bank"], ans:1 },
+  { q:"What is a stock dividend?", opts:["A company debt","A share of profits paid to shareholders","A bonus salary","A stock split"], ans:1 },
+  { q:"What is market capitalisation?", opts:["Total revenue of a company","Total shares × share price","Company's book value","Annual profit"], ans:1 },
+  { q:"What is a bond yield?", opts:["The bond's purchase price","Annual return on a bond investment","The bond's maturity date","The bond's credit rating"], ans:1 },
+  { q:"What does 'short selling' mean?", opts:["Selling shares you own","Selling borrowed shares hoping price falls","A quick sale","Selling below market value"], ans:1 },
+  { q:"What is an emergency fund?", opts:["Investment account","3-6 months of expenses in liquid savings","Retirement account","Business fund"], ans:1 },
+  { q:"What is the Rule of 72?", opts:["Tax rule","Estimates years to double money at a given rate","Retirement age rule","Stock split rule"], ans:1 },
+  { q:"What is Net Asset Value (NAV)?", opts:["Company's annual profit","Value of fund assets minus liabilities per share","Stock market index","Total revenue"], ans:1 },
+  { q:"What is inflation risk?", opts:["Risk of losing your job","Risk that inflation erodes purchasing power","Currency exchange risk","Risk of bank failure"], ans:1 },
+  { q:"What is a mutual fund expense ratio?", opts:["Sales commission","Annual fee as % of fund assets","Dividend payment","Management bonus"], ans:1 },
+  { q:"What is a stop-loss order?", opts:["An order to buy at a set price","An order to sell if price drops to set level","A limit buy order","A dividend instruction"], ans:1 },
+  { q:"What does 'rebalancing' a portfolio mean?", opts:["Selling all investments","Restoring original asset allocation targets","Adding new stocks","Switching brokers"], ans:1 },
+  { q:"What is a credit score used for?", opts:["Tracking spending","Assessing creditworthiness for loans","Calculating taxes","Measuring net worth"], ans:1 },
+  { q:"What is a Treasury bond?", opts:["Corporate debt","Government-issued long-term debt security","A bank savings product","A type of mutual fund"], ans:1 },
+  { q:"What is a Roth IRA?", opts:["A taxable brokerage account","Retirement account with tax-free withdrawals","A savings bond","A pension plan"], ans:1 },
+  { q:"What is the difference between a stock and a bond?", opts:["They are the same","Stock is ownership; bond is a loan to issuer","Bond gives ownership; stock is a loan","Stocks always outperform bonds"], ans:1 },
+  { q:"What is leverage in investing?", opts:["Owning multiple assets","Using borrowed money to amplify returns","A type of insurance","Portfolio diversification"], ans:1 },
+  { q:"What is a capital gain?", opts:["Regular income","Profit from selling an asset above purchase price","Annual dividend","Salary bonus"], ans:1 },
+  { q:"What is a hedge in investing?", opts:["A type of fund only","An investment to reduce risk of another position","A government bond","A savings plan"], ans:1 },
+  { q:"What does 'blue chip stock' mean?", opts:["Cheap penny stock","Shares in a large stable reputable company","Technology stocks only","IPO stocks"], ans:1 },
+  { q:"What is opportunity cost?", opts:["The cost of an investment","Value of the best alternative given up for a choice","Transaction fee","Tax on profits"], ans:1 },
+  { q:"What is a fiduciary?", opts:["A type of investment","Someone legally obligated to act in your financial interest","A tax advisor","A stockbroker"], ans:1 },
+  { q:"What does 'going public' mean for a company?", opts:["Opening international offices","Offering shares on a stock exchange for the first time","Hiring more staff","Publishing annual reports"], ans:1 },
+  { q:"What is a money market fund?", opts:["A stock fund","A low-risk fund investing in short-term debt instruments","A real estate fund","A cryptocurrency fund"], ans:1 },
+  { q:"What is portfolio beta?", opts:["Portfolio size","Measure of portfolio volatility vs the market","Annual return","Expense ratio"], ans:1 },
+  { q:"What is a sinking fund?", opts:["A failing investment","Money set aside regularly for a future planned expense","A pension scheme","A bankrupt fund"], ans:1 },
+  { q:"What is the difference between saving and investing?", opts:["There is no difference","Saving preserves capital; investing grows it with risk","Investing is safer than saving","Saving always beats investing"], ans:1 },
+  { q:"What is a financial statement?", opts:["A bank password","A formal record of a company's financial activities","A loan agreement","A tax form"], ans:1 },
+  { q:"What does CAGR stand for?", opts:["Compound Annual Growth Rate","Current Asset Gain Ratio","Capital Adjusted Gross Return","Cost Analysis Growth Rate"], ans:0 },
+  { q:"What is a preference share?", opts:["A share with voting rights only","A share with fixed dividends paid before ordinary shares","The most expensive share","A share in a government company"], ans:1 },
+  { q:"What is the Dow Jones?", opts:["A bond index","A stock market index of 30 major US companies","A cryptocurrency exchange","A global bank"], ans:1 },
+  { q:"What does 'portfolio alpha' measure?", opts:["Portfolio size","Excess return vs benchmark after risk adjustment","Portfolio age","Number of holdings"], ans:1 },
+  { q:"What is a derivative?", opts:["A basic savings product","A financial contract whose value is based on an underlying asset","A type of property investment","A government bond"], ans:1 },
+  { q:"What is the S&P 500?", opts:["A savings account rate","Index tracking 500 large US companies","A global bond index","A cryptocurrency index"], ans:1 },
+  { q:"What is a REIT?", opts:["A type of savings bond","Real Estate Investment Trust — lets you invest in property","A retirement fund","A tech stock fund"], ans:1 },
+  { q:"What does 'vesting' mean for stock options?", opts:["Selling your shares","Earning the right to your shares over time","Buying shares at market price","Transferring shares to another person"], ans:1 },
+  { q:"What is the difference between gross and net income?", opts:["They are the same","Gross is before deductions; net is after deductions","Net is before taxes; gross is after taxes","Gross is monthly; net is annual"], ans:1 },
+  { q:"What is a stock buyback?", opts:["A stock exchange policy","When a company repurchases its own shares from the market","When investors return shares to a company","A tax refund for shareholders"], ans:1 },
+  { q:"What does 'cash flow' measure?", opts:["Company profit","Movement of money in and out of a business","Total assets","Market share"], ans:1 },
+  { q:"What is the Sharpe ratio?", opts:["A measure of company size","Risk-adjusted return — return per unit of risk","A stock's price momentum","A bond's interest rate"], ans:1 },
+  { q:"What is quantitative easing?", opts:["A tax policy","Central bank buying assets to inject money into the economy","A savings interest rate policy","A government spending cut"], ans:1 },
+  { q:"What is a limit order in stock trading?", opts:["An order at any price","An order to buy/sell only at a specified price or better","A market order","A stop order"], ans:1 },
+  { q:"What does 'overweight' mean in analyst ratings?", opts:["The stock is too expensive","Analyst recommends buying more than the benchmark weight","The company has too much debt","The stock is risky"], ans:1 },
+  { q:"What is an amortisation schedule?", opts:["A stock trading plan","A table showing loan payments split between interest and principal","A savings growth chart","A tax payment timeline"], ans:1 },
+  { q:"What does 'market order' mean?", opts:["An order placed during market hours only","An order to buy/sell immediately at the current market price","An order with a price limit","A pending order"], ans:1 },
+  { q:"What is currency risk (forex risk)?", opts:["Risk of losing your credit card","Risk that exchange rate changes affect your investment value","Risk of a company going bankrupt","Risk of rising inflation"], ans:1 },
+  { q:"What is a 401(k)?", opts:["A type of bond","US employer-sponsored retirement savings plan","A stock market index","A government grant"], ans:1 },
+  { q:"What does 'earnings per share' (EPS) measure?", opts:["Total company earnings","Company profit divided by number of outstanding shares","Dividend payment per share","Revenue per employee"], ans:1 },
+  { q:"What is a margin call?", opts:["A request for a stock tip","Broker demanding you deposit more money when margin account falls below minimum","A dividend notice","A company earnings call"], ans:1 },
+  { q:"What is stagflation?", opts:["Fast economic growth with low inflation","High inflation combined with slow economic growth and high unemployment","A stock market crash","A government budget surplus"], ans:1 },
+  { q:"What does 'underweight' mean in a portfolio context?", opts:["A stock with low trading volume","Holding less of an asset than its benchmark weighting suggests","A company with low revenue","A declining stock"], ans:1 },
+  { q:"What is book value?", opts:["The price of a book about finance","A company's net asset value — total assets minus total liabilities","A stock's 52-week high","A company's annual revenue"], ans:1 },
+  { q:"What is a callable bond?", opts:["A bond you can call a broker to buy","A bond the issuer can repay before maturity","A bond with variable interest","A junk bond"], ans:1 },
+  { q:"What does 'yield curve' show?", opts:["A stock's price history","The relationship between bond interest rates and their maturity dates","A company's earnings trend","A currency exchange history"], ans:1 },
+  { q:"What is the difference between active and passive investing?", opts:["Active is riskier; passive is safer always","Active managers pick stocks to beat the market; passive tracks an index","Passive investing involves more trading","Active investing never charges fees"], ans:1 },
+  { q:"What is a stock's 52-week high?", opts:["Its price 52 weeks ago","The highest price the stock reached in the last 52 weeks","Its average price over a year","The price analysts target"], ans:1 },
+  { q:"What is a Ponzi scheme?", opts:["A legitimate investment fund","A fraud where returns are paid using new investors' money not real profits","A government bond scheme","A pyramid sales strategy"], ans:1 },
+  { q:"What does 'net worth' mean?", opts:["Monthly salary","Total assets minus total liabilities","Annual business revenue","Credit limit"], ans:1 },
+  { q:"What is a debit card vs credit card?", opts:["They are the same","Debit uses your own money; credit borrows from the bank","Credit uses your own money; debit borrows","A debit card earns rewards; credit does not"], ans:1 },
+  { q:"What is a gilt?", opts:["A gold coin","A UK government bond","A type of mutual fund","A high-yield corporate bond"], ans:1 },
+  { q:"What is the difference between revenue and profit?", opts:["They are the same","Revenue is total income; profit is what remains after expenses","Profit is total income; revenue is after costs","Revenue is only from products"], ans:1 },
+  { q:"What is a balance sheet?", opts:["A weight tracking tool","A financial statement showing assets, liabilities and equity at a point in time","A monthly spending tracker","A loan repayment schedule"], ans:1 },
+  { q:"What does 'liquidity ratio' measure?", opts:["How fast a company grows","A company's ability to pay short-term obligations","A stock's daily trading volume","A fund's annual fee"], ans:1 },
+  { q:"What is a call option?", opts:["A right to sell an asset at a set price","A right to buy an asset at a set price before expiry","A guaranteed purchase agreement","A futures contract"], ans:1 },
+  { q:"What is a put option?", opts:["A right to buy an asset at a set price","A right to sell an asset at a set price before expiry","A guaranteed sale agreement","A futures contract"], ans:1 },
+  { q:"What is the FTSE 100?", opts:["A financial exam score","An index of the 100 largest companies listed on the London Stock Exchange","A global bond index","A UK government savings rate"], ans:1 },
+  { q:"What is a micro-cap stock?", opts:["A stock with high liquidity","A stock from a very small company, typically under $300M market cap","A stock index","A government-backed stock"], ans:1 },
+  { q:"What does 'fiscal policy' refer to?", opts:["Central bank interest rate decisions","Government decisions on taxation and spending","A company's budget plan","A trade tariff policy"], ans:1 },
+  { q:"What is monetary policy?", opts:["A government spending plan","Central bank actions to control money supply and interest rates","A country's tax laws","A trade agreement"], ans:1 },
+  { q:"What is an income statement?", opts:["A personal bank statement","A financial report showing revenues, expenses and profit over a period","A list of assets owned","A tax filing document"], ans:1 },
+  { q:"What is a stock's 'float'?", opts:["How much the price fluctuates","The number of shares available for public trading","The stock's annual dividend","The company's total share count"], ans:1 },
+  { q:"What does 'capitalisation rate' (cap rate) mean in real estate?", opts:["The interest rate on a mortgage","Net operating income divided by property value — used to estimate returns","The total property purchase cost","A landlord's annual tax rate"], ans:1 },
+  { q:"What is an inverted yield curve often associated with?", opts:["Economic boom","Potential upcoming recession","Rising inflation","Stock market rally"], ans:1 },
+  { q:"What is dollar depreciation?", opts:["More purchasing power for the dollar","Less purchasing power for the dollar vs other currencies","A rise in US interest rates","A stock market gain"], ans:1 },
+  { q:"What is the difference between a growth stock and a value stock?", opts:["Growth stocks pay more dividends","Growth stocks are expected to grow faster; value stocks trade below intrinsic value","Value stocks always outperform","Growth stocks are only in tech"], ans:1 },
+  { q:"What is a convertible bond?", opts:["A bond in a foreign currency","A bond that can be converted into company shares","A government savings bond","A floating rate bond"], ans:1 },
+  { q:"What does 'basis point' mean?", opts:["1% change in interest rate","0.01% — one hundredth of one percent","100% change","A stock price unit"], ans:1 },
+  { q:"What is an IPO lock-up period?", opts:["When trading is halted","A period after IPO when insiders cannot sell their shares","A cooling-off period for investors","A price freeze period"], ans:1 },
+  { q:"What is a zombie company?", opts:["A bankrupt company","A company that only earns enough to pay debt interest but cannot grow","A startup that failed","A company with no employees"], ans:1 },
+  { q:"What is the efficient market hypothesis?", opts:["Markets are always wrong","Asset prices already reflect all available information","Only experts can beat the market","Stocks always rise long-term"], ans:1 },
+  { q:"What is a high-yield bond?", opts:["A government bond","A bond with higher interest rates due to higher default risk","A savings account","A low-risk investment"], ans:1 },
+  { q:"What does 'arbitrage' mean in finance?", opts:["A type of fund","Exploiting price differences of the same asset in different markets","A tax avoidance strategy","A merger strategy"], ans:1 },
+  { q:"What is a 'dead cat bounce'?", opts:["A bear market","A brief recovery in a falling asset before it continues declining","A stock split","A dividend cut"], ans:1 },
+  { q:"What is the difference between a current account and savings account?", opts:["There is no difference","Current is for everyday transactions; savings earns interest on deposits","Savings accounts have no interest","Current accounts earn more interest"], ans:1 },
+  { q:"What does 'price discovery' mean?", opts:["Finding the cheapest product","The market process of determining the fair price of an asset","Researching a stock","Comparing fund fees"], ans:1 },
+  { q:"What is a sovereign wealth fund?", opts:["A private equity fund","A state-owned investment fund funded by government revenues","A pension fund for citizens","A bank reserve"], ans:1 },
+  { q:"What is a stock warrant?", opts:["A legal document","The right to buy company shares at a fixed price before expiry","A stock dividend","A share buyback"], ans:1 },
+  { q:"What does 'time value of money' mean?", opts:["Money loses value over time only","A dollar today is worth more than a dollar in the future","Money always increases in value","Interest rates determine currency value"], ans:1 },
 ];
 let wqCurrent = 0, wqScore = 0, wqActive = false, wqShuffled = [];
+
+// Smart no-repeat pool system for mini-games
+function getNoRepeatPool(key, allItems, batchSize) {
+  let used = JSON.parse(localStorage.getItem(key) || '[]');
+  const total = allItems.length;
+  // If used pool is exhausted (all seen), reset
+  if (used.length >= total - batchSize) {
+    used = [];
+    localStorage.setItem(key, JSON.stringify(used));
+  }
+  // Available = all indices not yet used
+  const available = [...Array(total).keys()].filter(i => !used.includes(i));
+  // Shuffle available
+  const shuffled = shuffleArray(available);
+  // Pick batchSize
+  const selected = shuffled.slice(0, batchSize);
+  // Mark as used
+  localStorage.setItem(key, JSON.stringify([...used, ...selected]));
+  return selected.map(i => allItems[i]);
+}
 
 function shuffleArray(arr) {
   const a = [...arr];
@@ -4572,7 +4682,7 @@ function shuffleArray(arr) {
 function startWealthQuiz() {
   resetGameAreas('wqArea');
   wqCurrent = 0; wqScore = 0; wqActive = true;
-  wqShuffled = shuffleArray(wqQuestions);
+  wqShuffled = getNoRepeatPool('fm_wq_used', wqQuestions, 10).map(q => shuffleQuestionOptions(q));
   renderWealthQuizQ();
 }
 function renderWealthQuizQ() {
@@ -4605,15 +4715,104 @@ const ceoEvents = [
   { q:"VC offers $1M for 30% equity. Do you?", opts:[{t:"Accept",r:{team:2,cash:100,rev:0}},{t:"Counter at 15%",r:{team:0,cash:0,rev:5}},{t:"Decline",r:{team:0,cash:0,rev:10}}] },
   { q:"Server bills triple this month!", opts:[{t:"Migrate to cheaper cloud",r:{team:0,cash:20,rev:-10}},{t:"Raise prices",r:{team:0,cash:30,rev:-20}},{t:"Optimize code",r:{team:0,cash:15,rev:0}}] },
   { q:"A big enterprise wants a custom deal. Do you?", opts:[{t:"Build custom for them",r:{team:0,cash:-20,rev:40}},{t:"Offer standard plan discount",r:{team:0,cash:-5,rev:15}},{t:"Decline to stay focused",r:{team:1,cash:0,rev:5}}] },
-  { q:"Your app goes down on a Friday night!", opts:[{t:"All hands on deck — fix now",r:{team:-1,cash:-10,rev:10}},{t:"Post a status update, fix Monday",r:{team:0,cash:0,rev:-15}},{t:"Bring in contractors",r:{team:0,cash:-20,rev:5}}] },
+  { q:"Your app goes down on a Friday night!", opts:[{t:"All hands on deck — fix now",r:{team:-1,cash:-10,rev:10}},{t:"Post status update, fix Monday",r:{team:0,cash:0,rev:-15}},{t:"Bring in contractors",r:{team:0,cash:-20,rev:5}}] },
   { q:"A top competitor offers to acquire you for 5x revenue.", opts:[{t:"Accept the offer",r:{team:0,cash:200,rev:0}},{t:"Counter at 10x",r:{team:0,cash:0,rev:5}},{t:"Decline, stay independent",r:{team:2,cash:0,rev:15}}] },
   { q:"You can hire a superstar CMO or 3 junior engineers.", opts:[{t:"Hire the CMO",r:{team:1,cash:-60,rev:25}},{t:"Hire 3 engineers",r:{team:3,cash:-45,rev:5}},{t:"Hire nobody — conserve cash",r:{team:0,cash:0,rev:-5}}] },
   { q:"Churn rate spikes 20% this month. Do you?", opts:[{t:"Survey churned users immediately",r:{team:0,cash:-5,rev:10}},{t:"Discount to retain them",r:{team:0,cash:-20,rev:5}},{t:"Ignore — focus on new sales",r:{team:0,cash:0,rev:-10}}] },
+  { q:"A journalist wants to write a hit piece about your startup.", opts:[{t:"Offer full transparency interview",r:{team:0,cash:-5,rev:10}},{t:"Hire a PR firm",r:{team:0,cash:-25,rev:5}},{t:"Ignore it",r:{team:0,cash:0,rev:-10}}] },
+  { q:"Your product has a critical security vulnerability.", opts:[{t:"Patch quietly without disclosure",r:{team:0,cash:-10,rev:-20}},{t:"Disclose immediately and patch",r:{team:1,cash:-15,rev:5}},{t:"Hire security consultants",r:{team:0,cash:-30,rev:10}}] },
+  { q:"A top salesperson demands a 50% raise.", opts:[{t:"Give the raise",r:{team:1,cash:-25,rev:15}},{t:"Counter with 25% + commission",r:{team:0,cash:-10,rev:10}},{t:"Let them go",r:{team:-1,cash:0,rev:-15}}] },
+  { q:"You can launch in a new market or go deeper in existing one.", opts:[{t:"Expand to new market",r:{team:2,cash:-40,rev:20}},{t:"Go deeper in current market",r:{team:0,cash:-15,rev:25}},{t:"Do both simultaneously",r:{team:2,cash:-50,rev:10}}] },
+  { q:"Your co-founder wants to leave. Do you?", opts:[{t:"Buy them out",r:{team:-1,cash:-50,rev:5}},{t:"Find a replacement co-founder",r:{team:0,cash:-10,rev:0}},{t:"Convince them with equity",r:{team:1,cash:-20,rev:10}}] },
+  { q:"You receive a patent infringement letter from a big company.", opts:[{t:"Settle out of court",r:{team:0,cash:-30,rev:0}},{t:"Fight it in court",r:{team:0,cash:-60,rev:-10}},{t:"Redesign the feature",r:{team:0,cash:-15,rev:-5}}] },
+  { q:"A celebrity offers to promote your product for free equity.", opts:[{t:"Give 5% equity",r:{team:0,cash:0,rev:30}},{t:"Pay cash instead",r:{team:0,cash:-20,rev:15}},{t:"Decline",r:{team:0,cash:0,rev:0}}] },
+  { q:"Your runway is 3 months. What do you do?", opts:[{t:"Emergency fundraise",r:{team:0,cash:80,rev:0}},{t:"Cut team by 30%",r:{team:-2,cash:30,rev:-10}},{t:"Find revenue deals fast",r:{team:0,cash:-5,rev:25}}] },
+  { q:"A government regulation could affect your product.", opts:[{t:"Lobby against it",r:{team:0,cash:-20,rev:5}},{t:"Adapt product to comply early",r:{team:0,cash:-25,rev:15}},{t:"Wait and see",r:{team:0,cash:0,rev:-10}}] },
+  { q:"You can attend a high-profile conference or focus on product.", opts:[{t:"Attend — networking is key",r:{team:0,cash:-10,rev:15}},{t:"Skip — focus on building",r:{team:1,cash:0,rev:5}},{t:"Send a team member instead",r:{team:0,cash:-5,rev:8}}] },
+  { q:"A power user finds a major bug and tweets about it.", opts:[{t:"Fix immediately and thank them publicly",r:{team:0,cash:-5,rev:10}},{t:"Ignore and patch quietly",r:{team:0,cash:0,rev:-15}},{t:"Offer them a free plan",r:{team:0,cash:-2,rev:5}}] },
+  { q:"Your biggest customer wants 40% discount or they'll leave.", opts:[{t:"Give the discount",r:{team:0,cash:-20,rev:-5}},{t:"Offer 20% and added features",r:{team:0,cash:-10,rev:5}},{t:"Let them go",r:{team:0,cash:0,rev:-20}}] },
+  { q:"You can open-source part of your codebase. Do you?", opts:[{t:"Yes — builds community trust",r:{team:1,cash:0,rev:10}},{t:"No — protect IP",r:{team:0,cash:0,rev:0}},{t:"Open source everything",r:{team:2,cash:0,rev:-10}}] },
+  { q:"Inflation spikes — your team demands higher salaries.", opts:[{t:"Give inflation raises to all",r:{team:2,cash:-35,rev:0}},{t:"Give to top performers only",r:{team:0,cash:-15,rev:5}},{t:"Offer equity instead of raises",r:{team:1,cash:0,rev:0}}] },
+  { q:"A major bank offers a $500K credit line at 12% interest.", opts:[{t:"Take it — fuel growth",r:{team:2,cash:50,rev:20}},{t:"Take half — stay conservative",r:{team:0,cash:25,rev:10}},{t:"Decline — avoid debt",r:{team:0,cash:0,rev:0}}] },
+  { q:"Two key engineers are fighting and threatening to quit.", opts:[{t:"Mediate with HR help",r:{team:1,cash:-5,rev:0}},{t:"Let one go",r:{team:-1,cash:0,rev:-5}},{t:"Restructure teams to separate them",r:{team:0,cash:-10,rev:5}}] },
+  { q:"A competitor is copying your features every week.", opts:[{t:"Accelerate roadmap",r:{team:0,cash:-20,rev:15}},{t:"Send cease and desist",r:{team:0,cash:-15,rev:5}},{t:"Pivot to something they can't copy",r:{team:0,cash:-30,rev:20}}] },
+  { q:"Your app gets featured on Product Hunt. Do you?", opts:[{t:"Run a launch sale",r:{team:0,cash:-10,rev:25}},{t:"Just ride the traffic",r:{team:0,cash:0,rev:10}},{t:"Launch a waitlist for new feature",r:{team:0,cash:-5,rev:15}}] },
+  { q:"An ex-employee claims they own 10% of your company.", opts:[{t:"Settle for 2%",r:{team:0,cash:-20,rev:0}},{t:"Fight in court",r:{team:0,cash:-50,rev:-5}},{t:"Negotiate a cash buyout",r:{team:0,cash:-30,rev:0}}] },
+  { q:"Your payment processor suddenly freezes your account.", opts:[{t:"Switch processors immediately",r:{team:0,cash:-10,rev:-5}},{t:"Escalate with legal team",r:{team:0,cash:-20,rev:-10}},{t:"Set up backup processor in parallel",r:{team:0,cash:-15,rev:0}}] },
+  { q:"A TechCrunch journalist wants your exclusive story.", opts:[{t:"Grant exclusive — big exposure",r:{team:0,cash:0,rev:20}},{t:"Decline — not ready for spotlight",r:{team:0,cash:0,rev:-5}},{t:"Offer a limited story",r:{team:0,cash:0,rev:10}}] },
+  { q:"Your MVP is buggy but a huge client wants to buy.", opts:[{t:"Sign the deal and fix bugs after",r:{team:0,cash:30,rev:20}},{t:"Delay deal until product is ready",r:{team:0,cash:0,rev:0}},{t:"Be transparent about bugs",r:{team:1,cash:15,rev:10}}] },
+  { q:"Full remote or stay in-office? What do you choose?", opts:[{t:"Full remote — wider talent pool",r:{team:3,cash:20,rev:5}},{t:"Hybrid model",r:{team:1,cash:5,rev:8}},{t:"Stay in-office for culture",r:{team:-1,cash:-10,rev:5}}] },
+  { q:"A competitor is spreading false rumours about your product.", opts:[{t:"Publicly debunk with data",r:{team:0,cash:-5,rev:10}},{t:"Ignore it",r:{team:0,cash:0,rev:-5}},{t:"Take legal action",r:{team:0,cash:-25,rev:5}}] },
+  { q:"Your AI feature costs $50K/month but users love it.", opts:[{t:"Keep it — worth the cost",r:{team:1,cash:-50,rev:25}},{t:"Gate it behind a premium plan",r:{team:0,cash:-20,rev:20}},{t:"Remove it to save cash",r:{team:0,cash:0,rev:-15}}] },
+  { q:"You hit 10K users. Do you raise a seed round now?", opts:[{t:"Yes — raise $1.5M seed",r:{team:3,cash:150,rev:0}},{t:"Bootstrap further for better terms",r:{team:0,cash:0,rev:15}},{t:"Raise a smaller pre-seed",r:{team:1,cash:50,rev:0}}] },
+  { q:"A big tech company wants to white-label your product.", opts:[{t:"Sign the deal",r:{team:0,cash:50,rev:30}},{t:"Negotiate a revenue share instead",r:{team:0,cash:0,rev:40}},{t:"Decline — protect brand",r:{team:0,cash:0,rev:5}}] },
+  { q:"Your marketing spend doubles but conversions stay flat.", opts:[{t:"Cut marketing, invest in product",r:{team:0,cash:20,rev:-5}},{t:"Hire a growth expert",r:{team:1,cash:-30,rev:15}},{t:"Test new channels",r:{team:0,cash:-10,rev:10}}] },
+  { q:"Hire 5 cheap generalists or 1 elite specialist?", opts:[{t:"5 generalists — more bandwidth",r:{team:5,cash:-40,rev:5}},{t:"1 elite specialist — quality focus",r:{team:1,cash:-35,rev:20}},{t:"Hire 2 mid-level people",r:{team:2,cash:-30,rev:12}}] },
+  { q:"A data breach exposes 1,000 user emails.", opts:[{t:"Disclose immediately to users",r:{team:0,cash:-10,rev:-5}},{t:"Quietly patch and monitor",r:{team:0,cash:0,rev:-20}},{t:"Hire cybersecurity firm and disclose",r:{team:0,cash:-30,rev:5}}] },
+  { q:"Your biggest investor threatens to pull funding unless you pivot.", opts:[{t:"Pivot to their suggested idea",r:{team:-1,cash:50,rev:-10}},{t:"Stand your ground and seek new investors",r:{team:1,cash:-20,rev:10}},{t:"Compromise with a hybrid strategy",r:{team:0,cash:20,rev:5}}] },
+  { q:"A top university wants to partner for research. Do you?", opts:[{t:"Full partnership — free talent pipeline",r:{team:2,cash:-10,rev:5}},{t:"Sponsor only — limited involvement",r:{team:0,cash:-15,rev:8}},{t:"Decline — too distracting",r:{team:0,cash:0,rev:0}}] },
+  { q:"Users want a mobile app but you only have web. Do you?", opts:[{t:"Build native iOS and Android apps",r:{team:0,cash:-40,rev:20}},{t:"Build a PWA (progressive web app)",r:{team:0,cash:-15,rev:10}},{t:"Stay web-only for now",r:{team:0,cash:0,rev:-5}}] },
+  { q:"Your product gets a 1-star review from a major blogger.", opts:[{t:"Respond publicly and offer to fix issues",r:{team:0,cash:-5,rev:8}},{t:"Ask the blogger to remove the review",r:{team:0,cash:0,rev:-5}},{t:"Ignore it",r:{team:0,cash:0,rev:-10}}] },
+  { q:"A key employee wants remote work from another country.", opts:[{t:"Approve it — keep the talent",r:{team:1,cash:-5,rev:5}},{t:"Decline — compliance risks",r:{team:-1,cash:0,rev:-5}},{t:"Allow it with a contractor agreement",r:{team:0,cash:-5,rev:3}}] },
+  { q:"You can build a new flagship feature or fix 50 small bugs.", opts:[{t:"Build the flagship feature",r:{team:0,cash:-20,rev:20}},{t:"Fix all the bugs first",r:{team:1,cash:-10,rev:10}},{t:"Do half and half",r:{team:0,cash:-15,rev:12}}] },
+  { q:"A competitor just got funded with $20M. Your response?", opts:[{t:"Panic and fundraise immediately",r:{team:0,cash:30,rev:-5}},{t:"Focus on execution — outbuild them",r:{team:1,cash:0,rev:15}},{t:"Find a niche they'll ignore",r:{team:0,cash:-10,rev:18}}] },
+  { q:"Your pricing page is confusing — conversion is dropping.", opts:[{t:"Simplify to one plan",r:{team:0,cash:-5,rev:15}},{t:"Add a free tier",r:{team:0,cash:-10,rev:20}},{t:"Hire a conversion rate expert",r:{team:0,cash:-20,rev:18}}] },
+  { q:"A board member suggests hiring an experienced CEO to replace you.", opts:[{t:"Step aside gracefully",r:{team:2,cash:0,rev:20}},{t:"Refuse — this is your company",r:{team:-1,cash:0,rev:-10}},{t:"Negotiate a co-CEO role",r:{team:1,cash:0,rev:8}}] },
+  { q:"Your NPS score drops from 60 to 30. What do you do?", opts:[{t:"Interview 20 unhappy customers immediately",r:{team:0,cash:-5,rev:12}},{t:"Discount to improve satisfaction scores",r:{team:0,cash:-20,rev:5}},{t:"Ignore — focus on new acquisition",r:{team:0,cash:0,rev:-10}}] },
+  { q:"You can sponsor a major industry conference.", opts:[{t:"Sponsor as a Gold partner — high visibility",r:{team:0,cash:-30,rev:20}},{t:"Sponsor a small booth only",r:{team:0,cash:-10,rev:8}},{t:"Skip it — no proven ROI",r:{team:0,cash:0,rev:0}}] },
+  { q:"A freelance developer built a feature you need — do you hire them?", opts:[{t:"Hire full-time immediately",r:{team:1,cash:-30,rev:10}},{t:"Keep them as a long-term contractor",r:{team:0,cash:-15,rev:8}},{t:"Buy the code and move on",r:{team:0,cash:-10,rev:5}}] },
+  { q:"You're offered a speaking slot at a major summit.", opts:[{t:"Accept — great brand exposure",r:{team:0,cash:-5,rev:12}},{t:"Decline — too busy shipping",r:{team:0,cash:0,rev:0}},{t:"Send your Head of Product instead",r:{team:1,cash:-3,rev:6}}] },
+  { q:"Your email list hits 100K. How do you monetise it?", opts:[{t:"Launch a paid newsletter tier",r:{team:0,cash:-5,rev:15}},{t:"Partner with relevant brands for sponsorships",r:{team:0,cash:10,rev:12}},{t:"Do nothing — keep it free",r:{team:0,cash:0,rev:0}}] },
+  { q:"A viral Reddit post accuses your company of shady practices.", opts:[{t:"Post a transparent public response with evidence",r:{team:0,cash:-5,rev:10}},{t:"Let your community defend you",r:{team:0,cash:0,rev:5}},{t:"Ignore it — Reddit drama fades",r:{team:0,cash:0,rev:-10}}] },
+  { q:"Your SaaS pricing is monthly only. Should you add annual plans?", opts:[{t:"Yes — offer 20% discount for annual",r:{team:0,cash:20,rev:10}},{t:"Yes — offer 2 months free",r:{team:0,cash:15,rev:12}},{t:"No — keep it simple",r:{team:0,cash:0,rev:-3}}] },
+  { q:"A major client asks for a dedicated account manager.", opts:[{t:"Hire one specifically for them",r:{team:1,cash:-25,rev:20}},{t:"Assign existing team member part-time",r:{team:0,cash:-5,rev:12}},{t:"Decline — not your model",r:{team:0,cash:0,rev:-10}}] },
+  { q:"Should you build an affiliate programme?", opts:[{t:"Yes — launch with 30% commission",r:{team:0,cash:-10,rev:25}},{t:"Yes — launch with 10% commission",r:{team:0,cash:-5,rev:12}},{t:"No — too complex right now",r:{team:0,cash:0,rev:0}}] },
+  { q:"Taxes are due and your accountant made an error. Do you?", opts:[{t:"Pay the penalty and fix it",r:{team:0,cash:-20,rev:0}},{t:"Appeal the penalty with proof of error",r:{team:0,cash:-5,rev:0}},{t:"Hire a new accountant urgently",r:{team:0,cash:-15,rev:2}}] },
+  { q:"You're running out of cash but have great MRR growth.", opts:[{t:"Raise a bridge round from existing investors",r:{team:0,cash:60,rev:0}},{t:"Take a revenue-based financing loan",r:{team:0,cash:40,rev:-5}},{t:"Cut costs aggressively",r:{team:-2,cash:30,rev:-8}}] },
+  { q:"Your head of sales wants to hire 5 reps at once.", opts:[{t:"Approve — scale fast",r:{team:5,cash:-60,rev:20}},{t:"Hire 2 to test first",r:{team:2,cash:-25,rev:10}},{t:"Decline — product-led growth only",r:{team:0,cash:0,rev:5}}] },
+  { q:"A major product feature is beloved but rarely used. Keep it?", opts:[{t:"Keep it — it's a differentiator",r:{team:0,cash:-5,rev:5}},{t:"Sunset it and reinvest resources",r:{team:0,cash:10,rev:8}},{t:"Make it a premium add-on",r:{team:0,cash:0,rev:10}}] },
+  { q:"You receive a cease and desist over your brand name.", opts:[{t:"Rebrand completely",r:{team:0,cash:-30,rev:-15}},{t:"Fight it — you were first to market",r:{team:0,cash:-40,rev:-5}},{t:"Negotiate a co-existence agreement",r:{team:0,cash:-15,rev:0}}] },
+  { q:"Your customer success team is overwhelmed with support tickets.", opts:[{t:"Hire 3 more support agents",r:{team:3,cash:-30,rev:5}},{t:"Build a self-serve help centre",r:{team:0,cash:-15,rev:8}},{t:"Use AI chatbot for tier-1 support",r:{team:0,cash:-10,rev:10}}] },
+  { q:"A famous YouTuber reviews your product negatively.", opts:[{t:"Reach out privately to address concerns",r:{team:0,cash:-5,rev:8}},{t:"Release a public response video",r:{team:0,cash:-10,rev:5}},{t:"Ignore — they have no sway in B2B",r:{team:0,cash:0,rev:-8}}] },
+  { q:"You can integrate with Salesforce or build your own CRM.", opts:[{t:"Integrate with Salesforce — faster",r:{team:0,cash:-15,rev:20}},{t:"Build your own — full control",r:{team:0,cash:-40,rev:10}},{t:"Use a cheaper CRM integration",r:{team:0,cash:-8,rev:12}}] },
+  { q:"Your founding team has no diversity in background. Do you?", opts:[{t:"Actively recruit diverse hires",r:{team:3,cash:-25,rev:8}},{t:"Focus on skills only — diversity will come",r:{team:0,cash:0,rev:2}},{t:"Partner with diversity hiring platforms",r:{team:1,cash:-10,rev:5}}] },
+  { q:"A big client wants monthly invoicing instead of prepaid.", opts:[{t:"Allow it — close the deal",r:{team:0,cash:-15,rev:20}},{t:"Require 3-month upfront minimum",r:{team:0,cash:10,rev:12}},{t:"Decline — cash flow is critical",r:{team:0,cash:0,rev:-5}}] },
+  { q:"Your product roadmap is packed — team is burning out.", opts:[{t:"Cut the roadmap in half",r:{team:2,cash:0,rev:-5}},{t:"Hire 4 more engineers urgently",r:{team:4,cash:-50,rev:5}},{t:"Delay non-critical features by 3 months",r:{team:1,cash:0,rev:0}}] },
+  { q:"A B2B SaaS marketplace wants to list your product.", opts:[{t:"List it — free distribution channel",r:{team:0,cash:-5,rev:15}},{t:"Negotiate featured placement",r:{team:0,cash:-15,rev:25}},{t:"Decline — protect direct sales",r:{team:0,cash:0,rev:0}}] },
+  { q:"Your trial conversion rate drops from 25% to 10%. Do you?", opts:[{t:"Add in-app onboarding flows",r:{team:0,cash:-15,rev:12}},{t:"Offer a personal demo to all trial users",r:{team:0,cash:-5,rev:18}},{t:"Extend trial period to 30 days",r:{team:0,cash:-8,rev:10}}] },
+  { q:"You can sponsor a developer open source project.", opts:[{t:"Yes — builds brand among developers",r:{team:1,cash:-10,rev:8}},{t:"No — no direct ROI",r:{team:0,cash:0,rev:0}},{t:"Yes — if they mention us in their docs",r:{team:0,cash:-8,rev:6}}] },
+  { q:"A hacker reports a vulnerability in exchange for a bounty.", opts:[{t:"Pay the bounty and fix the issue",r:{team:0,cash:-10,rev:8}},{t:"Fix it but decline to pay",r:{team:0,cash:0,rev:-5}},{t:"Set up a formal bug bounty programme",r:{team:0,cash:-15,rev:10}}] },
+  { q:"Your top competitor just launched a free plan.", opts:[{t:"Match it with your own free plan",r:{team:0,cash:-10,rev:-5}},{t:"Improve your paid features instead",r:{team:0,cash:-20,rev:10}},{t:"Target their unhappy paid customers",r:{team:0,cash:-10,rev:15}}] },
+  { q:"An angel investor offers $200K but wants a board seat.", opts:[{t:"Accept — money and mentorship",r:{team:0,cash:20,rev:10}},{t:"Counter with advisory role only",r:{team:0,cash:15,rev:5}},{t:"Decline — protect board control",r:{team:0,cash:0,rev:2}}] },
+  { q:"Your app needs a complete UI redesign. Do you?", opts:[{t:"Rebuild from scratch — modern UI",r:{team:0,cash:-30,rev:10}},{t:"Incremental improvements only",r:{team:0,cash:-10,rev:5}},{t:"Hire a UX agency",r:{team:0,cash:-20,rev:12}}] },
+  { q:"A major partnership could bring 500 new users but takes 3 months.", opts:[{t:"Commit fully to the partnership",r:{team:0,cash:-15,rev:20}},{t:"Run it alongside current work",r:{team:0,cash:-5,rev:10}},{t:"Decline — focus on organic growth",r:{team:0,cash:0,rev:5}}] },
+  { q:"Your co-founder wants to launch a second product while scaling the first.", opts:[{t:"Support the new product fully",r:{team:2,cash:-30,rev:5}},{t:"Focus on core product only",r:{team:0,cash:0,rev:15}},{t:"Let them run it as a side experiment",r:{team:1,cash:-10,rev:8}}] },
+  { q:"A Netflix-style subscription tier vs one-time purchase — which to choose?", opts:[{t:"Subscription — predictable MRR",r:{team:0,cash:0,rev:20}},{t:"One-time — easier to sell",r:{team:0,cash:15,rev:5}},{t:"Offer both options",r:{team:0,cash:-5,rev:12}}] },
+  { q:"A potential hire wants equity equal to an early employee.", opts:[{t:"Grant it — they're worth it",r:{team:1,cash:0,rev:10}},{t:"Negotiate down to standard new hire equity",r:{team:0,cash:0,rev:5}},{t:"Decline — sets a bad precedent",r:{team:-1,cash:0,rev:0}}] },
+  { q:"Your sales team closes a deal 40% below standard pricing.", opts:[{t:"Honour it — first big logo matters",r:{team:0,cash:-15,rev:10}},{t:"Renegotiate before signing",r:{team:0,cash:0,rev:5}},{t:"Decline — protect pricing integrity",r:{team:0,cash:0,rev:-5}}] },
+  { q:"Your growth is strong but unit economics are poor. Do you?", opts:[{t:"Raise prices 30% immediately",r:{team:0,cash:20,rev:-10}},{t:"Cut COGS aggressively",r:{team:0,cash:15,rev:0}},{t:"Raise money before fixing economics",r:{team:2,cash:80,rev:5}}] },
+  { q:"A large agency wants a reseller deal. Do you?", opts:[{t:"Yes — 40% revenue share",r:{team:0,cash:0,rev:25}},{t:"Yes — 20% revenue share",r:{team:0,cash:0,rev:15}},{t:"No — direct sales only",r:{team:0,cash:0,rev:0}}] },
+  { q:"Your customer wants a feature that only helps 1% of users.", opts:[{t:"Build it — enterprise contract depends on it",r:{team:0,cash:-20,rev:25}},{t:"Decline politely",r:{team:0,cash:0,rev:0}},{t:"Add to roadmap for next year",r:{team:0,cash:0,rev:5}}] },
+  { q:"You have a chance to be acquired by your top competitor.", opts:[{t:"Sell — team gets rewarded",r:{team:0,cash:300,rev:0}},{t:"Decline — mission not complete",r:{team:2,cash:0,rev:15}},{t:"Counter at 3x their offer",r:{team:0,cash:0,rev:5}}] },
+  { q:"Should you allow a competitor's API to integrate with your product?", opts:[{t:"Yes — users asked for it",r:{team:0,cash:0,rev:10}},{t:"No — protect competitive moat",r:{team:0,cash:0,rev:2}},{t:"Yes — with data sharing agreement",r:{team:0,cash:5,rev:8}}] },
+  { q:"Your startup gets into Y Combinator. Do you?", opts:[{t:"Accept — network is invaluable",r:{team:2,cash:50,rev:15}},{t:"Decline — already growing fast",r:{team:0,cash:0,rev:10}},{t:"Negotiate terms before accepting",r:{team:0,cash:40,rev:12}}] },
+  { q:"A podcast wants to interview your CEO for 2 hours.", opts:[{t:"Do it — great brand storytelling",r:{team:0,cash:-5,rev:10}},{t:"Decline — CEO time is precious",r:{team:0,cash:0,rev:0}},{t:"Do a 30-min version only",r:{team:0,cash:-2,rev:6}}] },
+  { q:"Your NPS is 72 — should you invest more in customer success?", opts:[{t:"Yes — aim for 80+",r:{team:1,cash:-20,rev:12}},{t:"No — focus resources on growth",r:{team:0,cash:0,rev:8}},{t:"Automate CS with AI tools",r:{team:0,cash:-10,rev:10}}] },
+  { q:"A Fortune 500 company wants a pilot before committing.", opts:[{t:"Run a free pilot — big logo worth it",r:{team:0,cash:-10,rev:20}},{t:"Charge for the pilot",r:{team:0,cash:10,rev:15}},{t:"Decline — not scalable",r:{team:0,cash:0,rev:0}}] },
+  { q:"Team morale is low after 6 months of intense sprints.", opts:[{t:"Give the team a week off",r:{team:2,cash:-10,rev:-5}},{t:"Throw a team offsite",r:{team:3,cash:-20,rev:5}},{t:"Hire a chief of staff to manage culture",r:{team:1,cash:-30,rev:5}}] },
+  { q:"Your SaaS app needs SOC 2 certification to close enterprise deals.", opts:[{t:"Get certified — unlock enterprise market",r:{team:0,cash:-40,rev:30}},{t:"Use a compliance automation tool",r:{team:0,cash:-20,rev:25}},{t:"Skip it — focus on SMB for now",r:{team:0,cash:0,rev:5}}] },
+  { q:"You can double your marketing budget or double R&D.", opts:[{t:"Double marketing — growth is the priority",r:{team:0,cash:-30,rev:25}},{t:"Double R&D — product is the moat",r:{team:2,cash:-30,rev:10}},{t:"Split evenly",r:{team:1,cash:-30,rev:15}}] },
+  { q:"A user wants a refund after 3 months of using your product.", opts:[{t:"Refund fully — reputation matters",r:{team:0,cash:-10,rev:0}},{t:"Offer a pro-rated refund",r:{team:0,cash:-5,rev:0}},{t:"Decline per your terms of service",r:{team:0,cash:0,rev:-3}}] },
+  { q:"Your product is accidentally going viral in the wrong market.", opts:[{t:"Pivot to serve this new market",r:{team:0,cash:-20,rev:20}},{t:"Ignore and stay in original market",r:{team:0,cash:0,rev:5}},{t:"Build a separate product for them",r:{team:2,cash:-35,rev:15}}] },
+  { q:"A Series A VC asks for 3 years of financial projections.", opts:[{t:"Build detailed, conservative projections",r:{team:0,cash:-5,rev:5}},{t:"Show bold growth projections",r:{team:0,cash:-5,rev:10}},{t:"Decline to share — negotiate first",r:{team:0,cash:0,rev:0}}] },
+  { q:"A Series A VC asks for 3 years of financial projections.", opts:[{t:"Build detailed, conservative projections",r:{team:0,cash:-5,rev:5}},{t:"Show bold growth projections",r:{team:0,cash:-5,rev:10}},{t:"Decline to share — negotiate first",r:{team:0,cash:0,rev:0}}] },
+  { q:"Your top performer wants to work only 4 days a week.", opts:[{t:"Approve it — retain the talent",r:{team:1,cash:0,rev:5}},{t:"Decline — sets bad precedent",r:{team:-1,cash:0,rev:-5}},{t:"Trial it for 3 months",r:{team:1,cash:0,rev:3}}] },
+  { q:"A major client asks to pay you in equity instead of cash.", opts:[{t:"Accept — potential upside is massive",r:{team:0,cash:-10,rev:5}},{t:"Negotiate a mix of cash and equity",r:{team:0,cash:5,rev:8}},{t:"Decline — you need cash flow",r:{team:0,cash:10,rev:0}}] },
+  { q:"You're considering shutting down a product line that loses money.", opts:[{t:"Shut it down immediately",r:{team:-1,cash:20,rev:-10}},{t:"Give it 3 more months to turn around",r:{team:0,cash:-10,rev:5}},{t:"Spin it off as a separate company",r:{team:0,cash:5,rev:8}}] },
 ];
-let ceoState = {}, ceoShuffledEvents = [];
 function startCEOGame() {
   resetGameAreas('ceoArea');
-  ceoShuffledEvents = shuffleArray(ceoEvents).slice(0, 5);
+  ceoShuffledEvents = getNoRepeatPool('fm_ceo_used', ceoEvents, 5);
   ceoState = { round:0, cash:50, rev:10, team:3 };
   renderCEO();
 }
@@ -4647,12 +4846,23 @@ function answerCEO(i) {
 }
 
 // Habit Streak
+// Auto-clear old habit data so new custom habits load fresh
+(function() {
+  const saved = JSON.parse(localStorage.getItem('fm_habits') || 'null');
+  if (saved) {
+    const newNames = ['🙏 Morning Prayer','🚿 Cold Shower','📖 Read 5 Pages','💪 1 Hour Workout','🎯 Consistency for Your Learning Skill'];
+    const savedNames = (saved.habits || []).map(h => h.name);
+    const isOutdated = !newNames.every(n => savedNames.includes(n));
+    if (isOutdated) localStorage.removeItem('fm_habits');
+  }
+})();
+
 const defaultHabits = [
-  { name:'Morning workout',xp:30,streak:0,done:false },
-  { name:'Read 20 pages',xp:20,streak:0,done:false },
-  { name:'Cold shower',xp:25,streak:0,done:false },
-  { name:'Journal entry',xp:15,streak:0,done:false },
-  { name:'No social media before noon',xp:20,streak:0,done:false }
+  { name:'🙏 Morning Prayer', xp:25, streak:0, done:false },
+  { name:'🚿 Cold Shower', xp:25, streak:0, done:false },
+  { name:'📖 Read 5 Pages', xp:20, streak:0, done:false },
+  { name:'💪 1 Hour Workout', xp:30, streak:0, done:false },
+  { name:'🎯 Consistency for Your Learning Skill', xp:30, streak:0, done:false }
 ];
 function openHabitGame() {
   resetGameAreas('habitArea');
@@ -4791,6 +5001,116 @@ const ALL_QUIZ_QUESTIONS = [
   { q: "What is the '1% better every day' concept?", opts: ["Earning 1% more","Small daily improvements compound into massive results","Reducing work by 1%","A financial rule"], ans: 1, cat: "🔥 Mindset" },
   { q: "What is cognitive load?", opts: ["Computer processing power","Mental effort being used in working memory","Weight of a laptop","Learning speed"], ans: 1, cat: "🔥 Mindset" },
   { q: "What is 'social proof' in psychology?", opts: ["Legal proof","Tendency to follow others' actions in uncertain situations","Social media followers","Academic proof"], ans: 1, cat: "🔥 Mindset" },
+
+  // ── FINANCE PART 2 (20) ──
+  { q: "What does 'asset' mean in finance?", opts: ["A monthly expense","Something owned that has economic value","A type of loan","A government tax"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a liability?", opts: ["An investment account","A financial obligation or debt owed","A type of asset","A savings goal"], ans: 1, cat: "💰 Finance" },
+  { q: "What is 'net income'?", opts: ["Total revenue before costs","Income remaining after all expenses and taxes","Gross salary","Annual bonus"], ans: 1, cat: "💰 Finance" },
+  { q: "What does 'fiscal year' mean?", opts: ["A calendar year only","A 12-month period used for financial reporting","A tax payment date","A government budget cycle only"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a credit card APR?", opts: ["Annual Profit Rate","Annual Percentage Rate — the yearly interest on borrowed money","A penalty fee","A credit limit"], ans: 1, cat: "💰 Finance" },
+  { q: "What is an amortisation?", opts: ["A type of investment","Gradual repayment of a loan through scheduled payments","A penalty for early repayment","A government grant"], ans: 1, cat: "💰 Finance" },
+  { q: "What does 'equity' mean in a home context?", opts: ["The full home price","The portion of the home you actually own (value minus mortgage)","The property tax","The home insurance value"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a fixed interest rate?", opts: ["An interest rate that changes monthly","An interest rate that stays the same throughout the loan period","A rate set by the stock market","A rate based on inflation"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a variable interest rate?", opts: ["A rate that never changes","A rate that fluctuates based on a benchmark like the base rate","A fixed government rate","A promotional introductory rate"], ans: 1, cat: "💰 Finance" },
+  { q: "What is 'debt consolidation'?", opts: ["Adding more debt","Combining multiple debts into a single loan, often at lower interest","Clearing all debt at once","A government debt forgiveness scheme"], ans: 1, cat: "💰 Finance" },
+  { q: "What is the purpose of a budget?", opts: ["To restrict spending only","To plan income and expenses to achieve financial goals","To track only business spending","To avoid paying taxes"], ans: 1, cat: "💰 Finance" },
+  { q: "What is 'passive income'?", opts: ["Income from a part-time job","Income earned with little active effort, e.g. dividends or rent","Government benefits","Salary from employment"], ans: 1, cat: "💰 Finance" },
+  { q: "What does 'overdrawn' mean?", opts: ["Having too much savings","Spending more than your bank account balance — going into negative","A banking error","A credit card bonus"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a 'portfolio' in investing?", opts: ["A folder of documents","The collection of all your investments","A single stock purchase","A savings account"], ans: 1, cat: "💰 Finance" },
+  { q: "What is 'capital' in business?", opts: ["The company headquarters","Money or assets used to start or run a business","Annual profit","Employee salary budget"], ans: 1, cat: "💰 Finance" },
+  { q: "What does 'solvent' mean for a company?", opts: ["A company that is growing","A company able to pay all its debts as they fall due","A company with high profit","A company listed on stock exchange"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a 'cash flow statement'?", opts: ["A list of company assets","A financial report showing cash inflows and outflows over a period","A profit and loss statement","A tax return document"], ans: 1, cat: "💰 Finance" },
+  { q: "What is 'working capital'?", opts: ["Employee wages","Current assets minus current liabilities — measures short-term financial health","Total company equity","Long-term investment funds"], ans: 1, cat: "💰 Finance" },
+  { q: "What is a 'stock market index'?", opts: ["A list of all companies","A measure tracking the performance of a group of stocks","A government bond registry","A daily currency exchange rate"], ans: 1, cat: "💰 Finance" },
+
+  // ── PRODUCTIVITY PART 2 (20) ──
+  { q: "What is 'Parkinson's Law'?", opts: ["A law about motion","Work expands to fill the time available for its completion","A productivity hack","A health principle"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'asynchronous communication' mean?", opts: ["Real-time messaging","Communication where responses don't need to happen immediately","Video calls","In-person meetings"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'decision fatigue'?", opts: ["Being tired from exercise","Declining quality of decisions after making many choices","Fatigue from commuting","Burnout from a job"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is the 'Zeigarnik effect'?", opts: ["A memory technique","The tendency to remember uncompleted tasks better than completed ones","A focus method","A sleep improvement strategy"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is a 'brain dump'?", opts: ["Forgetting everything","Writing down everything on your mind to clear mental clutter","A brainstorming method","A note-taking app"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'scope creep' mean?", opts: ["A software bug","When a project gradually expands beyond its original goals","A type of manager","A time management failure"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'maker's schedule vs manager's schedule'?", opts: ["A business theory","Makers need long uninterrupted blocks; managers work in hourly slots","A shift-work system","A salary structure"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'temptation bundling'?", opts: ["A dieting strategy","Pairing tasks you dislike with things you enjoy to boost motivation","A type of incentive scheme","A financial reward system"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'accountability' in personal productivity?", opts: ["A punishment system","Taking responsibility for your actions and commitments","A group project method","A reporting structure at work"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is a 'kanban board'?", opts: ["A Japanese food dish","A visual workflow tool that tracks tasks through stages like To-Do, Doing, Done","A project budget tool","A team performance review"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'leverage' mean in a productivity context?", opts: ["Taking on debt","Using a small input to produce a disproportionately large output","Delegating all tasks","Working longer hours"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'deliberate practice'?", opts: ["Practising randomly","Focused, structured practice targeting specific weaknesses for skill improvement","Practising every day casually","Following a generic training plan"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is an 'OKR'?", opts: ["A project management software","Objectives and Key Results — a goal-setting framework","A time-tracking method","An HR performance review system"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'psychological safety' in a team?", opts: ["Physical workplace safety","A team environment where members feel safe to take risks and speak up","A mental health diagnosis","A legal HR requirement"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is the purpose of a 'standup meeting'?", opts: ["A meeting with no chairs","A short daily team check-in on progress, plans and blockers","A weekly review session","A client presentation format"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'automating repetitive tasks' achieve?", opts: ["Nothing significant","Frees up human time and reduces errors for tasks done regularly","Makes work more complicated","Eliminates the need for strategy"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'chunking' in learning and productivity?", opts: ["Eating smaller meals","Grouping related information or tasks together to improve memory and efficiency","A data compression method","A workout technique"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is the 'cone of uncertainty' in project planning?", opts: ["A weather forecast tool","The idea that estimates are most inaccurate at the start and improve over time","A risk management diagram","A product roadmap shape"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What does 'active listening' involve?", opts: ["Listening while doing other tasks","Fully concentrating on the speaker, understanding and responding thoughtfully","Nodding during conversations","Listening to music while working"], ans: 1, cat: "🧠 Productivity" },
+  { q: "What is 'time audit'?", opts: ["A financial review","Tracking exactly how you spend your time to identify waste and improve habits","A payroll check","A work contract review"], ans: 1, cat: "🧠 Productivity" },
+
+  // ── TECH PART 2 (20) ──
+  { q: "What is 'open AI' in the context of artificial intelligence?", opts: ["A government AI programme","AI systems whose models and research are made accessible to the public","A paid AI service only","A hardware company"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'latency' mean in tech?", opts: ["Battery life","The delay between a request and the response in a network","Processing speed","File storage size"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'two-factor authentication' (2FA)?", opts: ["Using two passwords","A security process requiring two forms of verification to access an account","A double login screen","Biometric-only login"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a 'server'?", opts: ["A restaurant worker","A computer that provides data or services to other computers over a network","A type of laptop","A programming language"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'bandwidth' mean in tech?", opts: ["The physical size of a cable","The maximum rate of data transfer across a network connection","The number of devices connected","The cost of internet service"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'phishing'?", opts: ["A fishing video game","A cyberattack using fake messages to trick users into revealing sensitive information","A type of malware","A network intrusion method"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'responsive design' mean in web development?", opts: ["Fast loading websites","A website design that adapts to different screen sizes and devices","A colourful website layout","A website with animations"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'machine learning'?", opts: ["Teaching robots to walk","A subset of AI where systems learn from data to improve without explicit programming","Computer hardware assembly","A programming language"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a 'database'?", opts: ["A filing cabinet","An organised collection of structured data stored electronically","A type of spreadsheet","A programming language"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'debugging' mean in programming?", opts: ["Adding new features","Finding and fixing errors or bugs in code","Deleting old code","Writing new software"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'DevOps'?", opts: ["A type of developer job","A set of practices combining software development and IT operations for faster delivery","A project management tool","A coding language"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'dark mode' in apps?", opts: ["A hacker interface","A display setting that uses a dark colour scheme to reduce eye strain","A privacy feature","A night-time only feature"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a 'tech stack'?", opts: ["A pile of computers","The set of technologies used to build and run an application","A developer's salary","A cloud storage plan"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'MVP' stand for in tech product development?", opts: ["Most Valuable Player","Minimum Viable Product — a basic version of a product to test with users","Maximum Version Product","Market Value Proposition"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'natural language processing' (NLP)?", opts: ["A language learning app","AI's ability to understand and generate human language","A programming language","A translation service"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'uptime' in tech services?", opts: ["The time a developer works","The percentage of time a system is operational and accessible","Server cooling time","A backup frequency"], ans: 1, cat: "💻 Tech" },
+  { q: "What is a 'pull request' in software development?", opts: ["A request to delete code","A request to merge code changes into the main codebase for review","A user feedback form","A software deployment command"], ans: 1, cat: "💻 Tech" },
+  { q: "What does 'cache' mean in computing?", opts: ["A hidden file folder","Temporary storage for frequently accessed data to speed up retrieval","A backup drive","A type of cookie"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'A/B testing' in tech?", opts: ["Testing two programming languages","Comparing two versions of something to see which performs better with users","A software security test","A type of database query"], ans: 1, cat: "💻 Tech" },
+  { q: "What is 'technical debt'?", opts: ["Money owed to software vendors","The cost of shortcuts taken in coding that need to be fixed later","A developer loan","Server infrastructure costs"], ans: 1, cat: "💻 Tech" },
+
+  // ── BUSINESS PART 2 (20) ──
+  { q: "What is 'brand equity'?", opts: ["A company's stock value","The commercial value a brand gains from consumer perception and recognition","Total company assets","Marketing budget"], ans: 1, cat: "🏢 Business" },
+  { q: "What does 'B2G' mean?", opts: ["Business to Government","Back to Basics","Business to Generation Z","Brand to Group"], ans: 0, cat: "🏢 Business" },
+  { q: "What is a 'value proposition'?", opts: ["A company's price list","The clear statement of benefits a product/service offers to customers","A sales discount","A business partnership offer"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'market segmentation'?", opts: ["Dividing the stock market","Dividing a broad market into subgroups with similar needs or characteristics","A sales territory map","A competitor analysis method"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'customer lifetime value' (CLV or LTV)?", opts: ["A customer's age","The total revenue a business can expect from a single customer over time","Annual revenue per customer","Number of customer purchases"], ans: 1, cat: "🏢 Business" },
+  { q: "What is an 'elevator pitch'?", opts: ["A speech given in an elevator","A brief, compelling summary of your business delivered in under a minute","A formal investor presentation","A product demo"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'outsourcing'?", opts: ["Expanding your team internally","Hiring an external company or individual to handle work instead of doing it in-house","Selling your company","Moving offices abroad"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a 'blue ocean strategy'?", opts: ["A maritime business","Creating uncontested market space rather than competing in an existing market","A low-cost business model","A global expansion plan"], ans: 1, cat: "🏢 Business" },
+  { q: "What does 'organic growth' mean in business?", opts: ["A farm business growing","Growth achieved through internal efforts like sales and marketing, not acquisitions","A sustainability strategy","Hiring more employees"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'market penetration'?", opts: ["Entering a new market","Increasing market share within an existing market using existing products","A competitor takeover","A pricing strategy"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a 'pain point'?", opts: ["A physical injury at work","A specific problem or frustration experienced by customers that a product solves","A business loss","A HR conflict"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'thought leadership'?", opts: ["Managing a team","Establishing expertise and authority in your field through insightful content and ideas","A management style","A marketing budget strategy"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a 'loss leader'?", opts: ["A failing executive","A product sold below cost to attract customers who then buy other profitable items","A company with no profit","An unpopular product"], ans: 1, cat: "🏢 Business" },
+  { q: "What does 'economies of scale' mean?", opts: ["A small business advantage","Cost advantages gained by increased production — cost per unit falls as output rises","A pricing formula","A government subsidy"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a 'term sheet'?", opts: ["A meeting agenda","A non-binding document outlining the key terms of an investment deal","A signed contract","A product specification document"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'due diligence' in business?", opts: ["A legal punishment","Thorough investigation and research done before signing a deal or making an investment","A daily task list","A financial audit"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'retention marketing'?", opts: ["Hiring marketing staff","Strategies focused on keeping existing customers engaged and loyal","A customer acquisition campaign","A product launch strategy"], ans: 1, cat: "🏢 Business" },
+  { q: "What does 'cash positive' mean for a startup?", opts: ["Having investors","Generating more cash from operations than it spends","Having a large bank loan","Raising a funding round"], ans: 1, cat: "🏢 Business" },
+  { q: "What is a 'content marketing' strategy?", opts: ["Buying advertising space","Creating and sharing valuable content to attract and engage a target audience","A social media paid campaign","A product packaging design"], ans: 1, cat: "🏢 Business" },
+  { q: "What is 'inbound marketing'?", opts: ["Cold calling customers","Attracting customers through valuable content, SEO and experiences they seek out","Paid billboard advertising","Door-to-door sales"], ans: 1, cat: "🏢 Business" },
+
+  // ── MINDSET & HEALTH PART 2 (20) ──
+  { q: "What is 'emotional intelligence' (EQ)?", opts: ["A type of IQ test","The ability to recognise, understand and manage your own and others' emotions","A personality type","A leadership qualification"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'resilience' mean in personal development?", opts: ["Physical strength","The ability to recover quickly from difficulties and adapt to adversity","Avoiding challenges","Being emotionally numb"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'cognitive dissonance'?", opts: ["A learning disability","The mental discomfort of holding two conflicting beliefs or values at the same time","A type of meditation","A decision-making model"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is the 'sunk cost fallacy'?", opts: ["A type of investment loss","Continuing a bad decision because of past investment rather than future value","A budgeting error","A financial penalty"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'gratitude journaling'?", opts: ["A diary of complaints","Regularly writing down things you're grateful for to improve mental well-being","A financial expense tracker","A goal-setting tool only"], ans: 1, cat: "💪 Health" },
+  { q: "What does 'aerobic exercise' do for the body?", opts: ["Only builds muscle","Strengthens the heart and lungs by increasing oxygen intake over sustained effort","Burns no calories","Only improves flexibility"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'anchoring bias'?", opts: ["A sailing technique","Over-relying on the first piece of information received when making decisions","A memory improvement strategy","A negotiation tactic only"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'intermittent fasting'?", opts: ["Eating very little food","Cycling between periods of eating and fasting for health and metabolic benefits","A crash diet","Skipping breakfast only"], ans: 1, cat: "💪 Health" },
+  { q: "What is a 'fixed mindset' vs a 'growth mindset'?", opts: ["Fixed is better for success","Fixed believes abilities are set; growth believes abilities can be developed","They are the same","Growth mindset avoids failure"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'cortisol' do in the body?", opts: ["Builds muscle","Released during stress — regulates metabolism, immune response and blood pressure","Controls appetite only","Improves sleep"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'deep breathing' used for?", opts: ["Lung strength training","Activating the parasympathetic system to reduce stress and calm the body","Improving posture","A fitness warm-up only"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'self-discipline'?", opts: ["Punishing yourself for mistakes","The ability to control impulses and stay on course toward long-term goals","Following strict rules set by others","Avoiding all fun activities"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'scarcity mindset' mean?", opts: ["Being financially poor","Believing there is never enough — leads to fear-based decisions and hoarding","A productivity problem","A health condition"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'abundance mindset'?", opts: ["Being wealthy","Believing there is enough for everyone — leads to generosity and collaboration","Spending freely","Avoiding saving money"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What are 'macronutrients'?", opts: ["Tiny food particles","The three main nutrient groups the body needs in large amounts: protein, carbs and fat","Vitamins and minerals","Food additives"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'active recovery' in fitness?", opts: ["Rest with no movement","Low-intensity movement on rest days to reduce soreness and aid recovery","High-intensity training every day","Stretching only before exercise"], ans: 1, cat: "💪 Health" },
+  { q: "What is the 'placebo effect'?", opts: ["A pharmaceutical side effect","When a patient improves due to belief in a treatment, not the treatment itself","A therapy technique","A medical diagnosis"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'positive self-talk'?", opts: ["Bragging to others","Using encouraging internal dialogue to improve confidence and performance","Complimenting others","Ignoring negative thoughts"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What is 'habit stacking'?", opts: ["Building multiple habits randomly","Linking a new habit to an existing one to make it easier to remember and do","Writing habits on a list","A fitness routine method"], ans: 1, cat: "🔥 Mindset" },
+  { q: "What does 'VO2 max' measure in fitness?", opts: ["Muscle size","The maximum rate of oxygen consumption during intense exercise — a key fitness indicator","Body fat percentage","Resting heart rate"], ans: 1, cat: "💪 Health" },
+  { q: "What is 'compound effect' in personal development?", opts: ["A financial formula","The idea that small consistent actions accumulate into extraordinary results over time","A workout plan","A budgeting method"], ans: 1, cat: "🔥 Mindset" },
 ];
 
 let quizState = {
@@ -4808,7 +5128,7 @@ function getTodayDateStr() {
 
 function getDailyQuestions() {
   const today = getTodayDateStr();
-  const totalQ = ALL_QUIZ_QUESTIONS.length; // 100 questions
+  const totalQ = ALL_QUIZ_QUESTIONS.length; // 200 questions
   const perDay = 10;
   const totalDays = Math.floor(totalQ / perDay); // 10 days before cycle repeats
 
@@ -5036,13 +5356,102 @@ const mmScenarios = [
   { q:"Crypto drops 60% in a month. Do you?", opts:[{t:"Buy as much as possible",outcome:-20},{t:"Small allocation (5% portfolio)",outcome:8},{t:"Avoid entirely",outcome:2},{t:"Short it",outcome:10}], best:1 },
   { q:"Interest rates are at 0%. Where do you invest?", opts:[{t:"Savings account",outcome:-2},{t:"Real estate & equities",outcome:12},{t:"Bonds",outcome:1},{t:"Cash",outcome:-3}], best:1 },
   { q:"A major company you own announces a stock split. You?", opts:[{t:"Sell immediately before split",outcome:-5},{t:"Hold — fundamentals unchanged",outcome:8},{t:"Buy more before split",outcome:6},{t:"Sell half",outcome:3}], best:1 },
+  { q:"Oil prices surge 50% due to geopolitical crisis.", opts:[{t:"Buy energy stocks",outcome:15},{t:"Sell all energy holdings",outcome:-10},{t:"Buy airline stocks",outcome:-12},{t:"Hold steady",outcome:2}], best:0 },
+  { q:"A blue-chip company cuts its dividend for the first time.", opts:[{t:"Sell immediately",outcome:-5},{t:"Investigate the reason first",outcome:8},{t:"Buy more at lower price",outcome:3},{t:"Hold and wait",outcome:5}], best:1 },
+  { q:"Your portfolio is 100% stocks. You're retiring in 2 years.", opts:[{t:"Keep all stocks for max return",outcome:-15},{t:"Shift 60% to bonds/cash",outcome:8},{t:"Sell everything now",outcome:3},{t:"Buy more stocks",outcome:-20}], best:1 },
+  { q:"A famous investor announces they're buying a company you own.", opts:[{t:"Buy more immediately",outcome:-5},{t:"Hold what you have",outcome:6},{t:"Sell on the news spike",outcome:10},{t:"Ignore — stick to your plan",outcome:8}], best:2 },
+  { q:"GDP shrinks for two consecutive quarters. You?", opts:[{t:"Sell all equities",outcome:-5},{t:"Buy consumer staples",outcome:10},{t:"Short cyclical stocks",outcome:8},{t:"Do nothing",outcome:3}], best:1 },
+  { q:"A company you own misses earnings by 2% but raises guidance.", opts:[{t:"Sell on the miss",outcome:-8},{t:"Hold or add — guidance is positive",outcome:12},{t:"Wait a month then decide",outcome:5},{t:"Short sell it",outcome:-10}], best:1 },
+  { q:"Your portfolio dropped 15% this year. You?", opts:[{t:"Panic sell everything",outcome:-10},{t:"Rebalance calmly",outcome:8},{t:"Double down on losers",outcome:-5},{t:"Invest more cash now",outcome:12}], best:3 },
+  { q:"A country you invest in has a surprise election upset.", opts:[{t:"Exit all positions in that country",outcome:-5},{t:"Hold — short-term noise",outcome:6},{t:"Buy more on the dip",outcome:8},{t:"Hedge with currency ETF",outcome:5}], best:2 },
+  { q:"Tech sector P/E averages hit 50x. You?", opts:[{t:"Go all-in on tech",outcome:-15},{t:"Trim tech, rotate to value",outcome:10},{t:"Hold steady",outcome:4},{t:"Avoid markets entirely",outcome:-5}], best:1 },
+  { q:"A hot meme stock is up 400% this week on Reddit.", opts:[{t:"Buy in — ride the wave",outcome:-25},{t:"Short it",outcome:15},{t:"Ignore it entirely",outcome:5},{t:"Small speculation, 1% portfolio",outcome:3}], best:1 },
+  { q:"Bond yields hit 6%. What do you do with your savings?", opts:[{t:"Buy 10-year treasuries",outcome:8},{t:"Stay in stocks",outcome:3},{t:"Move to high-yield savings",outcome:6},{t:"Buy gold instead",outcome:2}], best:0 },
+  { q:"A pharma company announces a breakthrough drug trial.", opts:[{t:"Buy heavily before news spreads",outcome:20},{t:"Wait for FDA approval",outcome:10},{t:"Ignore biotech — too risky",outcome:0},{t:"Short competing companies",outcome:8}], best:0 },
+  { q:"The US dollar strengthens significantly vs all currencies.", opts:[{t:"Buy international stocks",outcome:-8},{t:"Sell international, focus on US",outcome:8},{t:"Buy USD-hedged ETFs",outcome:6},{t:"Do nothing",outcome:3}], best:1 },
+  { q:"You have $10,000 windfall to invest. Market is at all-time high.", opts:[{t:"Invest it all today",outcome:5},{t:"Dollar cost average over 12 months",outcome:8},{t:"Wait for a crash",outcome:-3},{t:"Half now, half in 6 months",outcome:7}], best:1 },
+  { q:"A company in your portfolio is being investigated for fraud.", opts:[{t:"Hold — innocent until proven guilty",outcome:-20},{t:"Sell immediately",outcome:5},{t:"Short it",outcome:15},{t:"Wait for official news",outcome:-10}], best:2 },
+  { q:"Unemployment hits record lows. Markets are euphoric. You?", opts:[{t:"Buy everything — economy is great",outcome:-8},{t:"Take some profits off the table",outcome:10},{t:"Stay the course with current allocation",outcome:6},{t:"Move to all cash",outcome:-3}], best:1 },
+  { q:"Real estate prices drop 20% in your city.", opts:[{t:"Buy an investment property now",outcome:12},{t:"Wait for further drops",outcome:5},{t:"Avoid real estate entirely",outcome:2},{t:"Sell any REITs you hold",outcome:-5}], best:0 },
+  { q:"A stock you own is up 200% in 18 months. What now?", opts:[{t:"Hold — it can keep going",outcome:-10},{t:"Sell all and bank the gains",outcome:8},{t:"Sell 50% and let rest ride",outcome:12},{t:"Add more",outcome:-8}], best:2 },
+  { q:"Stagflation hits — high inflation + low growth. You?", opts:[{t:"Buy growth stocks",outcome:-15},{t:"Buy commodities & value stocks",outcome:10},{t:"Go to cash",outcome:-3},{t:"Buy real estate",outcome:7}], best:1 },
+  { q:"A mega-merger between two companies you own is announced.", opts:[{t:"Sell both before merger completes",outcome:-5},{t:"Hold both",outcome:10},{t:"Buy more of the target company",outcome:12},{t:"Short the acquirer",outcome:3}], best:2 },
+  { q:"Emerging markets drop 25% on currency crisis. You?", opts:[{t:"Avoid emerging markets forever",outcome:-5},{t:"Buy gradually — long-term opportunity",outcome:12},{t:"Wait 1 year then decide",outcome:6},{t:"Short emerging market ETF",outcome:8}], best:1 },
+  { q:"A 'sure thing' private investment opportunity arrives via email.", opts:[{t:"Invest $5,000",outcome:-100},{t:"Investigate thoroughly first",outcome:0},{t:"Ignore it — likely a scam",outcome:5},{t:"Forward to financial advisor",outcome:2}], best:2 },
+  { q:"Tax-loss harvesting season. You have some big losers.", opts:[{t:"Ignore taxes, focus on returns",outcome:-5},{t:"Sell losers to offset gains",outcome:8},{t:"Sell everything at a loss",outcome:-10},{t:"Buy more of your losers",outcome:-3}], best:1 },
+  { q:"A pandemic causes markets to crash 35% in 3 weeks.", opts:[{t:"Sell all equities",outcome:-15},{t:"Buy index funds aggressively",outcome:20},{t:"Do nothing — stay the course",outcome:12},{t:"Short markets",outcome:5}], best:1 },
+  { q:"Central banks worldwide start buying Bitcoin. You?", opts:[{t:"Go 50% Bitcoin",outcome:-15},{t:"Add 5% crypto to portfolio",outcome:8},{t:"Ignore — stick to traditional assets",outcome:3},{t:"Short Bitcoin",outcome:-20}], best:1 },
+  { q:"Your financial advisor recommends a product with high commissions.", opts:[{t:"Follow their advice",outcome:-8},{t:"Research it independently first",outcome:8},{t:"Switch advisors",outcome:5},{t:"Ask for a fee-only advisor",outcome:10}], best:3 },
+  { q:"Dividend stocks you own cut payouts due to economic stress.", opts:[{t:"Sell all dividend stocks",outcome:-8},{t:"Hold if company fundamentals are sound",outcome:8},{t:"Buy more at the lower price",outcome:5},{t:"Reinvest dividends elsewhere",outcome:6}], best:1 },
+  { q:"You are offered access to a hedge fund with 30% annual returns.", opts:[{t:"Invest your savings immediately",outcome:-100},{t:"Request audited performance records",outcome:5},{t:"Politely decline",outcome:8},{t:"Invest a small test amount",outcome:-20}], best:2 },
+  { q:"Retail sales surge 15% — consumer confidence is high. You?", opts:[{t:"Buy consumer discretionary stocks",outcome:10},{t:"Sell bonds for more equities",outcome:8},{t:"Do nothing",outcome:3},{t:"Buy defensive stocks",outcome:-3}], best:0 },
+  { q:"Your net worth is now 80% in your employer's company stock.", opts:[{t:"Keep it — you believe in the company",outcome:-20},{t:"Diversify immediately",outcome:12},{t:"Sell half and diversify",outcome:10},{t:"Buy even more",outcome:-25}], best:1 },
+  { q:"A country's central bank cuts rates to near zero. You?", opts:[{t:"Load up on bonds",outcome:-5},{t:"Shift to equities and real assets",outcome:12},{t:"Do nothing",outcome:2},{t:"Buy gold as hedge",outcome:6}], best:1 },
+  { q:"Your stock portfolio is down 40% from its peak. You?", opts:[{t:"Sell everything to stop the bleeding",outcome:-10},{t:"Hold and keep investing monthly",outcome:15},{t:"Sell half and hold rest",outcome:8},{t:"Borrow to buy more",outcome:-15}], best:1 },
+  { q:"A company you've been watching drops 20% after earnings miss.", opts:[{t:"Buy — the drop is overdone",outcome:10},{t:"Wait to see if it falls further",outcome:5},{t:"Avoid — bad fundamentals",outcome:8},{t:"Short it further",outcome:-5}], best:0 },
+  { q:"You have 30 years until retirement. How do you invest?", opts:[{t:"100% bonds for safety",outcome:-10},{t:"90% equities, 10% bonds",outcome:15},{t:"50/50 equities and bonds",outcome:5},{t:"100% cash — play it safe",outcome:-15}], best:1 },
+  { q:"A stock you own is halted due to a trading scandal.", opts:[{t:"Sell immediately when trading resumes",outcome:5},{t:"Wait for full investigation",outcome:-5},{t:"Hold — it'll recover",outcome:-15},{t:"Short it before the halt lifts",outcome:8}], best:0 },
+  { q:"The housing market is booming. You want in. Do you?", opts:[{t:"Buy an investment property at peak",outcome:-10},{t:"Buy REITs for lower cost exposure",outcome:8},{t:"Wait for a pullback",outcome:6},{t:"Avoid housing entirely",outcome:2}], best:1 },
+  { q:"A tech giant is rumoured to acquire a small cap you own.", opts:[{t:"Buy more on the rumour",outcome:-5},{t:"Hold what you have",outcome:10},{t:"Sell on the news if it pops",outcome:12},{t:"Ignore rumours entirely",outcome:5}], best:2 },
+  { q:"Global supply chain crisis causes commodity prices to spike.", opts:[{t:"Buy commodity ETFs",outcome:12},{t:"Short consumer goods companies",outcome:8},{t:"Do nothing",outcome:2},{t:"Buy tech stocks — unaffected",outcome:-5}], best:0 },
+  { q:"A central bank unexpectedly pauses rate hikes. Markets surge.", opts:[{t:"Buy aggressively into the surge",outcome:-5},{t:"Rebalance and take partial profits",outcome:10},{t:"Ignore — stay the course",outcome:6},{t:"Short the surge",outcome:-15}], best:1 },
+  { q:"You inherit ₹10 lakh. What's the wisest move?", opts:[{t:"Put it all in a single hot stock",outcome:-15},{t:"Diversify across index funds and FDs",outcome:12},{t:"Keep it all in savings account",outcome:-3},{t:"Invest in crypto only",outcome:-20}], best:1 },
+  { q:"Your SIP mutual fund has underperformed the index for 3 years.", opts:[{t:"Redeem and switch to index fund",outcome:10},{t:"Give it 2 more years",outcome:3},{t:"Add more to it — average down",outcome:-5},{t:"Stop SIP and hold cash",outcome:-8}], best:0 },
+  { q:"A large conglomerate splits into two separate companies.", opts:[{t:"Sell both parts immediately",outcome:-5},{t:"Keep both — spinoffs often outperform",outcome:10},{t:"Keep the core company only",outcome:6},{t:"Short the weaker spinoff",outcome:5}], best:1 },
+  { q:"You find a stock with a P/E of 4 and strong cash flows.", opts:[{t:"Invest heavily — it's a bargain",outcome:12},{t:"Investigate why it's so cheap first",outcome:15},{t:"Avoid — low P/E means trouble",outcome:-5},{t:"Buy a small position only",outcome:8}], best:1 },
+  { q:"Tensions rise between two major trading nations. Markets dip.", opts:[{t:"Panic sell all international holdings",outcome:-10},{t:"Stay calm and hold diversified portfolio",outcome:8},{t:"Buy defence and energy stocks",outcome:10},{t:"Move entirely to gold",outcome:3}], best:2 },
+  { q:"Your index fund charges 1.5% expense ratio. Is that too high?", opts:[{t:"No, all funds charge that",outcome:-8},{t:"Yes, switch to a 0.1% fund",outcome:10},{t:"It depends on performance",outcome:2},{t:"Pay more for active management",outcome:-5}], best:1 },
+  { q:"Interest rates are rising fast. You hold long-duration bonds.", opts:[{t:"Hold — bonds are always safe",outcome:-15},{t:"Switch to short-duration bonds",outcome:8},{t:"Sell all bonds, move to equities",outcome:5},{t:"Buy more long-duration bonds",outcome:-20}], best:1 },
+  { q:"A startup you invested in early is now valued at 100x your entry.", opts:[{t:"Hold — it could go 100x more",outcome:-10},{t:"Sell all and diversify the gains",outcome:8},{t:"Sell 75%, hold 25% for upside",outcome:12},{t:"Add more at the new valuation",outcome:-15}], best:2 },
+  { q:"Your equity portfolio has beaten the market for 3 years. Do you?", opts:[{t:"Invest more aggressively",outcome:-5},{t:"Stay disciplined with same strategy",outcome:10},{t:"Reduce risk — lock in gains",outcome:6},{t:"Switch to active trading",outcome:-8}], best:1 },
+  { q:"A financial influencer says to go all in on one sector. Do you?", opts:[{t:"Follow their advice — they're popular",outcome:-15},{t:"Do your own research first",outcome:8},{t:"Ignore it",outcome:5},{t:"Invest 5% speculatively",outcome:3}], best:1 },
+  { q:"Inflation falls back to 2%. What does that signal for your portfolio?", opts:[{t:"Sell bonds — bad for fixed income",outcome:-5},{t:"Good for growth stocks — rotate to equities",outcome:10},{t:"Move to commodities",outcome:-3},{t:"Do nothing",outcome:5}], best:1 },
+  { q:"A company announces a massive share buyback programme.", opts:[{t:"Sell — company has no better use of cash",outcome:-5},{t:"Buy — buybacks signal confidence and boost EPS",outcome:12},{t:"Hold what you have",outcome:8},{t:"Short it — they're wasting money",outcome:-10}], best:1 },
+  { q:"You've made 60% returns this year. Year end is near. Do you?", opts:[{t:"Keep all positions open",outcome:3},{t:"Lock in profits and rebalance",outcome:10},{t:"Sell all and restart next year",outcome:5},{t:"Go double or nothing",outcome:-15}], best:1 },
+  { q:"The government announces a windfall tax on energy companies you hold.", opts:[{t:"Sell energy holdings immediately",outcome:5},{t:"Hold — temporary measure",outcome:6},{t:"Buy more — overreaction by market",outcome:3},{t:"Short energy sector broadly",outcome:-5}], best:1 },
+  { q:"You discover your portfolio has zero international exposure.", opts:[{t:"That's fine — home bias is safe",outcome:-5},{t:"Add 20-30% international for diversification",outcome:10},{t:"Go 80% international immediately",outcome:-8},{t:"Add only emerging markets",outcome:3}], best:1 },
+  { q:"A country you invest in is hit by a major natural disaster.", opts:[{t:"Sell all holdings in that country",outcome:-5},{t:"Hold — markets recover long-term",outcome:8},{t:"Buy infrastructure and rebuild stocks",outcome:10},{t:"Avoid that country forever",outcome:-3}], best:2 },
+  { q:"Your friend made 200% on a penny stock and tells you to buy.", opts:[{t:"Buy immediately — FOMO is real",outcome:-30},{t:"Research it thoroughly before buying",outcome:5},{t:"Ignore it — penny stocks are gambling",outcome:8},{t:"Invest 2% speculatively",outcome:2}], best:2 },
+  { q:"Central banks start selling gold reserves. What do you do?", opts:[{t:"Buy gold — contrarian opportunity",outcome:5},{t:"Sell gold — supply is increasing",outcome:8},{t:"Hold current gold allocation",outcome:6},{t:"Avoid gold entirely",outcome:2}], best:1 },
+  { q:"The yield on 2-year bonds exceeds 10-year bonds (inverted curve).", opts:[{t:"Buy long-duration bonds aggressively",outcome:-5},{t:"Reduce equity exposure cautiously",outcome:8},{t:"Ignore — curves don't predict anything",outcome:-5},{t:"Short the stock market",outcome:3}], best:1 },
+  { q:"A company in your portfolio announces a CEO change unexpectedly.", opts:[{t:"Sell immediately",outcome:-5},{t:"Research the new CEO before deciding",outcome:10},{t:"Buy more — change can be positive",outcome:5},{t:"Hold steady",outcome:6}], best:1 },
+  { q:"You find out a stock you bought has very low trading volume.", opts:[{t:"That's fine — fundamentals matter more",outcome:-5},{t:"Be cautious — low liquidity means hard to sell",outcome:8},{t:"Buy more — hidden gem",outcome:-10},{t:"Sell immediately",outcome:3}], best:1 },
+  { q:"An earnings call reveals a company you own is facing a class action lawsuit.", opts:[{t:"Hold — lawsuits rarely go anywhere",outcome:-10},{t:"Sell 50% immediately",outcome:8},{t:"Sell all — legal risk is serious",outcome:5},{t:"Buy more on the dip",outcome:-15}], best:1 },
+  { q:"You want to invest but the market feels expensive. Do you?", opts:[{t:"Wait for a crash",outcome:-5},{t:"Invest steadily via SIP regardless",outcome:10},{t:"Put it all in cash",outcome:-8},{t:"Try to time the market",outcome:-3}], best:1 },
+  { q:"A stock you watch has been sideways for 2 years. Do you invest?", opts:[{t:"No — momentum is everything",outcome:-5},{t:"Research whether value is building up",outcome:8},{t:"Buy — it has nowhere to go but up",outcome:3},{t:"Short it — it's going down eventually",outcome:-8}], best:1 },
+  { q:"Your bond portfolio loses 12% as rates rise sharply.", opts:[{t:"Sell all bonds — they're broken",outcome:-8},{t:"Hold — rates will normalise over time",outcome:8},{t:"Buy more bonds as prices fell",outcome:5},{t:"Shift entirely to equities",outcome:3}], best:1 },
+  { q:"A fintech disrupts traditional banking. Do you invest?", opts:[{t:"Buy the fintech — disruption wins",outcome:10},{t:"Sell your bank stocks immediately",outcome:-5},{t:"Buy both fintech and bank stocks",outcome:6},{t:"Avoid financial sector entirely",outcome:-3}], best:0 },
+  { q:"Climate regulations tighten globally. Your portfolio has oil stocks.", opts:[{t:"Hold — oil demand won't disappear overnight",outcome:3},{t:"Rotate slowly into clean energy ETFs",outcome:10},{t:"Sell all oil stocks immediately",outcome:-5},{t:"Buy more oil — regulations will fail",outcome:-8}], best:1 },
+  { q:"You're 25 years old. What's your best long-term investment strategy?", opts:[{t:"100% bonds — safe and steady",outcome:-15},{t:"90% global equities, 10% bonds",outcome:18},{t:"50% cash, 50% stocks",outcome:2},{t:"100% crypto — high risk high reward",outcome:-20}], best:1 },
+  { q:"A massive corporate scandal hits a company that leads your index fund.", opts:[{t:"Sell your index fund",outcome:-8},{t:"Hold — one company is small part of index",outcome:10},{t:"Buy more of the index on the dip",outcome:8},{t:"Switch to actively managed funds",outcome:-3}], best:1 },
+  { q:"You have a 6-month cash buffer. Should you invest excess cash?", opts:[{t:"No — keep accumulating cash",outcome:-5},{t:"Yes — invest monthly into diversified assets",outcome:12},{t:"Put it all in one stock",outcome:-10},{t:"Buy gold and hold",outcome:3}], best:1 },
+  { q:"A company offers 12% annual returns on a 'guaranteed' fixed deposit.", opts:[{t:"Invest — guaranteed returns are rare",outcome:-20},{t:"Research the company's credibility first",outcome:8},{t:"Decline — too good to be true",outcome:10},{t:"Invest half cautiously",outcome:-10}], best:2 },
+  { q:"Your mutual fund manager keeps changing year after year.", opts:[{t:"That's normal — funds manage themselves",outcome:-5},{t:"Consider switching to an index fund",outcome:10},{t:"Invest more with the fund",outcome:-8},{t:"Withdraw and keep cash",outcome:-3}], best:1 },
+  { q:"A war breaks out in a region that produces 20% of global oil.", opts:[{t:"Buy oil futures and energy stocks",outcome:15},{t:"Sell everything — uncertainty is bad",outcome:-10},{t:"Buy gold and defence stocks",outcome:10},{t:"Do nothing — wars are short",outcome:2}], best:0 },
+  { q:"You've been investing for 10 years but never reviewed your portfolio.", opts:[{t:"No need — set it and forget it is fine",outcome:-5},{t:"Review and rebalance to target allocation",outcome:12},{t:"Sell everything and start over",outcome:-8},{t:"Add more without reviewing",outcome:-3}], best:1 },
+  { q:"A new government wants to tax capital gains at 40%.", opts:[{t:"Sell all investments before it passes",outcome:-10},{t:"Restructure into tax-efficient wrappers",outcome:10},{t:"Do nothing — laws may not pass",outcome:3},{t:"Move assets offshore",outcome:-5}], best:1 },
+  { q:"Your savings account earns 3% but inflation is 6%. Do you?", opts:[{t:"Keep savings there — it's safe",outcome:-8},{t:"Move to inflation-beating investments",outcome:12},{t:"Spend the money before it loses value",outcome:-15},{t:"Fix in a 1-year FD",outcome:2}], best:1 },
+  { q:"Two companies in your portfolio announce a merger. You?", opts:[{t:"Sell the acquirer — mergers are expensive",outcome:5},{t:"Hold both — synergies create value",outcome:8},{t:"Buy more of the target for the premium",outcome:12},{t:"Short both — mergers fail often",outcome:-5}], best:2 },
+  { q:"A major social media company loses 30% of users in one quarter.", opts:[{t:"Buy the dip — it'll recover",outcome:-10},{t:"Sell — user loss is existential",outcome:8},{t:"Hold and wait for turnaround plan",outcome:3},{t:"Short it further",outcome:10}], best:3 },
+  { q:"You read that 90% of active fund managers underperform their index.", opts:[{t:"Keep your actively managed funds",outcome:-5},{t:"Switch to low-cost index funds",outcome:12},{t:"Try to find the top 10% of managers",outcome:3},{t:"Do your own stock picking",outcome:-3}], best:1 },
+  { q:"Gold hits all-time highs. Do you buy?", opts:[{t:"Yes — momentum is strong",outcome:-5},{t:"No — buying at peak is risky",outcome:8},{t:"Sell gold you already own",outcome:6},{t:"Buy more as inflation hedge",outcome:3}], best:1 },
+  { q:"A company reports record profits but guides lower for next quarter.", opts:[{t:"Sell — guidance is what matters",outcome:8},{t:"Buy — record profits are great",outcome:-5},{t:"Hold and reassess next quarter",outcome:6},{t:"Short it",outcome:5}], best:0 },
+  { q:"You want to invest in individual stocks but don't know where to start.", opts:[{t:"Pick the most hyped stocks on social media",outcome:-20},{t:"Start with broad index funds first",outcome:12},{t:"Ask a friend for hot tips",outcome:-15},{t:"Buy the cheapest stocks available",outcome:-10}], best:1 },
+  { q:"A country devalues its currency by 20% overnight.", opts:[{t:"Buy their stocks — they're cheaper now",outcome:-5},{t:"Avoid or exit positions in that country",outcome:8},{t:"Buy their export companies",outcome:10},{t:"Short their currency",outcome:8}], best:2 },
+  { q:"Interest rates are expected to fall next year. You?", opts:[{t:"Buy long-duration bonds now",outcome:12},{t:"Stay in short-term bonds",outcome:3},{t:"Sell all bonds",outcome:-8},{t:"Go to 100% cash",outcome:-5}], best:0 },
+  { q:"A major tech company announces it's entering your favourite sector.", opts:[{t:"Sell all stocks in that sector immediately",outcome:-5},{t:"Hold — incumbents often survive disruption",outcome:6},{t:"Buy the tech giant instead",outcome:8},{t:"Short the incumbents",outcome:5}], best:2 },
+  { q:"Your portfolio has beaten inflation by 8% annually for 5 years.", opts:[{t:"Take more risk — you're on a roll",outcome:-8},{t:"Stay the course with proven strategy",outcome:12},{t:"Cash out all gains",outcome:3},{t:"Switch to speculative assets",outcome:-10}], best:1 },
+  { q:"Commodity supercycle begins — raw materials prices surge globally.", opts:[{t:"Buy commodity-heavy ETFs and miners",outcome:15},{t:"Avoid — commodities are volatile",outcome:-3},{t:"Sell consumer goods companies",outcome:5},{t:"Do nothing",outcome:2}], best:0 },
+  { q:"A global chip shortage hits tech companies hard. You?", opts:[{t:"Sell all tech stocks",outcome:-8},{t:"Buy semiconductor manufacturers",outcome:15},{t:"Hold tech — shortage is temporary",outcome:5},{t:"Rotate to non-tech sectors",outcome:6}], best:1 },
+  { q:"You discover you've been paying 2% annual fund fees for 10 years.", opts:[{t:"It's fine — fees are worth it",outcome:-10},{t:"Switch to index funds with 0.1% fees immediately",outcome:12},{t:"Negotiate lower fees with your advisor",outcome:6},{t:"Withdraw all investments",outcome:-5}], best:1 },
+  { q:"A major bank collapses suddenly. Markets panic. You?", opts:[{t:"Sell everything immediately",outcome:-15},{t:"Stay calm — regulators will intervene",outcome:8},{t:"Buy quality financials on the dip",outcome:10},{t:"Move savings to government bonds",outcome:6}], best:2 },
+  { q:"You've never invested before. Where do you start?", opts:[{t:"Try to pick the next big stock",outcome:-15},{t:"Start with a diversified index fund monthly SIP",outcome:12},{t:"Wait until you know more",outcome:-8},{t:"Ask friends for tips",outcome:-10}], best:1 },
 ];
-let mmPortfolio = 10000, mmRound = 0, mmShuffled = [];
 function startMarketMind() {
   resetGameAreas('mmArea');
   mmPortfolio = parseFloat(localStorage.getItem('fm_mm_portfolio')||'10000');
   mmRound = 0;
-  mmShuffled = shuffleArray(mmScenarios).slice(0, 5);
+  mmShuffled = getNoRepeatPool('fm_mm_used', mmScenarios, 5);
   renderMM();
 }
 function renderMM() {
