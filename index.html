@@ -4842,7 +4842,24 @@ function getDailyQuestions() {
   const updatedUsed = [...usedData.indices, ...selected];
   localStorage.setItem(usedKey, JSON.stringify({ indices: updatedUsed, lastReset: usedData.lastReset }));
 
-  return selected.map(i => ALL_QUIZ_QUESTIONS[i]);
+  return selected.map(i => shuffleQuestionOptions(ALL_QUIZ_QUESTIONS[i]));
+}
+
+// Shuffle answer options randomly so correct answer isn't always the same position
+function shuffleQuestionOptions(q) {
+  const opts = [...q.opts];
+  const correctText = opts[q.ans]; // Save the correct answer text
+
+  // Fisher-Yates shuffle
+  for (let i = opts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+
+  // Find new index of the correct answer after shuffle
+  const newAns = opts.indexOf(correctText);
+
+  return { ...q, opts, ans: newAns };
 }
 
 function initQuiz() {
