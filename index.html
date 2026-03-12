@@ -5932,7 +5932,7 @@ function activatePro(paymentId) { activatePlan('pro', paymentId); }
 // ─── FREE PLAN LIMIT CHECKS ──────────────────────────────────
 const FREE_TASK_LIMIT = 5;
 const FREE_GOAL_LIMIT = 5;
-const FREE_CHAT_LIMIT = 50; // 50 free chats per day
+const FREE_CHAT_LIMIT = 25; // 25 free chats per day
 
 function checkTaskLimit() {
   if (isPro()) return true;
