@@ -1030,6 +1030,34 @@ body::before {
 .gen-report-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168,85,247,0.3); }
 .gen-report-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
+/* ── AI LIFE SCORE ── */
+.life-score-card {
+  background: linear-gradient(135deg, rgba(168,85,247,0.08), rgba(91,143,255,0.08));
+  border: 1px solid rgba(168,85,247,0.3);
+  border-radius: var(--r2);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.life-score-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--silver); margin-bottom: 12px; }
+.life-score-big { font-family: 'JetBrains Mono', monospace; font-size: 48px; font-weight: 900; color: var(--gold); text-align: center; line-height: 1; margin-bottom: 4px; }
+.life-score-label { text-align: center; font-size: 12px; color: var(--silver); margin-bottom: 16px; }
+.life-score-bars { display: flex; flex-direction: column; gap: 10px; }
+.ls-bar-row { display: flex; align-items: center; gap: 10px; }
+.ls-bar-name { font-size: 12px; color: var(--text2); width: 140px; flex-shrink: 0; }
+.ls-bar-track { flex: 1; height: 6px; background: var(--line2); border-radius: 4px; overflow: hidden; }
+.ls-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.ls-bar-val { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text2); width: 36px; text-align: right; flex-shrink: 0; }
+/* Weekly report card */
+.weekly-report-card {
+  background: var(--ink3); border: 1px solid var(--line2); border-radius: var(--r2);
+  padding: 18px; margin-bottom: 20px;
+}
+.weekly-report-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--silver); margin-bottom: 12px; }
+.weekly-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.weekly-stat-row:last-child { border-bottom: none; }
+.weekly-stat-label { font-size: 13px; color: var(--text2); }
+.weekly-stat-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: var(--green); }
+
 /* ── EMPTY STATE ── */
 .empty {
   flex: 1; display: flex; flex-direction: column;
@@ -1650,55 +1678,82 @@ body::before {
 
 /* ── PRICING MODAL ── */
 .pricing-modal-overlay {
-  position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:2000;
-  display:none;align-items:center;justify-content:center;padding:20px;
+  position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2000;
+  display:none;align-items:center;justify-content:center;padding:16px;
 }
 .pricing-modal-overlay.show { display:flex; }
 .pricing-modal {
   background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r3);
-  padding:32px 28px;max-width:520px;width:100%;animation:fadeUp 0.3s ease;
-  max-height:90vh;overflow-y:auto;
+  padding:32px 28px;max-width:680px;width:100%;animation:fadeUp 0.3s ease;
+  max-height:92vh;overflow-y:auto;
 }
-.pricing-modal h2 {
-  font-family:'Instrument Serif',serif;font-size:28px;text-align:center;
+.pricing-modal-headline {
+  font-family:'Instrument Serif',serif;font-size:30px;text-align:center;
   margin-bottom:6px;background:linear-gradient(135deg,var(--text),var(--gold));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
-.pricing-modal-sub { text-align:center;color:var(--silver);font-size:14px;margin-bottom:24px; }
-.plans-grid { display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px; }
-@media(max-width:480px){.plans-grid{grid-template-columns:1fr;}}
+.pricing-modal-tagline {
+  text-align:center;color:var(--silver);font-size:14px;margin-bottom:6px;
+}
+.pricing-modal-sub {
+  text-align:center;color:var(--gold);font-size:13px;font-weight:700;
+  margin-bottom:24px;letter-spacing:0.3px;
+}
+.plans-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:20px; }
+@media(max-width:600px){.plans-grid{grid-template-columns:1fr;}}
 .plan-card {
   background:var(--ink3);border:2px solid var(--line2);border-radius:var(--r2);
   padding:20px 16px;text-align:center;transition:all 0.2s;position:relative;
 }
 .plan-card.pro { border-color:var(--gold);background:rgba(245,200,66,0.05); }
+.plan-card.premium { border-color:var(--purple);background:rgba(168,85,247,0.05); }
 .plan-card-badge {
   position:absolute;top:-10px;left:50%;transform:translateX(-50%);
   background:var(--gold);color:var(--ink);font-size:10px;font-weight:800;
   padding:3px 10px;border-radius:20px;white-space:nowrap;letter-spacing:1px;
 }
-.plan-name { font-size:16px;font-weight:800;margin-bottom:8px; }
-.plan-price { font-size:28px;font-weight:900;color:var(--gold);margin-bottom:4px; }
-.plan-price span { font-size:13px;color:var(--silver);font-weight:400; }
-.plan-features { list-style:none;margin:12px 0;text-align:left; }
-.plan-features li { font-size:12px;color:var(--text2);padding:4px 0;display:flex;gap:6px;align-items:flex-start; }
+.plan-card-badge.premium-badge { background:var(--purple); color:#fff; }
+.plan-name { font-size:16px;font-weight:800;margin-bottom:6px; }
+.plan-price { font-size:26px;font-weight:900;color:var(--gold);margin-bottom:2px; }
+.plan-price.purple { color:var(--purple); }
+.plan-price span { font-size:12px;color:var(--silver);font-weight:400; }
+.plan-save { font-size:11px;color:var(--green);font-weight:700;margin-bottom:10px; }
+.plan-features { list-style:none;margin:10px 0;text-align:left; }
+.plan-features li { font-size:12px;color:var(--text2);padding:3px 0;display:flex;gap:6px;align-items:flex-start; }
 .plan-features li .fi { flex-shrink:0; }
 .plan-btn {
-  width:100%;padding:12px;border:none;border-radius:var(--r2);
-  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:14px;
+  width:100%;padding:11px;border:none;border-radius:var(--r2);
+  font-family:'Cabinet Grotesk',sans-serif;font-weight:800;font-size:13px;
   cursor:pointer;transition:all 0.2s;margin-top:8px;
 }
 .plan-btn-free { background:var(--ink2);color:var(--silver);border:1px solid var(--line2); }
 .plan-btn-pro { background:var(--gold);color:var(--ink); }
 .plan-btn-pro:hover { background:var(--gold2);transform:translateY(-2px); }
+.plan-btn-premium { background:linear-gradient(135deg,var(--purple),#7c3aed);color:#fff; }
+.plan-btn-premium:hover { opacity:0.9;transform:translateY(-2px); }
 .plan-close-btn {
   display:block;width:100%;padding:10px;background:transparent;
   border:none;color:var(--silver);font-size:13px;cursor:pointer;margin-top:8px;
 }
+/* Comparison table */
+.compare-table { width:100%;border-collapse:collapse;margin-top:16px;font-size:12px; }
+.compare-table th { padding:8px 10px;text-align:center;color:var(--silver);font-weight:600;border-bottom:1px solid var(--line); }
+.compare-table th:first-child { text-align:left; }
+.compare-table td { padding:7px 10px;text-align:center;border-bottom:1px solid var(--line);color:var(--text2); }
+.compare-table td:first-child { text-align:left;color:var(--text); }
+.compare-table tr:last-child td { border-bottom:none; }
+.compare-table .yes { color:var(--green);font-weight:700; }
+.compare-table .no { color:var(--silver); }
+.compare-section-title { font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--silver);text-align:center;margin:16px 0 8px; }
 /* Plan indicator in topbar */
 .pro-badge {
   background:linear-gradient(135deg,var(--gold),var(--gold2));
   color:var(--ink);font-size:10px;font-weight:800;padding:3px 8px;
+  border-radius:20px;letter-spacing:1px;
+}
+.premium-badge-top {
+  background:linear-gradient(135deg,var(--purple),#7c3aed);
+  color:#fff;font-size:10px;font-weight:800;padding:3px 8px;
   border-radius:20px;letter-spacing:1px;
 }
 .free-badge {
@@ -1759,39 +1814,85 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
 <!-- PRICING MODAL -->
 <div class="pricing-modal-overlay" id="pricingModal">
   <div class="pricing-modal">
-    <h2>Upgrade FlowMind AI</h2>
-    <p class="pricing-modal-sub">Unlock your full productivity potential</p>
+    <div class="pricing-modal-headline">🚀 Upgrade Your Life With AI</div>
+    <p class="pricing-modal-tagline">Your AI partner for productivity, wealth building, and life planning.</p>
+    <p class="pricing-modal-sub">Turn Your Daily Actions Into Wealth &amp; Growth</p>
     <div class="plans-grid">
       <!-- FREE PLAN -->
       <div class="plan-card">
-        <div class="plan-name">Free</div>
+        <div class="plan-name">🟢 Free</div>
         <div class="plan-price">₹0 <span>/month</span></div>
+        <div class="plan-save">&nbsp;</div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> 5 Tasks max</li>
-          <li><span class="fi">✓</span> 5 Goals max</li>
           <li><span class="fi">✓</span> 10 AI chats/day</li>
-          <li><span class="fi">✓</span> 10 Quiz/day</li>
-          <li><span class="fi">✗</span> No Wealth section</li>
-          <li><span class="fi">✗</span> No Cloud Sync</li>
+          <li><span class="fi">✓</span> Basic Daily Planning</li>
+          <li><span class="fi">✓</span> Basic Task Tracking</li>
+          <li><span class="fi">✓</span> Simple Notes</li>
+          <li><span class="fi">✓</span> Daily Quiz (10/day)</li>
+          <li><span class="fi" style="color:var(--silver)">✗</span> No Wealth Strategy</li>
+          <li><span class="fi" style="color:var(--silver)">✗</span> No AI Reports</li>
         </ul>
         <button class="plan-btn plan-btn-free" onclick="closePricing()">Current Plan</button>
       </div>
       <!-- PRO PLAN -->
       <div class="plan-card pro">
-        <div class="plan-card-badge">⚡ POPULAR</div>
-        <div class="plan-name" style="color:var(--gold)">Pro</div>
-        <div class="plan-price">₹600 <span>/month</span></div>
+        <div class="plan-card-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name" style="color:var(--gold)">🔵 Pro</div>
+        <div class="plan-price">₹299 <span>/month</span></div>
+        <div class="plan-save">or ₹199/mo billed yearly · Save 33%</div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> Unlimited Tasks</li>
-          <li><span class="fi">✓</span> Unlimited Goals</li>
-          <li><span class="fi">✓</span> Unlimited AI chats</li>
-          <li><span class="fi">✓</span> Unlimited Quiz</li>
-          <li><span class="fi">✓</span> Wealth section</li>
-          <li><span class="fi">✓</span> Cloud Sync</li>
+          <li><span class="fi">✓</span> Unlimited AI Conversations</li>
+          <li><span class="fi">✓</span> AI Daily Life Planner</li>
+          <li><span class="fi">✓</span> Wealth Growth Suggestions</li>
+          <li><span class="fi">✓</span> Monthly Productivity Report</li>
+          <li><span class="fi">✓</span> Goal Tracking System</li>
+          <li><span class="fi">✓</span> Smart Habit Tracker</li>
+          <li><span class="fi">✓</span> Priority AI Response</li>
         </ul>
-        <button class="plan-btn plan-btn-pro" onclick="startPayment()">Upgrade Now →</button>
+        <button class="plan-btn plan-btn-pro" onclick="startPayment('pro')">Upgrade to Pro →</button>
+      </div>
+      <!-- PREMIUM PLAN -->
+      <div class="plan-card premium">
+        <div class="plan-card-badge premium-badge">🔥 BEST VALUE</div>
+        <div class="plan-name" style="color:var(--purple)">🟡 Premium</div>
+        <div class="plan-price purple">₹699 <span>/month</span></div>
+        <div class="plan-save">or ₹499/mo billed yearly · Save 29%</div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Everything in Pro</li>
+          <li><span class="fi">✓</span> AI Wealth Strategy Planner</li>
+          <li><span class="fi">✓</span> Advanced Monthly Reports</li>
+          <li><span class="fi">✓</span> Personal Growth Dashboard</li>
+          <li><span class="fi">✓</span> AI Decision Assistant</li>
+          <li><span class="fi">✓</span> AI Life Score Tracker</li>
+          <li><span class="fi">✓</span> Early Access to New Features</li>
+        </ul>
+        <button class="plan-btn plan-btn-premium" onclick="startPayment('premium')">Go Premium →</button>
       </div>
     </div>
+
+    <!-- Comparison Table -->
+    <div class="compare-section-title">— Feature Comparison —</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th style="color:var(--gold)">Pro</th>
+          <th style="color:var(--purple)">Premium</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>AI Chat</td><td>10/day</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
+        <tr><td>Daily Planner</td><td class="yes">✔</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>Wealth Strategy</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>Monthly Reports</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>AI Weekly Report</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>AI Decision Assistant</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+        <tr><td>AI Life Score</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+        <tr><td>Early Feature Access</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+      </tbody>
+    </table>
+
     <button class="plan-close-btn" onclick="closePricing()">✕ Maybe later</button>
   </div>
 </div>
@@ -2153,8 +2254,23 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
         </div>
         <div class="report-body">
           <div class="report-date" id="reportDate"></div>
+
+          <!-- AI Life Score -->
+          <div class="life-score-card" id="lifeScoreCard">
+            <div class="life-score-title">⚡ AI Life Score</div>
+            <div class="life-score-big" id="lifeScoreBig">—</div>
+            <div class="life-score-label" id="lifeScoreLabel">Complete tasks, habits &amp; goals to build your score</div>
+            <div class="life-score-bars" id="lifeScoreBars"></div>
+          </div>
+
+          <!-- AI Weekly Report -->
+          <div class="weekly-report-card" id="weeklyReportCard">
+            <div class="weekly-report-title">📅 AI Weekly Snapshot</div>
+            <div id="weeklyReportBody"></div>
+          </div>
+
           <button class="gen-report-btn" id="genReportBtn" onclick="generateReport()">
-            ✨ Generate AI Report
+            ✨ Generate Full AI Report
           </button>
           <div id="reportContent"></div>
         </div>
@@ -2711,6 +2827,10 @@ function switchPanel(name, btn) {
   if (name === 'tasks' || name === 'goals') {
     renderMotivationBanners();
   }
+  if (name === 'report') {
+    renderLifeScore();
+    renderWeeklyReport();
+  }
   if (window.innerWidth <= 680 && document.getElementById('sidebar').classList.contains('open')) {
     toggleSidebar();
   }
@@ -2985,52 +3105,56 @@ async function sendMessage() {
 
   const totalWealth = assets.reduce((s,a) => s + a.value, 0);
   
-  const systemPrompt = `You are FlowMind — ${userName}'s elite personal AI Chief of Staff. You are the sharpest advisor in the room: direct, practical, deeply insightful, and always outcome-focused. You think like a seasoned founder, operator, and strategist — not a corporate chatbot.
+  const systemPrompt = `You are FlowMind — ${userName}'s elite AI Personal Life Operating System. You combine the sharpness of a seasoned founder, the precision of a wealth strategist, and the care of a personal coach. Direct, practical, deeply insightful, always outcome-focused. Never sound like a chatbot.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YOUR LIVE CONTEXT ABOUT ${userName}
+${userName}'s LIVE CONTEXT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Net Worth / Assets: $${totalWealth.toLocaleString()}
-Active Tasks:
+Net Worth / Assets tracked: $${totalWealth.toLocaleString()}
+Active Tasks (${tasks.filter(t=>!t.done).length}):
 ${tasks.filter(t=>!t.done).map(t => `  • [ID:${t.id}] ${t.title}`).join('\n') || '  None active'}
-Completed Tasks:
+Completed Tasks (${tasks.filter(t=>t.done).length}):
 ${tasks.filter(t=>t.done).map(t => `  ✓ [ID:${t.id}] ${t.title}`).join('\n') || '  None yet'}
-Goals:
-${goals.map(g => `  → [ID:${g.id}] ${g.title} — ${g.progress}% complete`).join('\n') || '  No goals yet'}
+Goals (${goals.length}):
+${goals.map(g => `  → [ID:${g.id}] ${g.title} — ${g.progress}% complete`).join('\n') || '  No goals set yet'}
+Plan: ${getUserPlan().toUpperCase()}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YOUR ROLES
+YOUR CORE ROLES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. CHIEF OF STAFF — Daily planning, prioritization, time-blocking, delegation, task triage, follow-up systems.
-2. BUSINESS STRATEGIST — Sales, marketing, pricing, growth loops, competitive positioning, hiring, ops, product decisions.
-3. WEALTH COACH — Cash flow, budgeting, savings strategy, investment frameworks, risk management. Always note: verify major financial/legal decisions with a licensed professional.
-4. DECISION ENGINE — Break down tough calls using First Principles, Pre-Mortem, SWOT, 10/10/10, Opportunity Cost. Surface blind spots and second-order effects.
-5. DOCUMENT & IMAGE ANALYST — Extract insights, red flags, and action items from any file or image shared.
-6. COMMUNICATOR — Drafts for emails, proposals, pitches, negotiations, team feedback, client messages.
+1. AI DAILY LIFE PLANNER — Time-blocking, daily roadmaps, prioritisation, energy management, turning chaos into a clear productivity plan.
+2. AI WEALTH GROWTH ADVISOR — Cash flow, savings strategy, investment frameworks, wealth building habits. Always note: verify major financial/legal decisions with a licensed professional.
+3. PRODUCTIVITY ROADMAP BUILDER — Goal tracking, habit systems, deep work strategies, 90-day sprints, weekly reviews.
+4. BUSINESS & STRATEGY ADVISOR — Sales, marketing, pricing, growth loops, competitive positioning, hiring, product decisions.
+5. DECISION ENGINE — First Principles, Pre-Mortem, SWOT, 10/10/10, Opportunity Cost. Surface blind spots and second-order effects.
+6. DOCUMENT & IMAGE ANALYST — Extract insights, red flags, and action items from any file or image shared.
+7. COMMUNICATOR — Emails, proposals, pitches, negotiations, team feedback, client messages.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 HOW YOU RESPOND
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Structure EVERY response:
-▸ DIRECT ANSWER — 1-3 sentences, no preamble, lead with the point.
+▸ DIRECT ANSWER — Lead with the result/solution in 1-3 sentences. No preamble.
 ▸ KEY INSIGHTS — 3-5 sharp, non-obvious observations tailored to ${userName}'s context.
-▸ ACTION PLAN — Specific, numbered steps. Include timelines when relevant.
+▸ ACTION PLAN — Specific numbered steps with timelines where relevant.
 ▸ RISKS & WATCH-OUTS — What could go wrong? What assumptions need checking?
 
 AUTO-DETECT special requests:
-- "plan my day/week" → Time-blocked schedule + P1/P2/P3 priority matrix
-- "review contract/document" → Obligations, red flags, missing clauses, negotiation points
-- "business idea" → TAM/SOM, moat, go-to-market, 90-day action plan
-- "I'm overwhelmed/stuck" → Rapid triage: what to do now, defer, or drop
+- "plan my day/week" → Time-blocked schedule + P1/P2/P3 priority matrix + energy allocation
+- "wealth" / "money" / "invest" → Practical AI Wealth Growth Suggestions and next steps
+- "review contract/document" → Obligations, red flags, missing clauses, negotiation leverage
+- "business idea" → TAM/SOM, moat analysis, go-to-market, 90-day action plan
+- "I'm overwhelmed/stuck" → Rapid triage: do NOW, defer, or drop entirely
 - "analyze image/file" → Facts first, then interpretation, then recommended action
-- "write email/message" → Draft it. Offer direct + diplomatic versions.
-- "grow revenue" → Break down acquisition, retention, pricing, expansion levers
+- "write email/message" → Draft it immediately. Offer direct + diplomatic versions.
+- "grow revenue" → Acquisition, retention, pricing, and expansion levers
+- "life score" / "how am I doing" → Honest performance review based on tasks, habits, goals
 
-TONE: Direct, honest, warm. Like a brilliant friend who tells you what you need to hear.
-Never say "Great question!" or "Certainly!" — just answer. No filler. No fluff.
+TONE: Direct, honest, warm. Like a brilliant friend who tells you what you need to hear — not what you want to hear.
+Never say "Great question!" or "Certainly!" Just answer. No filler. No fluff.
 Match ${userName}'s energy — quick question = quick answer. Deep question = deep answer.
 Do the math when numbers matter. Show brief working.
-State assumptions when info is missing — don't stall with questions unless critical.
+State assumptions clearly when info is missing — don\'t stall with questions unless truly critical.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 STRICT COMMAND RULES
@@ -3038,10 +3162,10 @@ STRICT COMMAND RULES
 ONLY use these commands when ${userName} EXPLICITLY asks to add/delete a task or goal.
 NEVER auto-add tasks or goals. NEVER suggest adding them unless asked.
 
-To ADD a task: [ADD_TASK: Task Title | category]
-(categories: wealth, strategy, personal, health, general)
+To ADD a task:    [ADD_TASK: Task Title | category]
+  (categories: wealth, strategy, personal, health, general)
 To DELETE a task: [DELETE_TASK: <ID>]
-To ADD a goal: [ADD_GOAL: Goal Title | Description | Progress Number]
+To ADD a goal:    [ADD_GOAL: Goal Title | Description | Progress Number]
 To DELETE a goal: [DELETE_GOAL: <ID>]
 
 ✓ User says "add a task to call my accountant" → [ADD_TASK: Call accountant | wealth]
@@ -5483,19 +5607,115 @@ function answerMM(i) {
 }
 </script>
 <script>
+// ─── AI LIFE SCORE ────────────────────────────────────────────
+function renderLifeScore() {
+  const bigEl    = document.getElementById('lifeScoreBig');
+  const labelEl  = document.getElementById('lifeScoreLabel');
+  const barsEl   = document.getElementById('lifeScoreBars');
+  if (!bigEl) return;
+
+  // Productivity: % of tasks completed today + goal progress
+  const doneTasks    = tasks.filter(t => t.done).length;
+  const totalTasks   = Math.max(tasks.length, 1);
+  const taskScore    = Math.min(100, Math.round((doneTasks / totalTasks) * 100));
+
+  // Goal progress: average across all goals
+  const goalScore = goals.length
+    ? Math.min(100, Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length))
+    : 0;
+
+  // Wealth discipline: based on whether assets are tracked
+  const wealthScore = Math.min(100, Math.round(Math.min(assets.length * 20, 100)));
+
+  // Habit discipline: % of today's habits done
+  const hState = JSON.parse(localStorage.getItem('fm_habits') || 'null');
+  const habitScore = hState
+    ? Math.min(100, Math.round((hState.habits.filter(h => h.done).length / Math.max(hState.habits.length, 1)) * 100))
+    : 0;
+
+  // Learning: quiz activity today
+  const quizCount  = getDailyCount('fm_quiz_count') || 0;
+  const learnScore = Math.min(100, quizCount * 10);
+
+  const overall = Math.round((taskScore + goalScore + wealthScore + habitScore + learnScore) / 5);
+
+  const label = overall >= 85 ? '🏆 Elite Performance' :
+                overall >= 70 ? '🚀 Strong Momentum' :
+                overall >= 50 ? '📈 Building Habits' :
+                overall >= 30 ? '🌱 Just Getting Started' : '💤 Time to Wake Up';
+
+  bigEl.textContent  = overall + '/100';
+  labelEl.textContent = label;
+
+  const bars = [
+    { name: '🧠 Productivity',    score: taskScore,   color: 'var(--blue)'   },
+    { name: '🎯 Goal Progress',   score: goalScore,   color: 'var(--gold)'   },
+    { name: '💰 Wealth Tracking', score: wealthScore, color: 'var(--green)'  },
+    { name: '🔥 Habit Discipline',score: habitScore,  color: 'var(--purple)' },
+    { name: '📚 Learning',        score: learnScore,  color: 'var(--blue)'   },
+  ];
+
+  barsEl.innerHTML = bars.map(b => `
+    <div class="ls-bar-row">
+      <span class="ls-bar-name">${b.name}</span>
+      <div class="ls-bar-track"><div class="ls-bar-fill" style="width:${b.score}%;background:${b.color}"></div></div>
+      <span class="ls-bar-val">${b.score}%</span>
+    </div>`).join('');
+}
+
+// ─── AI WEEKLY REPORT ─────────────────────────────────────────
+function renderWeeklyReport() {
+  const bodyEl = document.getElementById('weeklyReportBody');
+  if (!bodyEl) return;
+
+  const doneTasks    = tasks.filter(t => t.done).length;
+  const totalTasks   = tasks.length;
+  const goalAvg      = goals.length
+    ? Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length)
+    : 0;
+  const hState = JSON.parse(localStorage.getItem('fm_habits') || 'null');
+  const habitsToday  = hState ? hState.habits.filter(h => h.done).length : 0;
+  const maxStreak    = hState ? hState.habits.reduce((m, h) => Math.max(m, h.streak || 0), 0) : 0;
+  const chatCount    = getDailyCount('fm_chat_count') || 0;
+  const quizCount    = getDailyCount('fm_quiz_count') || 0;
+
+  const focusArea    = goalAvg < 40 ? 'goal consistency' :
+                       habitsToday < 3 ? 'daily habits' :
+                       doneTasks < 3   ? 'task completion' : 'wealth tracking';
+
+  const rows = [
+    { label: '✅ Tasks Completed',      val: `${doneTasks} / ${totalTasks}` },
+    { label: '🎯 Average Goal Progress', val: `${goalAvg}%` },
+    { label: '🔥 Habits Done Today',    val: `${habitsToday} / ${hState ? hState.habits.length : 5}` },
+    { label: '🏆 Longest Habit Streak', val: `${maxStreak} days` },
+    { label: '💬 AI Chats Today',       val: `${chatCount}` },
+    { label: '🧠 Quiz Questions Today', val: `${quizCount}` },
+    { label: '🔍 Focus Next:',          val: focusArea },
+  ];
+
+  bodyEl.innerHTML = rows.map(r => `
+    <div class="weekly-stat-row">
+      <span class="weekly-stat-label">${r.label}</span>
+      <span class="weekly-stat-val">${r.val}</span>
+    </div>`).join('');
+}
+
 // ─── PLAN SYSTEM ─────────────────────────────────────────────
-// FREE limits: 5 tasks, 5 goals, 10 AI chats/day, 10 quiz/day, no wealth
-// PRO: unlimited everything + wealth section
-// Razorpay Key — replace with real key when selling
+// FREE: 5 tasks, 5 goals, 10 AI chats/day, 10 quiz/day, no wealth
+// PRO ₹299/mo: unlimited everything + wealth + reports + weekly AI report
+// PREMIUM ₹699/mo: everything in Pro + AI Life Score + Decision Assistant + early access
 const RAZORPAY_KEY = 'rzp_test_YourKeyHere';
-const PRO_AMOUNT = 60000; // ₹600 in paise
+const PRO_AMOUNT    = 29900;   // ₹299 in paise
+const PREMIUM_AMOUNT = 69900;  // ₹699 in paise
 
 function getUserPlan() {
   return localStorage.getItem('fm_plan') || 'free';
 }
-
 function isPro() {
-  return getUserPlan() === 'pro';
+  const p = getUserPlan(); return p === 'pro' || p === 'premium';
+}
+function isPremium() {
+  return getUserPlan() === 'premium';
 }
 
 function getDailyCount(key) {
@@ -5518,7 +5738,13 @@ function updatePlanUI() {
   const wealthLock = document.getElementById('wealthLock');
   if (!badge) return;
 
-  if (isPro()) {
+  if (isPremium()) {
+    badge.textContent = '🔥 PREMIUM';
+    badge.className = 'premium-badge-top';
+    badge.onclick = null;
+    badge.title = 'You are on Premium plan!';
+    if (wealthLock) wealthLock.style.display = 'none';
+  } else if (isPro()) {
     badge.textContent = '⚡ PRO';
     badge.className = 'pro-badge';
     badge.onclick = null;
@@ -5543,59 +5769,53 @@ function closePricing() {
   if (modal) modal.classList.remove('show');
 }
 
-function startPayment() {
+function startPayment(tier) {
+  const amount = tier === 'premium' ? PREMIUM_AMOUNT : PRO_AMOUNT;
+  const label  = tier === 'premium' ? 'Premium' : 'Pro';
+
   if (typeof Razorpay === 'undefined') {
-    // Razorpay not loaded — show demo mode
-    showToast('🎉 Demo Mode: Upgrading to Pro! (Add real Razorpay key to enable payments)');
-    activatePro('demo_' + Date.now());
+    showToast(`🎉 Demo Mode: Upgrading to ${label}! (Add real Razorpay key to enable payments)`);
+    activatePlan(tier, 'demo_' + Date.now());
     closePricing();
     return;
   }
 
   const options = {
     key: RAZORPAY_KEY,
-    amount: PRO_AMOUNT,
+    amount: amount,
     currency: 'INR',
     name: 'FlowMind AI',
-    description: 'Pro Plan - Monthly Subscription',
+    description: `${label} Plan — Monthly Subscription`,
     image: 'https://flowmind-ai-five.vercel.app/favicon.ico',
     handler: function(response) {
-      activatePro(response.razorpay_payment_id);
-      showToast('🎉 Payment successful! Welcome to Pro!');
+      activatePlan(tier, response.razorpay_payment_id);
+      showToast(`🎉 Payment successful! Welcome to ${label}!`);
       closePricing();
     },
     prefill: {
       name: userName || '',
       email: window._fbCurrentUser ? window._fbCurrentUser.email : ''
     },
-    theme: { color: '#f5c842' },
-    modal: {
-      ondismiss: function() {
-        showToast('Payment cancelled.');
-      }
-    }
+    theme: { color: tier === 'premium' ? '#a855f7' : '#f5c842' }
   };
-
-  try {
-    const rzp = new Razorpay(options);
-    rzp.open();
-  } catch(e) {
-    showToast('Payment system error. Contact support.');
-  }
+  new Razorpay(options).open();
 }
 
-function activatePro(paymentId) {
-  localStorage.setItem('fm_plan', 'pro');
+function activatePlan(tier, paymentId) {
+  localStorage.setItem('fm_plan', tier);
   localStorage.setItem('fm_payment_id', paymentId);
   localStorage.setItem('fm_pro_since', new Date().toISOString());
   updatePlanUI();
-  // Save to Firestore if logged in
+  renderLifeScore();
   if (window._fbDb && window._fbCurrentUser) {
     window._fbDb.collection('users').doc(window._fbCurrentUser.uid).update({
-      plan: 'pro', paymentId, proSince: new Date().toISOString()
+      plan: tier, paymentId, proSince: new Date().toISOString()
     }).catch(() => {});
   }
 }
+
+// Keep old activatePro for backward compat
+function activatePro(paymentId) { activatePlan('pro', paymentId); }
 
 // ─── FREE PLAN LIMIT CHECKS ──────────────────────────────────
 const FREE_TASK_LIMIT = 5;
