@@ -5430,6 +5430,8 @@ function answerQuiz(selectedIdx) {
 
   quizState.currentQ++;
   saveQuizState();
+  // Track for Life Score learning bar
+  incrementDailyCount('fm_quiz_count');
 
   setTimeout(() => renderQuiz(), 1500);
 }
@@ -5614,7 +5616,7 @@ function renderLifeScore() {
   const barsEl   = document.getElementById('lifeScoreBars');
   if (!bigEl) return;
 
-  // Productivity: % of tasks completed today + goal progress
+  // Productivity: % of tasks completed
   const doneTasks    = tasks.filter(t => t.done).length;
   const totalTasks   = Math.max(tasks.length, 1);
   const taskScore    = Math.min(100, Math.round((doneTasks / totalTasks) * 100));
@@ -5624,8 +5626,11 @@ function renderLifeScore() {
     ? Math.min(100, Math.round(goals.reduce((s, g) => s + (g.progress || 0), 0) / goals.length))
     : 0;
 
-  // Wealth discipline: based on whether assets are tracked
-  const wealthScore = Math.min(100, Math.round(Math.min(assets.length * 20, 100)));
+  // Wealth: REQUIRES Pro/Premium plan to unlock — free users get 0 with a lock label
+  const planUnlocked = isPro(); // isPro() returns true for both pro and premium
+  const wealthScore = planUnlocked
+    ? Math.min(100, Math.round(Math.min(assets.length * 20, 100)))
+    : 0;
 
   // Habit discipline: % of today's habits done
   const hState = JSON.parse(localStorage.getItem('fm_habits') || 'null');
@@ -5633,7 +5638,7 @@ function renderLifeScore() {
     ? Math.min(100, Math.round((hState.habits.filter(h => h.done).length / Math.max(hState.habits.length, 1)) * 100))
     : 0;
 
-  // Learning: quiz activity today
+  // Learning: based on quiz questions answered today (each answer = +10%, max 100%)
   const quizCount  = getDailyCount('fm_quiz_count') || 0;
   const learnScore = Math.min(100, quizCount * 10);
 
@@ -5648,18 +5653,21 @@ function renderLifeScore() {
   labelEl.textContent = label;
 
   const bars = [
-    { name: '🧠 Productivity',    score: taskScore,   color: 'var(--blue)'   },
-    { name: '🎯 Goal Progress',   score: goalScore,   color: 'var(--gold)'   },
-    { name: '💰 Wealth Tracking', score: wealthScore, color: 'var(--green)'  },
-    { name: '🔥 Habit Discipline',score: habitScore,  color: 'var(--purple)' },
-    { name: '📚 Learning',        score: learnScore,  color: 'var(--blue)'   },
+    { name: '🧠 Productivity',     score: taskScore,   color: 'var(--blue)',   note: '' },
+    { name: '🎯 Goal Progress',    score: goalScore,   color: 'var(--gold)',   note: '' },
+    { name: '💰 Wealth Tracking',  score: wealthScore, color: 'var(--green)',  note: planUnlocked ? '' : '🔒 Upgrade to Pro' },
+    { name: '🔥 Habit Discipline', score: habitScore,  color: 'var(--purple)', note: '' },
+    { name: '📚 Learning',         score: learnScore,  color: 'var(--blue)',   note: quizCount === 0 ? 'Answer quiz questions to grow' : `${quizCount} answered today` },
   ];
 
   barsEl.innerHTML = bars.map(b => `
     <div class="ls-bar-row">
       <span class="ls-bar-name">${b.name}</span>
       <div class="ls-bar-track"><div class="ls-bar-fill" style="width:${b.score}%;background:${b.color}"></div></div>
-      <span class="ls-bar-val">${b.score}%</span>
+      ${b.note
+        ? `<span class="ls-bar-val" style="width:auto;font-size:10px;color:var(--silver);white-space:nowrap;">${b.note}</span>`
+        : `<span class="ls-bar-val">${b.score}%</span>`
+      }
     </div>`).join('');
 }
 
