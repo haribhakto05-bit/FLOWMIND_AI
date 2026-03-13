@@ -1824,7 +1824,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
         <div class="plan-price">₹0 <span>/month</span></div>
         <div class="plan-save">&nbsp;</div>
         <ul class="plan-features">
-          <li><span class="fi">✓</span> 10 AI chats/day</li>
+          <li><span class="fi">✓</span> 25 AI chats/day</li>
           <li><span class="fi">✓</span> Basic Daily Planning</li>
           <li><span class="fi">✓</span> Basic Task Tracking</li>
           <li><span class="fi">✓</span> Simple Notes</li>
@@ -1882,7 +1882,7 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
         </tr>
       </thead>
       <tbody>
-        <tr><td>AI Chat</td><td>10/day</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
+        <tr><td>AI Chat</td><td>25/day</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
         <tr><td>Daily Planner</td><td class="yes">✔</td><td class="yes">✔</td><td class="yes">✔</td></tr>
         <tr><td>Wealth Strategy</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
         <tr><td>Monthly Reports</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
@@ -2339,17 +2339,98 @@ body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient
   </div>
 </div>
 
-<!-- ── LIMIT REACHED OVERLAY ── -->
-<div id="limitOverlay" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(13,13,18,0.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;">
-  <div style="background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r3);padding:40px 36px;max-width:400px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,0.6);animation:fadeUp 0.4s ease;">
-    <div style="font-size:48px;margin-bottom:16px;">🔒</div>
-    <div style="font-family:'Instrument Serif',serif;font-size:24px;margin-bottom:8px;background:linear-gradient(135deg,var(--text) 40%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Daily Limit Reached</div>
-    <div style="color:var(--silver);font-size:14px;line-height:1.7;margin-bottom:28px;" id="limitOverlayMsg">You've used all <strong style="color:var(--text)">10 free AI chats</strong> for today.<br>Your limit resets at midnight. Upgrade for unlimited access.</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <button onclick="openPricing();closeLimitOverlay();" style="background:var(--gold);color:var(--ink);border:none;border-radius:var(--r2);padding:14px 24px;font-family:'Cabinet Grotesk',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all 0.2s;">⚡ Upgrade to Pro — Unlimited Chats</button>
-      <button onclick="newChat();closeLimitOverlay();" style="background:transparent;color:var(--text2);border:1px solid var(--line2);border-radius:var(--r2);padding:12px 24px;font-family:'Cabinet Grotesk',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;">✏️ Start New Chat (resets tomorrow)</button>
-      <div style="font-size:11px;color:var(--silver);margin-top:4px;" id="limitResetTimer"></div>
+<!-- ── LIMIT REACHED OVERLAY (with full pricing) ── -->
+<div id="limitOverlay" style="display:none;position:fixed;inset:0;z-index:2500;background:rgba(0,0,0,0.88);backdrop-filter:blur(14px);align-items:flex-start;justify-content:center;overflow-y:auto;padding:20px 16px;">
+  <div style="background:var(--ink2);border:1px solid var(--line2);border-radius:var(--r3);padding:32px 28px;max-width:680px;width:100%;animation:fadeUp 0.4s ease;margin:auto;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:44px;margin-bottom:12px;">🔒</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:28px;margin-bottom:6px;background:linear-gradient(135deg,var(--text) 40%,var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Daily Limit Reached</div>
+      <div style="color:var(--silver);font-size:14px;line-height:1.7;">You've used all <strong style="color:var(--text)">25 free AI chats</strong> for today.</div>
+      <div style="margin-top:10px;display:inline-flex;align-items:center;gap:8px;background:var(--ink3);border:1px solid var(--line2);border-radius:20px;padding:6px 16px;">
+        <span style="font-size:14px;">⏰</span>
+        <span id="limitResetTimer" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:600;">Calculating...</span>
+      </div>
     </div>
+
+    <!-- Plan Cards -->
+    <div class="plans-grid">
+      <!-- FREE -->
+      <div class="plan-card">
+        <div class="plan-name">🟢 Free</div>
+        <div class="plan-price">₹0 <span>/month</span></div>
+        <div class="plan-save">&nbsp;</div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> 25 AI chats/day</li>
+          <li><span class="fi">✓</span> Basic Daily Planning</li>
+          <li><span class="fi">✓</span> Task & Goal Tracking</li>
+          <li><span class="fi">✓</span> Daily Quiz (10/day)</li>
+          <li><span class="fi" style="color:var(--silver)">✗</span> No Wealth Strategy</li>
+          <li><span class="fi" style="color:var(--silver)">✗</span> No AI Reports</li>
+        </ul>
+        <button class="plan-btn plan-btn-free" onclick="newChat();closeLimitOverlay();">✏️ New Chat (resets tomorrow)</button>
+      </div>
+      <!-- PRO -->
+      <div class="plan-card pro">
+        <div class="plan-card-badge">⭐ MOST POPULAR</div>
+        <div class="plan-name" style="color:var(--gold)">🔵 Pro</div>
+        <div class="plan-price">₹299 <span>/month</span></div>
+        <div class="plan-save">or ₹199/mo billed yearly · Save 33%</div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Unlimited AI Conversations</li>
+          <li><span class="fi">✓</span> AI Daily Life Planner</li>
+          <li><span class="fi">✓</span> Wealth Growth Suggestions</li>
+          <li><span class="fi">✓</span> Monthly Productivity Report</li>
+          <li><span class="fi">✓</span> Goal Tracking System</li>
+          <li><span class="fi">✓</span> Smart Habit Tracker</li>
+          <li><span class="fi">✓</span> Priority AI Response</li>
+        </ul>
+        <button class="plan-btn plan-btn-pro" onclick="startPayment('pro');closeLimitOverlay();">⚡ Upgrade to Pro →</button>
+      </div>
+      <!-- PREMIUM -->
+      <div class="plan-card premium">
+        <div class="plan-card-badge premium-badge">🔥 BEST VALUE</div>
+        <div class="plan-name" style="color:var(--purple)">🟡 Premium</div>
+        <div class="plan-price purple">₹699 <span>/month</span></div>
+        <div class="plan-save">or ₹499/mo billed yearly · Save 29%</div>
+        <ul class="plan-features">
+          <li><span class="fi">✓</span> Everything in Pro</li>
+          <li><span class="fi">✓</span> AI Wealth Strategy Planner</li>
+          <li><span class="fi">✓</span> Advanced Monthly Reports</li>
+          <li><span class="fi">✓</span> Personal Growth Dashboard</li>
+          <li><span class="fi">✓</span> AI Decision Assistant</li>
+          <li><span class="fi">✓</span> AI Life Score Tracker</li>
+          <li><span class="fi">✓</span> Early Access to New Features</li>
+        </ul>
+        <button class="plan-btn plan-btn-premium" onclick="startPayment('premium');closeLimitOverlay();">🔥 Go Premium →</button>
+      </div>
+    </div>
+
+    <!-- Comparison Table -->
+    <div class="compare-section-title">— Feature Comparison —</div>
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free</th>
+          <th style="color:var(--gold)">Pro</th>
+          <th style="color:var(--purple)">Premium</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>AI Chat</td><td>25/day</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
+        <tr><td>Daily Planner</td><td class="yes">✔</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>Wealth Strategy</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>Monthly Reports</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>AI Weekly Report</td><td class="no">✗</td><td class="yes">✔</td><td class="yes">✔</td></tr>
+        <tr><td>AI Decision Assistant</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+        <tr><td>AI Life Score</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+        <tr><td>Early Feature Access</td><td class="no">✗</td><td class="no">✗</td><td class="yes">✔</td></tr>
+      </tbody>
+    </table>
+
+    <button class="plan-close-btn" onclick="closeLimitOverlay()">✕ Maybe later — wait for reset</button>
   </div>
 </div>
 
@@ -2866,6 +2947,8 @@ function toast(msg) {
   clearTimeout(_toastTimer);
   _toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
+// ✅ Bug fix: showToast was called in many places but never defined
+function showToast(msg) { toast(msg); }
 
 // ─── API KEY ─────────────────────────────────────────────────
 function saveApiKey() {
@@ -3062,7 +3145,6 @@ function showLimitOverlay() {
   const overlay = document.getElementById('limitOverlay');
   overlay.style.display = 'flex';
 
-  // Countdown timer to midnight reset
   function updateTimer() {
     const now = new Date();
     const midnight = new Date();
@@ -3072,15 +3154,16 @@ function showLimitOverlay() {
     const m = Math.floor((diff % 3600000) / 60000);
     const s = Math.floor((diff % 60000) / 1000);
     const el = document.getElementById('limitResetTimer');
-    if (el) el.textContent = `⏰ Resets in ${h}h ${m}m ${s}s`;
+    if (el) el.textContent = `Resets in ${h}h ${m}m ${s}s`;
   }
   updateTimer();
   window._limitTimer = setInterval(updateTimer, 1000);
 }
 
 function closeLimitOverlay() {
-  document.getElementById('limitOverlay').style.display = 'none';
-  if (window._limitTimer) clearInterval(window._limitTimer);
+  const overlay = document.getElementById('limitOverlay');
+  overlay.style.display = 'none';
+  if (window._limitTimer) { clearInterval(window._limitTimer); window._limitTimer = null; }
 }
 
 // ─── MAGIC COMMAND PARSER ───
@@ -4024,8 +4107,8 @@ function renderSavedChats() {
     const timeStr = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     const isToday = d.toDateString() === new Date().toDateString();
     return `
-    <div class="saved-chat-item" onclick="loadSavedChat(${c.id})">
-      <button class="saved-chat-del" onclick="event.stopPropagation();deleteSavedChat(${c.id})" title="Delete">✕</button>
+    <div class="saved-chat-item" onclick="loadSavedChat('${c.id}')">
+      <button class="saved-chat-del" onclick="event.stopPropagation();deleteSavedChat('${c.id}')" title="Delete">✕</button>
       <div class="saved-chat-name">${esc(c.name)}</div>
       <div class="saved-chat-meta">
         <span>💬 ${c.msgCount} msg</span>
@@ -4054,7 +4137,7 @@ function confirmDeleteAll() {
 }
 
 function loadSavedChat(id) {
-  const chat = savedChats.find(c => c.id === id);
+  const chat = savedChats.find(c => c.id == id); // loose == handles string/number mismatch
   if (!chat) return;
   const msgs   = document.getElementById('messages');
   const typing = document.getElementById('typing');
@@ -4089,8 +4172,8 @@ function loadSavedChat(id) {
 }
 
 function deleteSavedChat(id) {
-  savedChats = savedChats.filter(c => c.id !== id);
-  if (currentChatId === id) currentChatId = null;
+  savedChats = savedChats.filter(c => c.id != id); // loose != handles string/number mismatch
+  if (currentChatId == id) currentChatId = null;
   localStorage.setItem('fm_saved_chats', JSON.stringify(savedChats));
   renderSavedChats();
   toast('🗑 Saved chat deleted');
@@ -5958,13 +6041,9 @@ function checkChatLimit() {
   if (isPro()) return true;
   const count = getDailyCount('fm_chat_count');
   if (count >= FREE_CHAT_LIMIT) {
-    // Show the beautiful limit overlay instead of just a toast
-    const msgEl = document.getElementById('limitOverlayMsg');
-    if (msgEl) msgEl.innerHTML = `You've used all <strong style="color:var(--text)">${FREE_CHAT_LIMIT} free AI chats</strong> for today.<br>Your limit resets at midnight. Upgrade to Pro for unlimited access.`;
     showLimitOverlay();
     return false;
   }
-  // NOTE: only increment on successful response, not here
   return true;
 }
 
