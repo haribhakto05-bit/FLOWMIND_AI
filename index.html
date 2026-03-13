@@ -254,12 +254,43 @@ body::before {
   backdrop-filter: blur(20px);
   opacity: 0;
   transform: translateY(24px);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+}
+.preview-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(245,200,66,0.14), rgba(91,143,255,0.10), rgba(168,85,247,0.10));
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.preview-card > * {
+  position: relative;
+  z-index: 1;
 }
 .preview-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(245,200,66,0.18);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 30px rgba(245,200,66,0.06);
+  transform: translateY(-6px) rotateX(1.2deg) rotateY(-1.2deg);
+  border-color: rgba(245,200,66,0.24);
+  background: rgba(24,24,35,0.78);
+  box-shadow: 0 18px 54px rgba(0,0,0,0.44), 0 0 36px rgba(245,200,66,0.10), 0 0 22px rgba(91,143,255,0.08);
+}
+.preview-card:hover::before {
+  opacity: 1;
+}
+.preview-card:hover .pie-chart-svg {
+  transform: rotate(-6deg) scale(1.04);
+  filter: drop-shadow(0 0 18px rgba(245,200,66,0.18));
+}
+.preview-card:hover .roadmap-dot {
+  transform: scale(1.16);
+}
+.preview-card:hover .roadmap-dot.active {
+  box-shadow: 0 0 28px rgba(91,143,255,0.72), 0 0 12px rgba(245,200,66,0.22);
 }
 .preview-card.card-1 { animation: cardUp 0.7s cubic-bezier(0.34,1.3,0.64,1) 1.4s forwards; }
 .preview-card.card-2 { animation: cardUp 0.7s cubic-bezier(0.34,1.3,0.64,1) 1.6s forwards; }
@@ -282,7 +313,7 @@ body::before {
   align-items: center;
   gap: 16px;
 }
-.pie-chart-svg { flex-shrink: 0; }
+.pie-chart-svg { flex-shrink: 0; transition: transform 0.35s ease, filter 0.35s ease; transform-origin: center; }
 .pie-legend { display: flex; flex-direction: column; gap: 8px; }
 .pie-legend-item {
   display: flex; align-items: center; gap: 8px;
@@ -326,7 +357,7 @@ body::before {
 .roadmap-label { text-align: center; }
 .roadmap-label-title { font-size: 11px; font-weight: 700; color: var(--text2); margin-bottom: 2px; }
 .roadmap-label-sub { font-size: 10px; color: var(--silver); }
-.roadmap-step:hover .roadmap-dot { transform: scale(1.15); }
+.roadmap-step:hover .roadmap-dot { transform: scale(1.15); box-shadow: 0 0 22px rgba(245,200,66,0.18); }
 
 /* ── Stat counters row ── */
 .preview-stats-row {
@@ -373,8 +404,9 @@ body::before {
   color: var(--silver);
 }
 @keyframes tickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-.ticker-item { display: inline-flex; align-items: center; gap: 6px; }
-.ticker-item .ti-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.7; }
+.ticker-item { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease; }
+.ticker-item:hover { transform: translateY(-2px); border-color: rgba(245,200,66,0.18); color: var(--text2); }
+.ticker-item .ti-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.7; box-shadow: 0 0 12px rgba(245,200,66,0.35); }
 
 /* ── Login card inner ── */
 .landing-inner {
@@ -2047,8 +2079,24 @@ body.light-mode #chatInput { background: transparent; color: var(--text); }
 body.light-mode .card { background: #ffffff; border-color: rgba(0,0,0,0.08); }
 body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient-3 { opacity: 0.03; }
 </style>
+
+<style>
+#aiDots{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:0;
+pointer-events:none;
+opacity:0.6;
+}
+</style>
+
 </head>
 <body>
+<canvas id='aiDots'></canvas>
+
 
 <!-- File input lives at body root — completely isolated from any UI context.
      This prevents file:// protocol browsers from treating onchange as a page navigation. -->
@@ -6610,14 +6658,14 @@ function animateCounter(elId, target, prefix, suffix, duration) {
 // 5. Scrolling ticker
 function buildTicker() {
   const items = [
-    '⚡ AI Chat — Plan your entire day in seconds',
-    '💰 Wealth AI — Track assets, get smart advice',
-    '🎯 Goal Engine — Set goals, track progress daily',
-    '📊 Reports — Weekly AI insights on your performance',
-    '🧠 Daily Quiz — Sharpen your mind every day',
-    '🔥 Habit Tracker — Build streaks that last',
-    '🚀 Life Score — Know exactly how you\'re doing',
-    '📱 Mobile App — Coming Q4 2026',
+    '🧠 AI Life Score — See your focus, wealth, and growth in one view',
+    '💰 Wealth Tracking — Track assets, cash flow, and financial momentum',
+    '🎯 Daily Strategy — Turn chaos into a clear action plan',
+    '⚡ Focus Engine — Prioritize deep work and protect attention',
+    '📊 AI Reports — Weekly insights on performance, habits, and progress',
+    '🤖 Personal Intelligence OS — One system for life, money, and execution',
+    '🔥 Habit Momentum — Build streaks that actually last',
+    '🚀 Goal Engine — Set targets, measure progress, and keep moving',
   ];
   const el = document.getElementById('tickerInner');
   if (!el) return;
@@ -6813,5 +6861,53 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 // Init theme on load
 window.addEventListener('load', initTheme);
 </script>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const canvas=document.getElementById("aiDots");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+let dots=[];
+for(let i=0;i<120;i++){
+dots.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.5,
+vy:(Math.random()-0.5)*0.5,
+r:Math.random()*2+1
+});
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="rgba(255,255,255,0.9)";
+dots.forEach(d=>{
+d.x+=d.vx;
+d.y+=d.vy;
+
+if(d.x<0)d.x=canvas.width;
+if(d.x>canvas.width)d.x=0;
+if(d.y<0)d.y=canvas.height;
+if(d.y>canvas.height)d.y=0;
+
+ctx.beginPath();
+ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
+ctx.fill();
+});
+
+requestAnimationFrame(draw);
+}
+draw();
+});
+</script>
+
 </body>
 </html>
