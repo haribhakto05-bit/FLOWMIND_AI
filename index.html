@@ -6483,29 +6483,77 @@ function initTheme() {
   draw();
 })();
 
-// 3. SVG Pie chart builder
+// 3. SVG Pie / Donut chart builder — robust version
 function buildPie(svgId, segments) {
   const svg = document.getElementById(svgId);
   if (!svg) return;
-  const cx=55, cy=55, r=42, hole=26;
-  let angle = -Math.PI/2;
-  let html = '';
-  segments.forEach(s => {
-    const sweep = (s.pct/100)*Math.PI*2;
-    const x1=cx+r*Math.cos(angle), y1=cy+r*Math.sin(angle);
-    const x2=cx+r*Math.cos(angle+sweep), y2=cy+r*Math.sin(angle+sweep);
-    const xi1=cx+hole*Math.cos(angle), yi1=cy+hole*Math.sin(angle);
-    const xi2=cx+hole*Math.cos(angle+sweep), yi2=cy+hole*Math.sin(angle+sweep);
-    const large=sweep>Math.PI?1:0;
-    html+=`<path d="M${xi1},${yi1} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} L${xi2},${yi2} A${hole},${hole} 0 ${large},0 ${xi1},${yi1}" fill="${s.color}" opacity="0.9">
-      <animate attributeName="opacity" from="0" to="0.9" dur="0.6s" begin="${s.delay}s" fill="freeze"/>
+
+  // Resolve CSS variables to actual hex/rgb values so SVG fill works reliably
+  const cssVarMap = {
+    'var(--gold)'  : '#f5c842',
+    'var(--gold2)' : '#f5a020',
+    'var(--blue)'  : '#5b8fff',
+    'var(--green)' : '#3dffa0',
+    'var(--red)'   : '#ff5b5b',
+    'var(--purple)': '#a855f7',
+    'var(--silver)': '#8888aa',
+  };
+  function resolveColor(c) { return cssVarMap[c] || c; }
+
+  const cx = 55, cy = 55, outerR = 42, innerR = 27;
+  const total = segments.reduce((s, seg) => s + seg.pct, 0);
+  let angle = -Math.PI / 2; // start from top
+  let paths = '';
+
+  segments.forEach((seg, i) => {
+    // Clamp so total never exceeds 100
+    const pct   = seg.pct / total; // normalise
+    let sweep    = pct * 2 * Math.PI;
+
+    // Prevent degenerate arc (full circle breaks SVG arc command)
+    if (sweep >= 2 * Math.PI) sweep = 2 * Math.PI - 0.0001;
+
+    const startAngle = angle;
+    const endAngle   = angle + sweep;
+    const large      = sweep > Math.PI ? 1 : 0;
+
+    // Outer arc points
+    const ox1 = cx + outerR * Math.cos(startAngle);
+    const oy1 = cy + outerR * Math.sin(startAngle);
+    const ox2 = cx + outerR * Math.cos(endAngle);
+    const oy2 = cy + outerR * Math.sin(endAngle);
+
+    // Inner arc points
+    const ix1 = cx + innerR * Math.cos(startAngle);
+    const iy1 = cy + innerR * Math.sin(startAngle);
+    const ix2 = cx + innerR * Math.cos(endAngle);
+    const iy2 = cy + innerR * Math.sin(endAngle);
+
+    const color = resolveColor(seg.color);
+    const delay = seg.delay || (i * 0.15);
+
+    // Donut path: outer arc → inner arc (reversed)
+    const d = [
+      `M ${ox1.toFixed(3)} ${oy1.toFixed(3)}`,
+      `A ${outerR} ${outerR} 0 ${large} 1 ${ox2.toFixed(3)} ${oy2.toFixed(3)}`,
+      `L ${ix2.toFixed(3)} ${iy2.toFixed(3)}`,
+      `A ${innerR} ${innerR} 0 ${large} 0 ${ix1.toFixed(3)} ${iy1.toFixed(3)}`,
+      'Z'
+    ].join(' ');
+
+    paths += `<path d="${d}" fill="${color}" opacity="0">
+      <animate attributeName="opacity" from="0" to="0.92" dur="0.5s" begin="${delay}s" fill="freeze"/>
     </path>`;
-    angle+=sweep;
+
+    angle = endAngle;
   });
-  // Center glow
-  html+=`<circle cx="${cx}" cy="${cy}" r="${hole-4}" fill="rgba(13,13,18,0.9)"/>`;
-  html+=`<circle cx="${cx}" cy="${cy}" r="${hole-4}" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>`;
-  svg.innerHTML=html;
+
+  // Dark center hole + subtle ring
+  const bg = '#0d0d12';
+  paths += `<circle cx="${cx}" cy="${cy}" r="${innerR - 2}" fill="${bg}"/>`;
+  paths += `<circle cx="${cx}" cy="${cy}" r="${innerR - 2}" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>`;
+
+  svg.innerHTML = paths;
 }
 
 // 4. Animated counter (legacy — kept for compatibility)
@@ -6600,15 +6648,14 @@ function attachLiveStatsListener() {
         smoothUpdateStat('pStatGoals',  _liveStats.totalGoals, '', '');
         smoothUpdateStat('pStatWealth', totalWealth,           '', '');
 
-        // Recalculate pie chart 1 (productivity) based on real ratio
-        const totalActivity = _liveStats.totalChats + _liveStats.totalGoals + 1;
-        const chatPct  = Math.round((_liveStats.totalChats / totalActivity) * 100);
-        const goalPct  = Math.round((_liveStats.totalGoals / totalActivity) * 100);
-        const learnPct = 100 - chatPct - goalPct;
+        // Pie 1 recalculated from real data — buildPie normalises percentages internally
+        const chatVal  = Math.max(_liveStats.totalChats, 1);
+        const goalVal  = Math.max(_liveStats.totalGoals, 1);
+        const learnVal = Math.max(Math.round((chatVal + goalVal) * 0.4), 1);
         buildPie('pieChart1', [
-          { pct: Math.max(chatPct,  5), color:'var(--gold)',   delay:0.1 },
-          { pct: Math.max(goalPct,  5), color:'var(--blue)',   delay:0.3 },
-          { pct: Math.max(learnPct, 5), color:'var(--purple)', delay:0.5 },
+          { pct: chatVal,  color:'var(--gold)',   delay:0.1 },
+          { pct: goalVal,  color:'var(--blue)',   delay:0.3 },
+          { pct: learnVal, color:'var(--purple)', delay:0.5 },
         ]);
       }, err => {
         console.log('Stats listener error — using fallback display', err);
