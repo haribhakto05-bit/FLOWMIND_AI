@@ -136,15 +136,7 @@ body::before {
    FULLSCREEN TWO-COLUMN PREMIUM LANDING
 ══════════════════════════════════════════ */
 
-#particleCanvas {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0;
-  animation: particleFadeIn 2.5s ease 0.8s forwards;
-  width: 100%; height: 100%;
-}
-@keyframes particleFadeIn { to { opacity: 1; } }
+ }
 
 #landing {
   position: fixed; inset: 0;
@@ -2109,22 +2101,11 @@ body.light-mode .card { background: #ffffff; border-color: rgba(0,0,0,0.08); }
 body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient-3 { opacity: 0.03; }
 </style>
 
-<style>
-#aiDots{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:0;
-pointer-events:none;
-opacity:0.6;
-}
-</style>
+
 
 </head>
 <body>
-<canvas id='aiDots'></canvas>
+
 
 
 <!-- File input lives at body root — completely isolated from any UI context.
@@ -2229,7 +2210,7 @@ opacity:0.6;
   <div class="landing-orb landing-orb-1"></div>
   <div class="landing-orb landing-orb-2"></div>
   <div class="landing-orb landing-orb-3"></div>
-  <canvas id="particleCanvas" style="position:absolute;inset:0;pointer-events:none;z-index:1;"></canvas>
+  
 
   <!-- ══ LEFT — Login ══ -->
   <div class="landing-left">
@@ -6579,39 +6560,7 @@ function initTheme() {
   ).join('');
 })();
 
-// 2. Floating particles
-(function initParticles() {
-  const canvas = document.getElementById('particleCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let W, H;
-  const particles = [];
-  function resize() {
-    // Use window dimensions — canvas covers full viewport via absolute+inset:0 on #landing
-    W = canvas.width  = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  function r(a,b){ return a + Math.random()*(b-a); }
-  for (let i = 0; i < 60; i++) {
-    particles.push({ x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight, rad:r(0.8,2.2), alpha:r(0.07,0.25), dx:r(-0.15,0.15), dy:r(-0.2,-0.05), pulse:Math.random()*Math.PI*2,
-      col: Math.random()>0.6?'rgba(245,200,66,': Math.random()>0.5?'rgba(91,143,255,':'rgba(168,85,247,' });
-  }
-  function draw() {
-    ctx.clearRect(0,0,W,H);
-    particles.forEach(p => {
-      p.pulse+=0.016; const a=p.alpha*(0.7+0.3*Math.sin(p.pulse));
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.rad,0,Math.PI*2);
-      ctx.fillStyle=p.col+a+')'; ctx.fill();
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<-5)p.x=W+5; if(p.x>W+5)p.x=-5;
-      if(p.y<-5)p.y=H+5; if(p.y>H+5)p.y=-5;
-    });
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
+
 
 // 3. SVG Pie / Donut chart builder — robust version
 function buildPie(svgId, segments) {
@@ -6910,52 +6859,7 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 window.addEventListener('load', initTheme);
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded",function(){
-const canvas=document.getElementById("aiDots");
-const ctx=canvas.getContext("2d");
 
-function resize(){
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-}
-resize();
-window.addEventListener("resize",resize);
-
-let dots=[];
-for(let i=0;i<120;i++){
-dots.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.5,
-vy:(Math.random()-0.5)*0.5,
-r:Math.random()*2+1
-});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="rgba(255,255,255,0.9)";
-dots.forEach(d=>{
-d.x+=d.vx;
-d.y+=d.vy;
-
-if(d.x<0)d.x=canvas.width;
-if(d.x>canvas.width)d.x=0;
-if(d.y<0)d.y=canvas.height;
-if(d.y>canvas.height)d.y=0;
-
-ctx.beginPath();
-ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-ctx.fill();
-});
-
-requestAnimationFrame(draw);
-}
-draw();
-});
-</script>
 
 </body>
 </html>
