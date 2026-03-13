@@ -1547,12 +1547,12 @@ body::before {
   z-index: 9000;
   animation: fadeUp 0.3s ease;
   box-shadow: var(--shadow);
-  max-width: 300px;
+  max-width: 320px;
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
 }
-.toast.show { opacity: 1; }
+.toast.show { opacity: 1; pointer-events: all; }
 
 /* ── LIVE VOICE CHAT ── */
 .live-voice-btn {
@@ -3952,11 +3952,14 @@ Write 3-4 punchy sentences as a friend, not a consultant. Acknowledge wins, call
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model:'openai/gpt-oss-20b', messages:[{role:'user',content:prompt}], max_tokens:320 })
+      body: JSON.stringify({ model:'llama-3.3-70b-versatile', messages:[{role:'user',content:prompt}], max_tokens:400, temperature:0.7 })
     });
     const data = await res.json();
-    if (data.error) throw new Error(data.error.message);
-    document.getElementById('aiInsightText').textContent = data.choices[0].message.content;
+    if (data.error) {
+      const errMsg = typeof data.error === 'object' ? (data.error.message || JSON.stringify(data.error)) : String(data.error);
+      throw new Error(errMsg);
+    }
+    document.getElementById('aiInsightText').textContent = data.choices?.[0]?.message?.content || 'No insights generated.';
   } catch(e) {
     document.getElementById('aiInsightText').textContent = '❌ Could not generate insights: ' + e.message;
   }
@@ -3972,14 +3975,24 @@ function updateSidebar() {
   const active  = goals.filter(g => !g.done).length;
   const pending = tasks.filter(t => !t.done).length;
 
-  document.getElementById('sbWealth').textContent = '$' + total.toLocaleString('en-US',{maximumFractionDigits:0});
-  document.getElementById('sbTasks').textContent  = `${done}/${tasks.length}`;
-  document.getElementById('sbGoals').textContent  = active;
-  document.getElementById('sbMsgs').textContent   = msgCount;
+  // Always read fresh msgCount from localStorage in case it updated
+  msgCount = parseInt(localStorage.getItem('fm_msgs') || '0');
 
-  const badge = document.getElementById('taskBadge');
-  if (pending > 0) { badge.style.display = 'inline'; badge.textContent = pending; }
-  else badge.style.display = 'none';
+  const sbWealth = document.getElementById('sbWealth');
+  const sbTasks  = document.getElementById('sbTasks');
+  const sbGoals  = document.getElementById('sbGoals');
+  const sbMsgs   = document.getElementById('sbMsgs');
+  const badge    = document.getElementById('taskBadge');
+
+  if (sbWealth) sbWealth.textContent = '$' + total.toLocaleString('en-US',{maximumFractionDigits:0});
+  if (sbTasks)  sbTasks.textContent  = `${done}/${tasks.length}`;
+  if (sbGoals)  sbGoals.textContent  = active;
+  if (sbMsgs)   sbMsgs.textContent   = msgCount;
+
+  if (badge) {
+    if (pending > 0) { badge.style.display = 'inline'; badge.textContent = pending; }
+    else badge.style.display = 'none';
+  }
 }
 
 // ─── SAVE (auto + manual) ─────────────────────────────────────
@@ -4122,17 +4135,14 @@ function renderSavedChats() {
 
 function deleteAllChats() {
   if (savedChats.length === 0) { toast('No saved chats to delete'); return; }
-  const t = document.getElementById('toast');
-  t.innerHTML = '🗑 Delete ALL chats? <button onclick="confirmDeleteAll()" style="margin-left:10px;background:var(--red);color:#fff;border:none;border-radius:6px;padding:3px 10px;cursor:pointer;font-size:12px;">Yes, delete</button>';
-  t.style.opacity = '1';
-  setTimeout(() => { if(t.style.opacity==='1'){ t.style.opacity='0'; t.innerHTML=''; } }, 5000);
+  if (!confirm(`Delete all ${savedChats.length} saved chats? This cannot be undone.`)) return;
+  confirmDeleteAll();
 }
 function confirmDeleteAll() {
   savedChats = [];
-  currentChatId = null; 
+  currentChatId = null;
   localStorage.setItem('fm_saved_chats', JSON.stringify(savedChats));
   renderSavedChats();
-  document.getElementById('toast').style.opacity = '0';
   toast('🗑 All saved chats deleted');
 }
 
