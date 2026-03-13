@@ -22,6 +22,7 @@ function initFirebase() {
   try {
     if (typeof firebase === 'undefined') {
       console.log('Firebase SDK not loaded - running in local mode');
+      showFallbackStats && showFallbackStats();
       return;
     }
     var firebaseConfig = {
@@ -36,7 +37,7 @@ function initFirebase() {
       firebase.initializeApp(firebaseConfig);
     }
     window._fbAuth = firebase.auth();
-    window._fbDb = firebase.firestore();
+    window._fbDb   = firebase.firestore();
     window._fbGoogleProvider = new firebase.auth.GoogleAuthProvider();
     window._fbGoogleProvider.addScope('email');
     window._fbGoogleProvider.addScope('profile');
@@ -54,9 +55,16 @@ function initFirebase() {
         if (typeof window.onFirebaseLogout === 'function') window.onFirebaseLogout();
       }
     });
+
+    // ── Attach live stats listener now that _fbDb is definitely ready ──
+    if (typeof attachLiveStatsListener === 'function') {
+      attachLiveStatsListener();
+    }
+
     console.log('Firebase ready!');
   } catch(e) {
     console.log('Firebase init error - local mode active:', e.message);
+    if (typeof showFallbackStats === 'function') showFallbackStats();
   }
 }
 window.addEventListener('load', initFirebase);
@@ -3155,14 +3163,26 @@ async function firebaseLogout() {
 
 window.onFirebaseLogin = async function(user) {
   userName = user.displayName || user.email.split('@')[0] || 'Friend';
+
+  // ── Wipe any stale data from previous session / different account FIRST ──
+  const prevUid = localStorage.getItem('fm_uid');
+  if (prevUid && prevUid !== user.uid) {
+    // Different user — clear everything before loading new user's data
+    ['fm_tasks','fm_assets','fm_goals','fm_msgs','fm_saved_chats',
+     'fm_chat_count','fm_plan','fm_apikey','fm_gemini_key','fm_autosave_ts'].forEach(k => localStorage.removeItem(k));
+    tasks = []; assets = []; goals = []; msgCount = 0; apiKey = '';
+  }
+  // Track current UID so we can detect account switches
+  localStorage.setItem('fm_uid', user.uid);
   localStorage.setItem('fm_name', userName);
+
   try {
     const snap = await window._fbDb.collection('users').doc(user.uid).get();
     if (snap.exists) {
       const data = snap.data();
-      if (data.tasks) { tasks = data.tasks; localStorage.setItem('fm_tasks', JSON.stringify(tasks)); }
+      if (data.tasks)  { tasks  = data.tasks;  localStorage.setItem('fm_tasks',  JSON.stringify(tasks));  }
       if (data.assets) { assets = data.assets; localStorage.setItem('fm_assets', JSON.stringify(assets)); }
-      if (data.goals) { goals = data.goals; localStorage.setItem('fm_goals', JSON.stringify(goals)); }
+      if (data.goals)  { goals  = data.goals;  localStorage.setItem('fm_goals',  JSON.stringify(goals));  }
       if (data.apiKey) { apiKey = data.apiKey; localStorage.setItem('fm_apikey', apiKey); }
     }
   } catch(e) { console.log('Firestore load error', e); }
@@ -3171,6 +3191,20 @@ window.onFirebaseLogin = async function(user) {
 };
 
 window.onFirebaseLogout = function() {
+  // ── Clear ALL user-specific data from localStorage on logout ──
+  // This prevents data from one account leaking into another account
+  const keysToWipe = [
+    'fm_name', 'fm_tasks', 'fm_assets', 'fm_goals', 'fm_apikey',
+    'fm_msgs', 'fm_saved_chats', 'fm_chat_count', 'fm_plan',
+    'fm_wq_best', 'fm_ceo_best', 'fm_mm_portfolio', 'fm_habits',
+    'fm_gemini_key', 'fm_autosave_ts', 'fm_theme'
+  ];
+  keysToWipe.forEach(k => localStorage.removeItem(k));
+
+  // Reset in-memory variables so stale data doesn't persist in RAM
+  tasks = []; assets = []; goals = [];
+  msgCount = 0; userName = ''; apiKey = '';
+
   const landing = document.getElementById('landing');
   const app = document.getElementById('app');
   landing.classList.remove('hide','gone');
@@ -6701,18 +6735,14 @@ async function incrementGlobalStat(field, amount) {
   }
 }
 
-// Start the live listener as soon as Firebase is ready
-// Firebase fires onAuthStateChanged on load — we hook in there
-const _origInitFirebase_statsHook = window.initFirebase;
-document.addEventListener('DOMContentLoaded', () => {
-  // Poll until Firebase db is ready, then attach listener
-  let attempts = 0;
-  const poll = setInterval(() => {
-    attempts++;
-    if (window._fbDb) { clearInterval(poll); attachLiveStatsListener(); }
-    if (attempts > 30) { clearInterval(poll); showFallbackStats(); }
-  }, 300);
-});
+// Live stats listener is now started directly inside initFirebase() above
+// This is the most reliable approach — _fbDb is guaranteed ready at that point
+// Fallback: if Firebase fails, show zeros after 4s
+setTimeout(() => {
+  if (!_statsUnsubscribe && typeof showFallbackStats === 'function') {
+    showFallbackStats();
+  }
+}, 4000);
 
 // ─── INIT PREVIEW (pies + ticker) ────────────────────────────
 setTimeout(() => {
