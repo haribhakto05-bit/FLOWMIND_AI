@@ -2109,22 +2109,11 @@ body.light-mode .card { background: #ffffff; border-color: rgba(0,0,0,0.08); }
 body.light-mode .ambient-1, body.light-mode .ambient-2, body.light-mode .ambient-3 { opacity: 0.03; }
 </style>
 
-<style>
-#aiDots{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:0;
-pointer-events:none;
-opacity:0.6;
-}
-</style>
+
 
 </head>
 <body>
-<canvas id='aiDots'></canvas>
+
 
 
 <!-- File input lives at body root — completely isolated from any UI context.
@@ -6898,52 +6887,7 @@ document.getElementById('pricingModal').addEventListener('click', function(e) {
 window.addEventListener('load', initTheme);
 </script>
 
-<script>
-document.addEventListener("DOMContentLoaded",function(){
-const canvas=document.getElementById("aiDots");
-const ctx=canvas.getContext("2d");
 
-function resize(){
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-}
-resize();
-window.addEventListener("resize",resize);
-
-let dots=[];
-for(let i=0;i<120;i++){
-dots.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.5,
-vy:(Math.random()-0.5)*0.5,
-r:Math.random()*2+1
-});
-}
-
-function draw(){
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="rgba(255,255,255,0.9)";
-dots.forEach(d=>{
-d.x+=d.vx;
-d.y+=d.vy;
-
-if(d.x<0)d.x=canvas.width;
-if(d.x>canvas.width)d.x=0;
-if(d.y<0)d.y=canvas.height;
-if(d.y>canvas.height)d.y=0;
-
-ctx.beginPath();
-ctx.arc(d.x,d.y,d.r,0,Math.PI*2);
-ctx.fill();
-});
-
-requestAnimationFrame(draw);
-}
-draw();
-});
-</script>
 
 </body>
 </html>
